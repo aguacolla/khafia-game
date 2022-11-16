@@ -9,12 +9,12 @@ public class PurchasesManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     public void OnPurchaseComplete(Product product)
     {
-        print(product.definition.id);
+        print(product.definition.id + " " + product.metadata.localizedPriceString);
         switch (product.definition.id)
         {
             case "com.kabakebstudio.wordlearabic.noads":
@@ -43,7 +43,7 @@ public class PurchasesManager : MonoBehaviour
         NotificationsManager.Instance.SpawnMessage(1);
         print($"coins added {GameManager.Instance.CoinsAvailable}");
     }
-    
+
     public void OnPurchaseFailed(Product product, PurchaseFailureReason reason)
     {
         NotificationsManager.Instance.SpawnMessage(2);

@@ -2860,7 +2860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 0.4985407
+  m_AspectRatio: 0.5599505
 --- !u!1 &101796092
 GameObject:
   m_ObjectHideFlags: 0
@@ -19042,6 +19042,7 @@ GameObject:
   - component: {fileID: 621051563}
   - component: {fileID: 621051562}
   - component: {fileID: 621051565}
+  - component: {fileID: 621051566}
   m_Layer: 0
   m_Name: Buy
   m_TagString: Untagged
@@ -19200,6 +19201,18 @@ MonoBehaviour:
   titleText: {fileID: 0}
   descriptionText: {fileID: 0}
   priceText: {fileID: 0}
+--- !u!114 &621051566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621051560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6cda5af01e7564a916729c0655912c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &623417780
 GameObject:
   m_ObjectHideFlags: 0
@@ -23098,6 +23111,7 @@ GameObject:
   - component: {fileID: 739776158}
   - component: {fileID: 739776157}
   - component: {fileID: 739776160}
+  - component: {fileID: 739776161}
   m_Layer: 0
   m_Name: Buy
   m_TagString: Untagged
@@ -23258,6 +23272,18 @@ MonoBehaviour:
   titleText: {fileID: 0}
   descriptionText: {fileID: 0}
   priceText: {fileID: 0}
+--- !u!114 &739776161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739776155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6cda5af01e7564a916729c0655912c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &740273910
 GameObject:
   m_ObjectHideFlags: 0
@@ -27425,6 +27451,7 @@ GameObject:
   - component: {fileID: 864914809}
   - component: {fileID: 864914808}
   - component: {fileID: 864914811}
+  - component: {fileID: 864914812}
   m_Layer: 0
   m_Name: Buy
   m_TagString: Untagged
@@ -27583,6 +27610,18 @@ MonoBehaviour:
   titleText: {fileID: 0}
   descriptionText: {fileID: 0}
   priceText: {fileID: 0}
+--- !u!114 &864914812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864914806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6cda5af01e7564a916729c0655912c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &873206568
 GameObject:
   m_ObjectHideFlags: 0
@@ -32707,6 +32746,7 @@ GameObject:
   - component: {fileID: 1003927928}
   - component: {fileID: 1003927927}
   - component: {fileID: 1003927930}
+  - component: {fileID: 1003927931}
   m_Layer: 0
   m_Name: Buy
   m_TagString: Untagged
@@ -32865,6 +32905,18 @@ MonoBehaviour:
   titleText: {fileID: 0}
   descriptionText: {fileID: 0}
   priceText: {fileID: 0}
+--- !u!114 &1003927931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1003927925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6cda5af01e7564a916729c0655912c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1014692950
 GameObject:
   m_ObjectHideFlags: 0
@@ -65137,6 +65189,7 @@ GameObject:
   - component: {fileID: 1818242536}
   - component: {fileID: 1818242535}
   - component: {fileID: 1818242538}
+  - component: {fileID: 1818242539}
   m_Layer: 0
   m_Name: Buy
   m_TagString: Untagged
@@ -65295,6 +65348,18 @@ MonoBehaviour:
   titleText: {fileID: 0}
   descriptionText: {fileID: 0}
   priceText: {fileID: 0}
+--- !u!114 &1818242539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818242533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6cda5af01e7564a916729c0655912c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1821879798
 GameObject:
   m_ObjectHideFlags: 0
@@ -71012,6 +71077,7 @@ GameObject:
   - component: {fileID: 1985454175}
   - component: {fileID: 1985454174}
   - component: {fileID: 1985454173}
+  - component: {fileID: 1985454176}
   m_Layer: 0
   m_Name: Buy
   m_TagString: Untagged
@@ -71135,6 +71201,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1985454171}
   m_CullTransparentMesh: 1
+--- !u!114 &1985454176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985454171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6cda5af01e7564a916729c0655912c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1993819869
 GameObject:
   m_ObjectHideFlags: 0
@@ -74106,6 +74184,7 @@ GameObject:
   - component: {fileID: 2117422256}
   - component: {fileID: 2117422255}
   - component: {fileID: 2117422258}
+  - component: {fileID: 2117422259}
   m_Layer: 0
   m_Name: Buy
   m_TagString: Untagged
@@ -74264,6 +74343,18 @@ MonoBehaviour:
   titleText: {fileID: 0}
   descriptionText: {fileID: 0}
   priceText: {fileID: 0}
+--- !u!114 &2117422259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117422253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6cda5af01e7564a916729c0655912c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2119105826
 GameObject:
   m_ObjectHideFlags: 0
