@@ -186,7 +186,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         OnNewWord += RandomColor;
         AdsManager.Instance.InitializeAds();
         AdsManager.Instance.LoadBanner();
-        GleyNotifications.Initialize();
+        MobileNotifications.Init();
 
         dailyRewards = PlayerPrefs.GetInt("DailyRewards");
         //AdsManager.Instance.ShowBanner();
@@ -222,7 +222,10 @@ public class GameManager : Singleton<GameManager>, IStateManageable
             if (day != DateTime.UtcNow.Day)
             {
                 if (DailyRewardsAvailable < 1)
+                {
+                    MobileNotifications.SendDailyReward();
                     DailyRewardsAvailable++;
+                }
                 DailyWord = PseudoDailyWord();
                 day = DateTime.UtcNow.Day;
                 PlayerPrefs.SetInt("Day", day);
@@ -306,5 +309,13 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     {
         PlayerPrefs.SetInt("Ads", 0);
         AdsManager.Instance.HideBanner();
+    }
+
+    private void OnApplicationFocus(bool focusStatus)
+    {
+        if (!focusStatus)
+        {
+            MobileNotifications.SendContinueGame();
+        }
     }
 }
