@@ -204,7 +204,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         MobileNotifications.Init();
 
         dailyRewards = PlayerPrefs.GetInt("DailyRewards", 0);
-        unlockedLevel = PlayerPrefs.GetInt("PlayerPrefs", 1);
+        unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel", 1);
         //AdsManager.Instance.ShowBanner();
 
 

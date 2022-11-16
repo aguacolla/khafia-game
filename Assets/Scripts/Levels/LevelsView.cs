@@ -27,6 +27,7 @@ public class LevelsView : MonoBehaviour
         button.outline = button.gameObject.AddComponent<Outline>();
         button.canvasGroup = button.gameObject.AddComponent<CanvasGroup>();
         button.outline.effectColor = outlineColorDefault;
+        button.button.interactable = false;
     }
     void Expand()
     {
@@ -106,14 +107,11 @@ public class LevelsView : MonoBehaviour
 
     void UpdateButton(LevelButton button, int stars, bool isLocked)
     {
-        if (button.button)
-            button.button.interactable = isLocked;
-
         button.LeftStar.SetActive(stars >= 2);
         button.RightStar.SetActive(stars >= 2);
         button.MiddleStar.SetActive(stars == 1 || stars == 3);
         button.Lock.SetActive(stars == 0 && isLocked);
-        button.button.interactable = !isLocked && stars == 0;
+        button.button.interactable = false;
 
         button.canvasGroup.alpha = isLocked ? lockedAlpha : 1;
         button.outline.effectColor = stars == 0 && !isLocked ? outlineColorCurrent : outlineColorDefault;
@@ -145,11 +143,12 @@ public class LevelsView : MonoBehaviour
     void SnapTo(RectTransform target)
     {
         Canvas.ForceUpdateCanvases();
+        var delta = (Vector2)scrollRect.transform.InverseTransformPoint(contentPanel.position)
+                        - (Vector2)scrollRect.transform.InverseTransformPoint(target.position)
+                        + scrollOffset;
+        delta.x = contentPanel.anchoredPosition.x;
+        contentPanel.anchoredPosition = delta;
 
-        contentPanel.anchoredPosition =
-                (Vector2)scrollRect.transform.InverseTransformPoint(contentPanel.position)
-                - (Vector2)scrollRect.transform.InverseTransformPoint(target.position)
-                + scrollOffset;
         ;
     }
 
