@@ -24,4 +24,9 @@ public class UIConfig : Config<UIConfig>
     public Color keyboardDefaultColor = new Color(129, 131, 132, 255);
     public Color keyboardDefaultTextColor;
 
+
+    [Header("Levels View")]
+    public GameObject[] levelsSeason;
+    public GameObject firstSeason;
+
 }

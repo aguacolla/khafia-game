@@ -36,7 +36,7 @@ public class MenuState : BaseState
 {
     public override void EnterState(IStateManageable stateManager)
     {
-        if(!SoundManager.Instance.musicSource.isPlaying)
+        if (!SoundManager.Instance.musicSource.isPlaying)
             SoundManager.Instance.PlayMusic(0);
     }
 
@@ -47,7 +47,7 @@ public class MenuState : BaseState
     public override void ExitState(IStateManageable stateManager)
     {
     }
-    
+
     public MenuState() : base("Menu")
     {
     }
@@ -66,7 +66,7 @@ public class StoreState : BaseState
     public override void ExitState(IStateManageable stateManager)
     {
     }
-    
+
     public StoreState() : base("Store")
     {
     }
@@ -91,14 +91,35 @@ public class GameState : BaseState
 
     public override void UpdateState(IStateManageable stateManager)
     {
-        
+
     }
 
     public override void ExitState(IStateManageable stateManager)
     {
     }
-    
+
     public GameState() : base("Game")
     {
     }
 }
+
+
+public class LevelsState : BaseState
+{
+    public override void EnterState(IStateManageable stateManager)
+    {
+    }
+
+    public override void UpdateState(IStateManageable stateManager)
+    {
+    }
+
+    public override void ExitState(IStateManageable stateManager)
+    {
+    }
+
+    public LevelsState() : base("Levels")
+    {
+    }
+}
+

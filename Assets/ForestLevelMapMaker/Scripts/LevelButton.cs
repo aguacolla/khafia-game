@@ -13,6 +13,9 @@ namespace Mkey
         public Text numberText;
         public bool Interactable { get; private set; }
 
+        public CanvasGroup canvasGroup { get; set; }
+        public Outline outline { get; set; }
+
         /// <summary>
         /// Set button interactable if button "active" or appropriate level is passed. Show stars or Lock image
         /// </summary>
@@ -21,17 +24,17 @@ namespace Mkey
         /// <param name="isPassed"></param>
         internal void SetActive(bool active, int activeStarsCount, bool isPassed)
         {
-            if (LeftStar)  LeftStar.SetActive(activeStarsCount > 1 && isPassed);
+            if (LeftStar) LeftStar.SetActive(activeStarsCount > 1 && isPassed);
             if (MiddleStar) MiddleStar.SetActive(activeStarsCount > 0 && isPassed);
             if (RightStar) RightStar.SetActive(activeStarsCount > 2 && isPassed);
             Interactable = active || isPassed;
-            if(button)  button.interactable = Interactable;
+            if (button) button.interactable = Interactable;
             if (active)
             {
-                MapController.Instance.ActiveButton = this;
+                //MapController.Instance.ActiveButton = this;
             }
 
-            if(Lock) Lock.SetActive(!isPassed && !active);
+            if (Lock) Lock.SetActive(!isPassed && !active);
         }
     }
 }

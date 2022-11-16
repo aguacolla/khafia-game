@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b5400bfa170a15408340bff8b3aef5e, type: 3}
+  m_Name: UIConfig
+  m_EditorClassIdentifier: 
+  defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  FulldefaultColor: {r: 0, g: 0, b: 0, a: 0}
+  outlineColor: {r: 0.24705882, g: 0.24705882, b: 0.24705882, a: 1}
+  inPlaceColor: {r: 0.3254902, g: 0.5529412, b: 0.30588236, a: 1}
+  inWordColor: {r: 0.70980394, g: 0.62352943, b: 0.23137255, a: 1}
+  notInWordColor: {r: 0.16470589, g: 0.16470589, b: 0.16470589, a: 1}
+  hintColor: {r: 0, g: 0, b: 0, a: 0}
+  hintTextColor: {r: 0, g: 0, b: 0, a: 0}
+  defaultWordImage: {fileID: 0}
+  wordImage: {fileID: 0}
+  gridLetterDefaultColor: {r: 0, g: 0, b: 0, a: 0}
+  gridLetterCheckedColor: {r: 0, g: 0, b: 0, a: 0}
+  keyboardDefaultColor: {r: 129, g: 131, b: 132, a: 255}
+  keyboardDefaultTextColor: {r: 0, g: 0, b: 0, a: 0}
+  levelsSeason:
+  - {fileID: 1316549758685200, guid: ab2a5dafa99d5384ba9f61149e0e88d6, type: 3}
+  - {fileID: 1792324914579886, guid: bc1523af926dcdc47bdf073b0f8a9e82, type: 3}
+  - {fileID: 1781861821157362, guid: b778f6472ee286f4fb9ae37494d25773, type: 3}
+  - {fileID: 1137680879928446, guid: 54ebe729d11d5f1439230f5683eedc44, type: 3}
+  - {fileID: 1011432084046642, guid: d60871a9749d2234fbac53744df4af0e, type: 3}
+  - {fileID: 1351669927082788, guid: 3f2920a1a624c734a857c23affb6fbe4, type: 3}
+  - {fileID: 1515668221751046, guid: 8bd56b51254da0649bf2675e1c4e35ef, type: 3}
+  - {fileID: 1535168028603026, guid: c1a80641b39d1634ba80262a0f6035da, type: 3}
+  - {fileID: 1535168028603026, guid: bfac50440afd3e144a385f3297b4c1e8, type: 3}
+  firstSeason: {fileID: 1535168028603026, guid: bfac50440afd3e144a385f3297b4c1e8, type: 3}

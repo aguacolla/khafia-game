@@ -15,6 +15,7 @@ public class MainMenu : Page
     public TextMeshProUGUI coinsText;
     public TextMeshProUGUI month;
     public TextMeshProUGUI day;
+    public TextMeshProUGUI currentLevel;
     public Image check;
 
     DailyRewardButton dailyRewardButton;
@@ -46,8 +47,16 @@ public class MainMenu : Page
 
     public void PlayClassic()
     {
+        GameManager.Instance.LevelGame = 0;
         GameManager.Instance.SetGameType(GameType.Classic);
         GameManager.Instance.SwitchState(GameManager.Instance.States["game"]);
+    }
+    public void PlayCurrentLevel()
+    {
+        int currentLevel = GameManager.Instance.UnlockedLevel;
+        GameManager.Instance.LevelGame = currentLevel;
+        GameManager.Instance.SetGameType(GameType.Classic);
+        GameManager.Instance.SwitchState("game");
     }
 
     public void PlayDaily()
@@ -61,10 +70,12 @@ public class MainMenu : Page
         playDailyButton.interactable = PlayerPrefs.GetInt("DailyButton") == 1;
         check.gameObject.SetActive(PlayerPrefs.GetInt("DailyButton") == 0);
     }
+
     private void OnEnable()
     {
         highScore.text = GameManager.Instance.highScore.ToString();
         coinsText.text = GameManager.Instance.CoinsAvailable.ToString();
+        currentLevel.text = GameManager.Instance.UnlockedLevel.ToString();
         GameManager.Instance.OnTextChanged += SetText;
         SetCalendar();
         GameManager.Instance.OnNewDailyWord += SetCalendar;

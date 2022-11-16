@@ -43,9 +43,13 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     private int hints;
     private int eliminations;
     private int dailyRewards;
+    private int unlockedLevel = 1;
 
     public int interstitialFreq = 2;
     public int GamesWon { get; set; }
+
+    public bool IsLevelGame => LevelGame > 0;
+    public int LevelGame { get; set; }
 
     public int CoinsAvailable
     {
@@ -89,6 +93,16 @@ public class GameManager : Singleton<GameManager>, IStateManageable
             OnTextChanged?.Invoke();
         }
     }
+    public int UnlockedLevel
+    {
+        get => unlockedLevel;
+        set
+        {
+            unlockedLevel = value;
+            PlayerPrefs.SetInt("UnlockedLevel", value);
+            OnTextChanged?.Invoke();
+        }
+    }
 
     public int startingCoins = 100;
     public int startingHints = 3;
@@ -113,7 +127,8 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         {"intro", new IntroState()},
         {"menu", new MenuState()},
         {"game", new GameState()},
-        {"store", new StoreState()}
+        {"store", new StoreState()},
+        {"levels", new LevelsState()}
     };
 
     [Header("Daily")]
@@ -188,7 +203,8 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         AdsManager.Instance.LoadBanner();
         MobileNotifications.Init();
 
-        dailyRewards = PlayerPrefs.GetInt("DailyRewards");
+        dailyRewards = PlayerPrefs.GetInt("DailyRewards", 0);
+        unlockedLevel = PlayerPrefs.GetInt("PlayerPrefs", 1);
         //AdsManager.Instance.ShowBanner();
 
 
@@ -318,4 +334,21 @@ public class GameManager : Singleton<GameManager>, IStateManageable
             MobileNotifications.SendContinueGame();
         }
     }
+    public int GetLevelStars(int level)
+    {
+        string key = "level" + level + ".stars";
+        return PlayerPrefs.GetInt(key, 0);
+    }
+    public void SetLevelStars(int level, int stars)
+    {
+        string key = "level" + level + ".stars";
+        PlayerPrefs.SetInt(key, stars);
+    }
+    // public void PlayLevel(int level)
+    // {
+    //     PagesManager.Instance.FlipPage(4);
+    //     GameManager.Instance.LevelGame = level;
+    //     GameManager.Instance.SetGameType(GameType.Classic);
+    //     GameManager.Instance.SwitchState("levels");
+    // }
 }

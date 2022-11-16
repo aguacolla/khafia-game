@@ -11,21 +11,22 @@ public class StateManager : MonoBehaviour, IStateManageable
         {"intro", new IntroState()},
         {"menu", new MenuState()},
         {"game", new GameState()},
-        {"store", new StoreState()}
+        {"store", new StoreState()},
+        {"levels", new LevelsState()}
     };
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    
+
 
     public void SwitchState(BaseState state)
     {
