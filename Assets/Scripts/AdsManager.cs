@@ -18,7 +18,7 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
     public string bannerPlacementIdI = "Banner_iOS";
     public string interstitialPlacementIdI = "Interstitial_iOS";
     public string rewardedPlacementIdI = "Rewarded_iOS";
-    
+
     public bool isTestMode = true;
 
     private IUnityAdsInitializationListener unityAdsInitializationListenerImplementation;
@@ -30,6 +30,16 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
 
     public Button rewardButton;
 
+    public int defaultRewardCoins = 25;
+    public int rewardCoins = 25;
+    /// <summary>
+    /// Automatically be removed
+    /// </summary>
+    public event System.Action<bool> onRewardedDone;
+
+    AdRewardedButton[] adRewardedButtons;
+
+
     // Start is called before the first frame update
     public void InitializeAds()
     {
@@ -37,8 +47,9 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
         bannerId = (Application.platform == RuntimePlatform.IPhonePlayer) ? bannerPlacementIdI : bannerPlacementIdA;
         interstitialId = (Application.platform == RuntimePlatform.IPhonePlayer) ? interstitialPlacementIdI : interstitialPlacementIdA;
         rewardId = (Application.platform == RuntimePlatform.IPhonePlayer) ? rewardedPlacementIdI : rewardedPlacementIdA;
-        
+
         Advertisement.Initialize(gameId, isTestMode, this);
+        adRewardedButtons = FindObjectsOfType<AdRewardedButton>(true);
     }
 
     public void LoadBanner()
@@ -49,9 +60,9 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
             errorCallback = OnBannerError
         };
         Advertisement.Banner.SetPosition(UnityEngine.Advertisements.BannerPosition.BOTTOM_CENTER);
-        if(PlayerPrefs.GetInt("Ads", 1) == 1) Advertisement.Banner.Load(bannerId, bannerLoadOptions);
+        if (PlayerPrefs.GetInt("Ads", 1) == 1) Advertisement.Banner.Load(bannerId, bannerLoadOptions);
     }
-    
+
     public void ShowBanner()
     {
         BannerOptions bannerOptions = new BannerOptions()
@@ -62,22 +73,22 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
         };
         if (PlayerPrefs.GetInt("Ads", 1) == 1) Advertisement.Banner.Show(bannerId, bannerOptions);
     }
-    
+
     public void HideBanner()
     {
         Advertisement.Banner.Hide();
     }
-    
+
     public void LoadInterstitial()
     {
         print("Loading Interstitial");
         Advertisement.Load(interstitialId, this);
     }
-    
+
     public void ShowInterstitial()
     {
         print("Showing Interstitial");
-        if(PlayerPrefs.GetInt("Ads", 1) == 1) Advertisement.Show(interstitialId, this);
+        if (PlayerPrefs.GetInt("Ads", 1) == 1) Advertisement.Show(interstitialId, this);
     }
 
     public void LoadRewarded()
@@ -85,13 +96,13 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
         print("Loading Rewarded");
         Advertisement.Load(rewardId, this);
     }
-    
+
     public void ShowRewarded()
     {
         print("Showing Rewarded");
-        if(PlayerPrefs.GetInt("Ads", 1) == 1) Advertisement.Show(rewardId, this);
+        Advertisement.Show(rewardId, this);
     }
-    
+
     public void OnInitializationComplete()
     {
         print("Ads initialized");
@@ -110,22 +121,22 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
         print("Banner loaded");
         ShowBanner();
     }
-    
+
     public void OnBannerError(string message)
     {
         print("Banner error: " + message);
     }
-    
+
     public void OnBannerClick()
     {
         print("Banner clicked");
     }
-    
+
     public void OnBannerShow()
     {
         print("Banner shown");
     }
-    
+
     public void OnBannerHide()
     {
         print("Banner hidden");
@@ -136,13 +147,14 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
         if (placementId.Equals(rewardId))
         {
             print("Rewarded loaded");
+            foreach (var x in adRewardedButtons) x.button.interactable = true;
             rewardButton.interactable = true;
             //owRewarded();
         }
-        else if(placementId.Equals(interstitialId))
+        else if (placementId.Equals(interstitialId))
         {
-             print("Interstitial loaded");
-             //ShowInterstitial();
+            print("Interstitial loaded");
+            //ShowInterstitial();
         }
     }
 
@@ -150,6 +162,7 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
     {
         if (placementId.Equals(rewardId))
         {
+            foreach (var x in adRewardedButtons) x.button.interactable = false;
             rewardButton.interactable = false;
         }
         print("interstitial failed loading");
@@ -175,16 +188,26 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
         if (placementId.Equals(rewardId) && showCompletionState == UnityAdsShowCompletionState.COMPLETED)
         {
             print("user should claim reward");
-            GameManager.Instance.CoinsAvailable += 25;
+            GameManager.Instance.CoinsAvailable += rewardCoins;
+            foreach (var x in adRewardedButtons) x.button.interactable = false;
             rewardButton.interactable = false;
+            onRewardedDone?.Invoke(true);
             LoadRewarded();
         }
+        else if (placementId.Equals(rewardId) && showCompletionState != UnityAdsShowCompletionState.COMPLETED)
+        {
+            onRewardedDone?.Invoke(false);
+        }
+
         else if (placementId.Equals(interstitialId))
         {
-            
+
             LoadInterstitial();
         }
+        onRewardedDone = null;
+        rewardCoins = defaultRewardCoins;
+
     }
-    
-    
+
+
 }

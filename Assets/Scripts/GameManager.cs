@@ -24,11 +24,11 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     public string CurrentWord { get; set; } = String.Empty;
     public string CurrentWordSimplified { get; set; } = String.Empty;
     public BaseState CurrentState { get; private set; }
-    
+
     public int NewUser { get; private set; }
 
     public Color backgroundColor;
-    
+
     public UnityAction<GameType> OnGameTypeSelected;
     public UnityAction OnNewWord;
     public UnityAction OnNewDailyWord;
@@ -42,6 +42,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     private int coins;
     private int hints;
     private int eliminations;
+    private int dailyRewards;
 
     public int interstitialFreq = 2;
     public int GamesWon { get; set; }
@@ -78,25 +79,35 @@ public class GameManager : Singleton<GameManager>, IStateManageable
             OnTextChanged?.Invoke();
         }
     }
-    
+    public int DailyRewardsAvailable
+    {
+        get => dailyRewards;
+        set
+        {
+            dailyRewards = value;
+            PlayerPrefs.SetInt("DailyRewards", value);
+            OnTextChanged?.Invoke();
+        }
+    }
+
     public int startingCoins = 100;
     public int startingHints = 3;
     public int startingEliminations = 3;
 
     public int coinsPerGame = 60;
     public int decreasePerRow = 10;
-    
+
     public int coinsPerGameDaily = 60;
     public int decreasePerRowDaily = 10;
-    
+
     public int hintLimit = 3;
     [HideInInspector] public int timesHintUsed = 0;
     public int eliminationLimit = 3;
     [HideInInspector] public int timesEliminationUsed = 0;
-    
 
 
-    
+
+
     public Dictionary<string, BaseState> States { get; } = new Dictionary<string, BaseState>()
     {
         {"intro", new IntroState()},
@@ -104,9 +115,9 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         {"game", new GameState()},
         {"store", new StoreState()}
     };
-    
+
     [Header("Daily")]
-    [HideInInspector]public List<string> arabicMonths = new List<string>(){"يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"};
+    [HideInInspector] public List<string> arabicMonths = new List<string>() { "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر" };
     public int randomSeed = 1361997;
     [SerializeField] private string dailyWord;
 
@@ -122,7 +133,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
             ((MainMenu)PagesManager.Instance.pages[0]).SetDaily();
         }
     }
-    
+
     [Header("Background Settings")]
     public Image background;
     public Sprite[] patterns;
@@ -166,7 +177,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         SwitchState("intro");
         //Gley
         OnNewDailyWord += wordGuessManager.FetchDailyWord;
-        if(NewUser == 0) DailyWord = PseudoDailyWord();
+        if (NewUser == 0) DailyWord = PseudoDailyWord();
         else DailyWord = PlayerPrefs.GetString("DailyWord");
         StartCoroutine(CheckForDay());
         background.sprite = patterns[Random.Range(0, patterns.Length)];
@@ -175,6 +186,9 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         OnNewWord += RandomColor;
         AdsManager.Instance.InitializeAds();
         AdsManager.Instance.LoadBanner();
+        GleyNotifications.Initialize();
+
+        dailyRewards = PlayerPrefs.GetInt("DailyRewards");
         //AdsManager.Instance.ShowBanner();
 
 
@@ -192,14 +206,14 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         //Random.InitState(randomSeed);
         int dayMonth = DateTime.UtcNow.Day + DateTime.UtcNow.Month;
         int idx = 0;
-        for(int i = 0; i < dayMonth; i++)
+        for (int i = 0; i < dayMonth; i++)
         {
             idx = r.Next(0, WordArray.WordList.Length);
         }
         //print($"daily word generated {WordArray.WordList[idx]}");
         return WordArray.WordList[idx];
     }
-    
+
     private IEnumerator CheckForDay()
     {
         var day = PlayerPrefs.GetInt("Day");
@@ -207,6 +221,8 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         {
             if (day != DateTime.UtcNow.Day)
             {
+                if (DailyRewardsAvailable < 1)
+                    DailyRewardsAvailable++;
                 DailyWord = PseudoDailyWord();
                 day = DateTime.UtcNow.Day;
                 PlayerPrefs.SetInt("Day", day);
@@ -218,7 +234,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
 
     void RandomColor()
     {
-        
+
         if (wordGuessManager.pastState == InGameState.Win || wordGuessManager.pastState == InGameState.Loss)
         {
             Camera.main.backgroundColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), 0.27f, 0.9f);
@@ -236,9 +252,9 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     {
         PopupManager.Instance.CloseCurrentPopup();
         timesEliminationUsed = timesHintUsed = 0;
-        if(gameType == GameType.Classic)
+        if (gameType == GameType.Classic)
             wordGuessManager.ResetClassic();
-        else if(gameType == GameType.Daily)
+        else if (gameType == GameType.Daily)
             wordGuessManager.Reset();
     }
 
@@ -254,14 +270,14 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         CurrentState = state;
         CurrentState.EnterState(this);
     }
-    
+
     public void SwitchState(string state)
     {
         CurrentState?.ExitState(this);
         CurrentState = States[state];
         CurrentState.EnterState(this);
     }
-    
+
     public void SetGameType(GameType type)
     {
         gameType = type;
@@ -276,7 +292,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         wordGuessManagerDaily.enabled = false;
         wordGuessManager = wordGuessManagerClassic;*/
     }
-    
+
     public void EnableDailyMode()
     {
         /*wordGuessManagerClassic.gameObject.SetActive(false);
