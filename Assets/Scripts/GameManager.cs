@@ -47,6 +47,8 @@ public class GameManager : Singleton<GameManager>, IStateManageable
 
     public int interstitialFreq = 2;
     public int GamesWon { get; set; }
+    public int interCounter { get; set; }
+    public bool shouldShowInterAd => interCounter > 0 && interCounter % interstitialFreq == 0;
 
     public bool IsLevelGame => LevelGame > 0;
     public int LevelGame { get; set; }

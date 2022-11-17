@@ -178,6 +178,8 @@ public class WordGuessManager : MonoBehaviour
 
     public void SwitchState(InGameState state)
     {
+        if (state == InGameState.Win || state == InGameState.Loss)
+            GameManager.Instance.interCounter++;
         switch (state)
         {
             case InGameState.Typing:
@@ -224,15 +226,13 @@ public class WordGuessManager : MonoBehaviour
             else
                 PopupManager.Instance.OpenPopup((gameType == GameType.Classic) ? 1 : 4);
             GameManager.Instance.OnGameWon?.Invoke();
-            if ((gameType == GameType.Classic) && GameManager.Instance.GamesWon % GameManager.Instance.interstitialFreq == 0)
-            {
-                AdsManager.Instance.ShowInterstitial();
-            }
-            else if (gameType == GameType.Daily)
+
+            if (gameType == GameType.Daily)
             {
                 AdsManager.Instance.ShowInterstitial();
             }
         };
+
         //print("ondailygame should be invoked");
         //GameManager.Instance.OnDailyGamePlayed?.Invoke();
         coinsWon = (gameType == GameType.Classic) ? GameManager.Instance.coinsPerGame : GameManager.Instance.coinsPerGameDaily;
@@ -241,7 +241,10 @@ public class WordGuessManager : MonoBehaviour
         //PopupManager.Instance.OpenPopup(1);
         //GameManager.Instance.OnGameWon?.Invoke();
         PlayerPrefs.Save();
-
+        if (GameManager.Instance.shouldShowInterAd)
+        {
+            AdsManager.Instance.ShowInterstitial();
+        }
 
     }
 
@@ -250,12 +253,16 @@ public class WordGuessManager : MonoBehaviour
         //GameManager.Instance.score = 0;
         NotificationsManager.Instance.SpawnNotification(1).onComplete += () =>
         {
-            PopupManager.Instance.OpenPopup((gameType == GameType.Classic) ? 2 : 5);
+            if (GameManager.Instance.IsLevelGame)
+                PopupManager.Instance.OpenPopup(8);
+            else
+                PopupManager.Instance.OpenPopup((gameType == GameType.Classic) ? 2 : 5);
             //GameManager.Instance.OnDailyGamePlayed?.Invoke();
             GameManager.Instance.OnGameLost?.Invoke();
             if (gameType == GameType.Classic) GameManager.Instance.ResetScore();
         };
-        AdsManager.Instance.ShowInterstitial();
+        if (GameManager.Instance.shouldShowInterAd)
+            AdsManager.Instance.ShowInterstitial();
         //PopupManager.Instance.OpenPopup(2);
         //GameManager.Instance.OnGameLost?.Invoke();
     }

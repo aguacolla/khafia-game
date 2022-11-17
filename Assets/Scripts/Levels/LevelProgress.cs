@@ -27,6 +27,7 @@ public class LevelProgress
                 stars--;
         }
         stars = Mathf.Max(1, stars);
+        LevelProgress.stars = stars;
         return stars;
     }
 }

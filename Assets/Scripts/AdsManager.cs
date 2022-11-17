@@ -31,11 +31,12 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
     public Button rewardButton;
 
     public int defaultRewardCoins = 25;
-    public int rewardCoins = 25;
+    public int rewardCoins { get; set; } = 25;
     /// <summary>
     /// Automatically be removed
     /// </summary>
     public event System.Action<bool> onRewardedDone;
+    public bool rewardSkipLevel { get; set; }
 
     AdRewardedButton[] adRewardedButtons;
 
@@ -189,6 +190,14 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
         {
             print("user should claim reward");
             GameManager.Instance.CoinsAvailable += rewardCoins;
+            if (rewardSkipLevel)
+            {
+                GameManager.Instance.SetLevelStars(GameManager.Instance.LevelGame, 3);
+                GameManager.Instance.UnlockedLevel++;
+                GameManager.Instance.ProccedLevel();
+            }
+
+
             foreach (var x in adRewardedButtons) x.button.interactable = false;
             rewardButton.interactable = false;
             onRewardedDone?.Invoke(true);
@@ -204,8 +213,14 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
 
             LoadInterstitial();
         }
+
+        if (placementId.Equals(rewardId))
+        {
+            GameManager.Instance.interCounter = -1;
+        }
         onRewardedDone = null;
         rewardCoins = defaultRewardCoins;
+        rewardSkipLevel = false;
 
     }
 
