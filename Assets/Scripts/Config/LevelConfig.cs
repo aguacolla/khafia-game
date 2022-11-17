@@ -14,4 +14,5 @@ public class LevelConfig : Config<LevelConfig>
     public MinMax inWordcount = new MinMax(3, 4);
     public MinMax inPlaceCount = new MinMax(1, 2);
     public int genSeed = 0;
+    public int maxIterations = 10;
 }

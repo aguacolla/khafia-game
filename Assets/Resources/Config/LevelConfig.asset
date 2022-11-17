@@ -19,14 +19,15 @@ MonoBehaviour:
   - 1
   solvedGuesses:
     min: 3
-    max: 4
+    max: 3
   leftGuesses:
     min: 3
     max: 4
   inWordcount:
-    min: 4
-    max: 5
+    min: 3
+    max: 4
   inPlaceCount:
     min: 1
     max: 2
-  genSeed: -49
+  genSeed: 0
+  maxIterations: 10
