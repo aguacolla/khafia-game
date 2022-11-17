@@ -184,6 +184,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
             CoinsAvailable = 1000;
             HintsAvailable = 10;
             EliminationsAvailable = 10;
+            DailyRewardsAvailable = 1;
         }
 
 
@@ -272,10 +273,28 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         PopupManager.Instance.CloseCurrentPopup();
         timesEliminationUsed = timesHintUsed = 0;
         if (gameType == GameType.Classic)
+        {
+            wordGuessManager.wordMode = WordGuessManager.WordMode.array;
             wordGuessManager.ResetClassic();
+        }
         else if (gameType == GameType.Daily)
             wordGuessManager.Reset();
     }
+    public void ProccedLevel()
+    {
+        PopupManager.Instance.CloseCurrentPopup();
+        LevelGame = UnlockedLevel;
+        var level = LevelGame;
+        var guessManager = wordGuessManager;
+        var levelInfo = LevelGen.Generate(level);
+        guessManager.wordMode = WordGuessManager.WordMode.single;
+        guessManager.wordSingle = levelInfo.goalWord;
+        guessManager.ResetClassic();
+        levelInfo.ApplyInputs();
+        LevelProgress.Reset();
+        // guessManager.NewWord();
+    }
+
 
     public void ResetScore()
     {

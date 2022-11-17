@@ -8,7 +8,7 @@ public static class LevelGen
     public static LevelInfo Generate(int level)
     {
         var st = Random.state;
-        Random.InitState(level);
+        Random.InitState(level + LevelConfig.instance.genSeed);
         LevelInfo info = new LevelInfo();
         var dict = WordArray.AllWordsDict;
         {
@@ -28,16 +28,18 @@ public static class LevelGen
                 inWord = Mathf.Max(inWord, 0);
                 inPlace = Mathf.Max(inPlace, 0);
 
-                var inp = Random.Range(0, inPlace + 1);
-                var inw = Random.Range(0, inWord + 1);
-                guessContents[i] = new GuessContent();
+                var isLast = i == solvedGuesses - 1;
+
+                var inp = isLast ? inPlace : Random.Range(0, inPlace + 1);
+                var inw = isLast ? inWord : Random.Range(0, inWord + 1);
+                guessContents[i] = new GuessContent(inp, inw);
 
                 inPlace -= inp;
                 inWord -= inw;
             }
             foreach (var x in guessContents)
             {
-                info.entered.Add(SearchWord(x, goalOrigin));
+                info.entered.Add(SearchWord(x, goalOrigin, info.entered));
             }
             info.goalWord = goalOrigin;
             info.goalWordSimplified = goal;
@@ -48,7 +50,7 @@ public static class LevelGen
         return info;
     }
 
-    static string Simplify(string currentWord)
+    public static string Simplify(string currentWord)
     {
         var currentWordSimplified = currentWord;
         currentWordSimplified = Regex.Replace(currentWordSimplified, @"[أ|إ|آ]", "ا");
@@ -76,16 +78,43 @@ public static class LevelGen
         }
         return content;
     }
-    static string SearchWord(GuessContent content, string goalOrigin)
+    static KeyValuePair<K, V> GetAt<K, V>(this Dictionary<K, V> dict, int index)
+    {
+        int counter = 0;
+        foreach (var x in dict)
+        {
+            if (counter == index)
+                return x;
+            counter++;
+        }
+        return default;
+    }
+    static string SearchWord(GuessContent content, string goalOrigin, List<string> current)
     {
         var dict = WordArray.AllWordsDict;
         string any = null;
         GuessContent anyContent = default;
-        foreach (var x in dict)
+
+        int startIndex = Random.Range(0, dict.Count);
+        int count = dict.Count;
+
+        // int i = startIndex + 1;
+        // if (startIndex == dict.Count - 1)
+        int i = startIndex;
+        int loopSafe = 0;
+        do
         {
+            loopSafe++;
+            if (loopSafe > 1000)
+            {
+                throw new System.Exception("Something is not correct");
+            }
+
+            var x = dict.GetAt(i);
+
             foreach (var word in x.Value)
             {
-                if (word == goalOrigin)
+                if (word == goalOrigin || current.Contains(word))
                     continue;
                 if (Compare(goalOrigin, word).Equals(content))
                     return word;
@@ -111,7 +140,9 @@ public static class LevelGen
                     }
                 }
             }
-        }
+            i++;
+            i %= count;
+        } while (i != startIndex);
         return any;
     }
     struct GuessContent

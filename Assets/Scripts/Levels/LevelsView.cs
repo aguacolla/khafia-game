@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 public class LevelsView : MonoBehaviour
 {
+    public LevelInfo testLevelInfo;
     public int minLevels = 100;
     public float lockedAlpha = 0.9f;
     public Vector2 scrollOffset = new Vector2(0, 2000);

@@ -21,7 +21,8 @@ public enum InGameState
 [AddComponentMenu("Word Guess/WordGuessManager")]
 public class WordGuessManager : MonoBehaviour
 {
-    public enum WordMode {
+    public enum WordMode
+    {
         single,
         array
     }
@@ -66,16 +67,16 @@ public class WordGuessManager : MonoBehaviour
     private bool wordGuessedDaily, outOfTrialsDaily;
     public InGameState CurrentState, pastState;
     public UnityAction<InGameState> OnStateChange;
-    
+
 
     public Transform keyboard, keyboardClassic, keyboardDaily;
     public Dictionary<string, Button> KeyboardButtons;
     public Dictionary<string, Button> KeyboardButtonsClassic = new Dictionary<string, Button>();
     public Dictionary<string, Button> KeyboardButtonsDaily = new Dictionary<string, Button>();
     public EnterButton enterButton, enterButtonClassic, enterButtonDaily;
-    
+
     public bool incorrectWord = false;
-    
+
     public List<int> lettersHinted;
     public bool hintCalled;
     private List<Image> glowImages = new List<Image>();
@@ -83,9 +84,9 @@ public class WordGuessManager : MonoBehaviour
 
     public int coinsWon;
     public int coinsDecrease;
-    
+
     private GameType gameType;
-    
+
     private void Awake()
     {
         foreach (Transform row in keyboardClassic.GetChild(0))
@@ -97,7 +98,7 @@ public class WordGuessManager : MonoBehaviour
                 KeyboardButtonsClassic.Add(but.name, but);
             }
         }
-        
+
         foreach (Transform row in keyboardDaily.GetChild(0))
         {
             foreach (Button but in row.GetComponentsInChildren<Button>())
@@ -119,7 +120,7 @@ public class WordGuessManager : MonoBehaviour
                 glowImages.Add(glow);
             }
         }
-        
+
         foreach (Transform row in wordGridDaily)
         {
             foreach (Transform letter in row)
@@ -198,11 +199,17 @@ public class WordGuessManager : MonoBehaviour
 
     void GameWon()
     {
+        if (GameManager.Instance.IsLevelGame)
+        {
+            GameManager.Instance.SetLevelStars(GameManager.Instance.UnlockedLevel,
+            LevelProgress.GetLevelStars(LevelProgress.levelTimeSpent));
+            GameManager.Instance.UnlockedLevel++;
+        }
         if (gameType == GameType.Classic)
         {
             GameManager.Instance.GamesWon++;
             GameManager.Instance.score++;
-            if(GameManager.Instance.score > GameManager.Instance.highScore)
+            if (GameManager.Instance.score > GameManager.Instance.highScore)
             {
                 GameManager.Instance.highScore = GameManager.Instance.score;
                 PlayerPrefs.SetInt("HighScore", GameManager.Instance.highScore);
@@ -212,15 +219,16 @@ public class WordGuessManager : MonoBehaviour
         SoundManager.Instance.PlayWinSound();
         NotificationsManager.Instance.SpawnNotification(0).onComplete += () =>
         {
-            
-
-            PopupManager.Instance.OpenPopup((gameType == GameType.Classic) ? 1 : 4);
+            if (GameManager.Instance.IsLevelGame)
+                PopupManager.Instance.OpenPopup(7);
+            else
+                PopupManager.Instance.OpenPopup((gameType == GameType.Classic) ? 1 : 4);
             GameManager.Instance.OnGameWon?.Invoke();
             if ((gameType == GameType.Classic) && GameManager.Instance.GamesWon % GameManager.Instance.interstitialFreq == 0)
             {
                 AdsManager.Instance.ShowInterstitial();
             }
-            else if(gameType == GameType.Daily)
+            else if (gameType == GameType.Daily)
             {
                 AdsManager.Instance.ShowInterstitial();
             }
@@ -234,7 +242,7 @@ public class WordGuessManager : MonoBehaviour
         //GameManager.Instance.OnGameWon?.Invoke();
         PlayerPrefs.Save();
 
-        
+
     }
 
     void GameLost()
@@ -245,7 +253,7 @@ public class WordGuessManager : MonoBehaviour
             PopupManager.Instance.OpenPopup((gameType == GameType.Classic) ? 2 : 5);
             //GameManager.Instance.OnDailyGamePlayed?.Invoke();
             GameManager.Instance.OnGameLost?.Invoke();
-            if(gameType == GameType.Classic) GameManager.Instance.ResetScore();
+            if (gameType == GameType.Classic) GameManager.Instance.ResetScore();
         };
         AdsManager.Instance.ShowInterstitial();
         //PopupManager.Instance.OpenPopup(2);
@@ -259,25 +267,25 @@ public class WordGuessManager : MonoBehaviour
         currentWordSimplifiedDaily = currentWordDaily;
         currentWordSimplifiedDaily = Regex.Replace(currentWordSimplifiedDaily, @"[أ|إ|آ]", "ا");
         currentWordSimplifiedDaily = Regex.Replace(currentWordSimplifiedDaily, @"[ى]", "ي");
-        
+
     }
 
     public void NewWord()
     {
         // Single: Gives you the word set in the Inspector
-        if(wordMode == WordMode.single) currentWord = wordSingle;
+        if (wordMode == WordMode.single) currentWord = wordSingle;
         // Array: Gives you a random word from the dictionary
         else
         {
             int index = Random.Range(0, WordArray.WordList.Length);
             currentWord = WordArray.WordList[index];
-            
+
         }
         currentWordSimplified = currentWord;
         currentWordSimplified = Regex.Replace(currentWordSimplified, @"[أ|إ|آ]", "ا");
         currentWordSimplified = Regex.Replace(currentWordSimplified, @"[ى]", "ي");
-        
-        for(int i = 0; i < 5; i++)
+
+        for (int i = 0; i < 5; i++)
         {
             lettersHinted = new List<int>() { 0, 1, 2, 3, 4 };
         }
@@ -315,7 +323,7 @@ public class WordGuessManager : MonoBehaviour
                     if (gameType == GameType.Classic) enteredWord = eWord;
                     else if (gameType == GameType.Daily) enteredWordDaily = eWord;
                 }
-                
+
                 // Submits word for validation
                 else if (c == '\n' || c == '\r')
                 {
@@ -328,7 +336,8 @@ public class WordGuessManager : MonoBehaviour
 
                     // Checks if word is in dictionary
                     // Check for word here
-                    if (incorrectWord){
+                    if (incorrectWord)
+                    {
                         //wordGrid.GetChild(rowIndex).DOShakePosition(0.5f, 100);
                         StartCoroutine(Shake((gameType == GameType.Classic) ? rowIndex : rowIndexDaily, 1));
                         wordErrorEvent.Invoke();
@@ -393,21 +402,21 @@ public class WordGuessManager : MonoBehaviour
                             break;
                     }
                 }
-                
+
                 //print(eWord);
 
                 enteredWord = ValidateWord(enteredWord);
                 enteredWordDaily = ValidateWord(enteredWordDaily);
 
                 eWord = (GameManager.Instance.gameType == GameType.Classic) ? enteredWord : enteredWordDaily;
-                
+
                 enterButton.SetInteractable(eWord.Length == 5);
                 if (eWord.Length == 5)
                 {
                     incorrectWord = WordNotInDictionary(eWord);
                     enterButton.SetIncorrectWord(incorrectWord);
                 }
-                
+
                 DisplayWord();
                 SoundManager.Instance.PlayClickSound();
             }
@@ -417,14 +426,15 @@ public class WordGuessManager : MonoBehaviour
     public void DisplayWord()
     {
         Transform row = wordGrid.GetChild((gameType == GameType.Classic) ? rowIndex : rowIndexDaily);
-        for(int i = 0; i < row.childCount; i++)
+        for (int i = 0; i < row.childCount; i++)
         {
             var eWord = (gameType == GameType.Classic) ? enteredWord : enteredWordDaily;
             var str = eWord.Length > i ? eWord[i].ToString() : "";
             if (str == "ي" && i != row.childCount - 1)
             {
                 str = "يـ";
-            }else if(str == "ئ" && i != row.childCount - 1)
+            }
+            else if (str == "ئ" && i != row.childCount - 1)
             {
                 str = "ئـ";
             }
@@ -452,7 +462,7 @@ public class WordGuessManager : MonoBehaviour
 
     private void Update()
     {
-        if(GameManager.Instance.CurrentState.stateName == "Game") EnterLetter(Input.inputString);
+        if (GameManager.Instance.CurrentState.stateName == "Game") EnterLetter(Input.inputString);
         //print(CurrentState);
         if (Input.GetKeyDown("space"))
         {
@@ -463,9 +473,9 @@ public class WordGuessManager : MonoBehaviour
 
     public string ValidateWord(string str)
     {
-        if(str == "" || str == null) return "";
+        if (str == "" || str == null) return "";
         // Sets length of string if it's too long
-        if(str.Length > wordLength) str = str.Substring(0, wordLength);
+        if (str.Length > wordLength) str = str.Substring(0, wordLength);
         // Remove anything else than letters
         str = Regex.Replace(str, @"[^\u0600-\u06ff]", "");
 
@@ -475,7 +485,7 @@ public class WordGuessManager : MonoBehaviour
     void SetImageColor()
     {
         Transform row = wordGrid.GetChild((gameType == GameType.Classic) ? rowIndex : rowIndexDaily);
-        for(int i=0; i < row.childCount; i++)
+        for (int i = 0; i < row.childCount; i++)
         {
             Image img = row.GetChild(row.childCount - i - 1).GetComponent<Image>();
             img.color = FulldefaultColor;
@@ -488,14 +498,14 @@ public class WordGuessManager : MonoBehaviour
         Transform row = wordGrid.GetChild((gameType == GameType.Classic) ? rowIndex : rowIndexDaily);
         List<Image> notInRightPlaceImages = new List<Image>();
         List<char> notInRightPlaceChars = new List<char>();
-        
+
         string cWordSimplified = (gameType == GameType.Classic) ? currentWordSimplified : currentWordSimplifiedDaily;
         string cWord = (gameType == GameType.Classic) ? currentWord : currentWordDaily;
         string eWord = (gameType == GameType.Classic) ? enteredWord : enteredWordDaily;
         string letterCount = cWordSimplified;
 
-        
-        for(int i = 0; i < row.childCount; i++)
+
+        for (int i = 0; i < row.childCount; i++)
         {
             Image img = row.GetChild(row.childCount - i - 1).GetComponent<Image>();
             if (eWord[i].ToString() == cWordSimplified[i].ToString())
@@ -506,9 +516,10 @@ public class WordGuessManager : MonoBehaviour
                 //img.color = inPlaceColor;
                 buttonImg.color = inPlaceColor;
                 buttonImg.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
-                colors.Add(inPlaceColor); 
+                colors.Add(inPlaceColor);
                 lettersHinted.Remove(i);
-            } else
+            }
+            else
             {
                 notInRightPlaceImages.Add(img);
                 notInRightPlaceChars.Add(eWord[i]);
@@ -517,11 +528,11 @@ public class WordGuessManager : MonoBehaviour
             }
         }
 
-        for(int i = 0; i < notInRightPlaceImages.Count; i++)
+        for (int i = 0; i < notInRightPlaceImages.Count; i++)
         {
             Image img = notInRightPlaceImages[i];
             Image buttonImg = KeyboardButtons[notInRightPlaceChars[i].ToString()].gameObject.GetComponent<Image>();
-            if(letterCount.Contains(notInRightPlaceChars[i])) 
+            if (letterCount.Contains(notInRightPlaceChars[i]))
             {
                 Regex regex = new Regex(Regex.Escape(notInRightPlaceChars[i].ToString()));
                 letterCount = regex.Replace(letterCount, "", 1);
@@ -549,10 +560,10 @@ public class WordGuessManager : MonoBehaviour
         seq.Append(t);
         seq.Append(DOTween.To(() => ims.color, x => ims.color = x, colors[0], 0.1f).SetDelay(0.1f));
         seq.Join(row.GetChild(4).DOLocalRotate(new Vector3(0, 0, 0), 0.1f));
-        
-        for(int i = 1; i < 5; i++)
+
+        for (int i = 1; i < 5; i++)
         {
-            Image im = row.GetChild(5-i-1).GetComponent<Image>();
+            Image im = row.GetChild(5 - i - 1).GetComponent<Image>();
             //seq.AppendInterval(0.05f);
             Tweener t2 = row.GetChild(5 - i - 1).DOLocalRotate(new Vector3(90, 0, 0), 0.1f);
             t2.onComplete += () =>
@@ -564,7 +575,7 @@ public class WordGuessManager : MonoBehaviour
                     im.transform.GetChild(2).gameObject.SetActive(false);
                     im.transform.GetChild(1).GetComponent<Image>().DOFade(0, 0.1f);
                 }
-                
+
             };
             seq.Join(t2.SetDelay(0.05f));
             seq.Join(DOTween.To(() => im.color, x => im.color = x, colors[i], 0.1f).SetDelay(0.1f));
@@ -600,39 +611,39 @@ public class WordGuessManager : MonoBehaviour
 
     public void ResetClassic()
     {
-        if(!wordGridClassic) return;
+        if (!wordGridClassic) return;
         // Gets all characters displayed in the grid
         TextMeshProUGUI[] gridTMPro = wordGridClassic.GetComponentsInChildren<TextMeshProUGUI>();
         // Gets all boxes behind the characters
-        
+
         // Resets characters
-        foreach(TextMeshProUGUI tmPro in gridTMPro) tmPro.text = "";
+        foreach (TextMeshProUGUI tmPro in gridTMPro) tmPro.text = "";
 
         foreach (Image glow in glowImages)
         {
             glow.rectTransform.localPosition = new Vector3(0, 0, 0);
             glow.color = hintColor;
             glow.GetComponent<CanvasGroup>().alpha = 0;
-            if(glow.transform.childCount > 0)
+            if (glow.transform.childCount > 0)
             {
                 glow.transform.GetChild(0).gameObject.SetActive(false);
             }
         }
         EliminationCount = 0;
-        
+
         foreach (var btn in KeyboardButtonsClassic.Values)
         {
             btn.GetComponent<Image>().color = keyboardDefaultColor;
         }
-        
+
         // Common
         // Jumps to first row
         rowIndex = 0;
         enteredWord = "";
         wordGuessed = outOfTrials = false;
-        
+
         enterButtonClassic.SetInteractable(false);
-        
+
         foreach (Transform row in wordGridClassic)
         {
             foreach (Transform letter in row)
@@ -641,7 +652,7 @@ public class WordGuessManager : MonoBehaviour
                 letter.GetComponentInChildren<TextMeshProUGUI>().color = gridLetterDefaultColor;
             }
         }
-        
+
         foreach (Transform row in keyboard.GetChild(0))
         {
             foreach (Button but in row.GetComponentsInChildren<Button>())
@@ -650,51 +661,51 @@ public class WordGuessManager : MonoBehaviour
                 but.GetComponentInChildren<TextMeshProUGUI>().color = keyboardDefaultTextColor;
             }
         }
-        
+
         // Classic specific
         NewWord();
         Image[] images = wordGridClassic.GetComponentsInChildren<Image>();
 
         foreach (Image image in images) image.color = defaultColor;
     }
-    
+
     public void ResetDaily()
     {
-        if(!wordGridDaily) return;
+        if (!wordGridDaily) return;
         // Gets all characters displayed in the grid
         TextMeshProUGUI[] gridTMPro = wordGridDaily.GetComponentsInChildren<TextMeshProUGUI>();
         // Gets all boxes behind the characters
         Image[] images = wordGridDaily.GetComponentsInChildren<Image>();
-        
-        foreach(Image image in images) image.color = defaultColor;
+
+        foreach (Image image in images) image.color = defaultColor;
         // Resets characters
-        foreach(TextMeshProUGUI tmPro in gridTMPro) tmPro.text = "";
+        foreach (TextMeshProUGUI tmPro in gridTMPro) tmPro.text = "";
 
         foreach (Image glow in glowImages)
         {
             glow.rectTransform.localPosition = new Vector3(0, 0, 0);
             glow.color = hintColor;
             glow.GetComponent<CanvasGroup>().alpha = 0;
-            if(glow.transform.childCount > 0)
+            if (glow.transform.childCount > 0)
             {
                 glow.transform.GetChild(0).gameObject.SetActive(false);
             }
         }
         EliminationCount = 0;
-        
+
         foreach (var btn in KeyboardButtonsDaily.Values)
         {
             btn.GetComponent<Image>().color = keyboardDefaultColor;
         }
-        
+
         // Common
         // Jumps to first row
         rowIndexDaily = 0;
         enteredWordDaily = "";
         wordGuessedDaily = outOfTrialsDaily = false;
-        
+
         enterButtonDaily.SetInteractable(false);
-        
+
         foreach (Transform row in wordGridDaily)
         {
             foreach (Transform letter in row)
@@ -703,7 +714,7 @@ public class WordGuessManager : MonoBehaviour
                 letter.GetComponentInChildren<TextMeshProUGUI>().color = gridLetterDefaultColor;
             }
         }
-        
+
         foreach (Transform row in keyboardDaily.GetChild(0))
         {
             foreach (Button but in row.GetComponentsInChildren<Button>())
@@ -712,7 +723,7 @@ public class WordGuessManager : MonoBehaviour
                 but.GetComponentInChildren<TextMeshProUGUI>().color = keyboardDefaultTextColor;
             }
         }
-        
+
         // Classic specific
         foreach (Transform row in keyboardDaily.GetChild(0))
         {
@@ -728,8 +739,8 @@ public class WordGuessManager : MonoBehaviour
 
         foreach (Image image in imagess) image.color = defaultColor;
     }
-    
-    
+
+
 
     public void Reset()
     {
@@ -741,7 +752,7 @@ public class WordGuessManager : MonoBehaviour
                 but.interactable = false;
             }
         }
-        
+
         enterButtonDaily.SetInteractable(false);
         rowIndexDaily = 0;
         enteredWordDaily = "";
@@ -757,22 +768,23 @@ public class WordGuessManager : MonoBehaviour
         float time = Time.time - startTime;
         while (time <= duration)
         {
-            float x = 50*Mathf.Sin(40 * time) * Mathf.Exp(-5 * time);
+            float x = 50 * Mathf.Sin(40 * time) * Mathf.Exp(-5 * time);
             wordGrid.GetChild(row).localPosition = new Vector3(x, wordGrid.GetChild(row).localPosition.y, wordGrid.GetChild(row).localPosition.z);
             yield return new WaitForSeconds(0.01f);
             time = Time.time - startTime;
         }
     }
-    
+
 
 
 #if UNITY_EDITOR
-    private void OnValidate() {
-        if(!wordGrid) return;
-        
+    private void OnValidate()
+    {
+        if (!wordGrid) return;
+
 
         Outline[] outlines = wordGrid.GetComponentsInChildren<Outline>();
-        foreach(Outline outline in outlines) outline.effectColor = outlineColor;
+        foreach (Outline outline in outlines) outline.effectColor = outlineColor;
     }
 #endif
 }

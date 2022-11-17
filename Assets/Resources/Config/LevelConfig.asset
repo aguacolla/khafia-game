@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6858c164dd29df540b033f2d6fe0bae9, type: 3}
   m_Name: LevelConfig
   m_EditorClassIdentifier: 
+  levelDuration: 60
+  starsDiv:
+  - 0.33333334
+  - 0.6666667
+  - 1
   solvedGuesses:
     min: 3
     max: 4
@@ -19,9 +24,9 @@ MonoBehaviour:
     min: 3
     max: 4
   inWordcount:
-    min: 3
-    max: 4
+    min: 4
+    max: 5
   inPlaceCount:
     min: 1
     max: 2
-  genSeed: 0
+  genSeed: -49

@@ -80,9 +80,24 @@ public class GameState : BaseState
     {
         if (GameManager.Instance.gameType == GameType.Classic)
         {
-            if (GameManager.Instance.CurrentWord.Length == 5)
+            var level = GameManager.Instance.LevelGame;
+            var guessManager = GameManager.Instance.wordGuessManager;
+            if (GameManager.Instance.IsLevelGame)
             {
-                return;
+                var levelInfo = LevelGen.Generate(level);
+                guessManager.wordMode = WordGuessManager.WordMode.single;
+                guessManager.wordSingle = levelInfo.goalWord;
+                guessManager.ResetClassic();
+                levelInfo.ApplyInputs();
+                LevelProgress.Reset();
+            }
+            else
+            {
+                guessManager.wordMode = WordGuessManager.WordMode.array;
+                if (GameManager.Instance.CurrentWord.Length == 5)
+                {
+                    return;
+                }
             }
             GameManager.Instance.wordGuessManager.NewWord();
         }
@@ -96,6 +111,14 @@ public class GameState : BaseState
 
     public override void ExitState(IStateManageable stateManager)
     {
+        if (GameManager.Instance.IsLevelGame)
+        {
+            GameManager.Instance.timesEliminationUsed = 0;
+            GameManager.Instance.timesHintUsed = 0;
+            GameManager.Instance.wordGuessManager.ResetClassic();
+        }
+        GameManager.Instance.LevelGame = 0;
+
     }
 
     public GameState() : base("Game")
@@ -123,3 +146,18 @@ public class LevelsState : BaseState
     }
 }
 
+public class EmptyState : BaseState
+{
+    public override void EnterState(IStateManageable stateManager)
+    {
+    }
+
+    public override void UpdateState(IStateManageable stateManager)
+    {
+    }
+
+    public override void ExitState(IStateManageable stateManager)
+    {
+    }
+    public EmptyState() : base("empty") { }
+}

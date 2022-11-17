@@ -31,16 +31,24 @@ public class Game : Page
         coinsText.DOText(GameManager.Instance.CoinsAvailable.ToString(), 0.25f);
     }
 
-    
+
     // Update is called once per frame
     void ChangeText()
     {
         if (GameManager.Instance.gameType == GameType.Classic)
         {
-            topText.text = "عدد النقاط";
-            titleText.text = GameManager.Instance.score.ToString();
+            if (GameManager.Instance.IsLevelGame)
+            {
+                topText.text = "المستوى";
+                titleText.text = GameManager.Instance.LevelGame.ToString();
+            }
+            else
+            {
+                topText.text = "عدد النقاط";
+                titleText.text = GameManager.Instance.score.ToString();
+            }
         }
-        else if(GameManager.Instance.gameType == GameType.Daily)
+        else if (GameManager.Instance.gameType == GameType.Daily)
         {
             topText.text = GameManager.Instance.arabicMonths[DateTime.Now.Month - 1];
             titleText.text = DateTime.Now.Day.ToString();
@@ -57,7 +65,7 @@ public class Game : Page
         {
             GameManager.Instance.EnableDailyMode();
         }
-        
+
         ChangeText();
     }
 }
