@@ -31,8 +31,6 @@ public static class LevelGen
             inPlace = Mathf.Clamp(inPlace, 0, wordLen);
             while (inPlace + inWord > wordLen)
                 inPlace--;
-            while (inPlace + inWord < wordLen)
-                inWord++;
 
             GuessContent gc = new GuessContent(inPlace, inWord);
 
