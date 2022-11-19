@@ -12,20 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b5400bfa170a15408340bff8b3aef5e, type: 3}
   m_Name: UIConfig
   m_EditorClassIdentifier: 
-  defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  FulldefaultColor: {r: 0, g: 0, b: 0, a: 0}
+  backgroundPatterns:
+  - {fileID: 21300000, guid: 799d539ee0bf4204caffbf5c4b44ac83, type: 3}
+  - {fileID: 21300000, guid: dc1490cf695492544b9772beb85ca256, type: 3}
+  - {fileID: 21300000, guid: 53550fcc670dc6f44935480eb4b8ec2b, type: 3}
+  - {fileID: 21300000, guid: 50faca3fa402ec94dbb0fa2721447ddb, type: 3}
+  - {fileID: 21300000, guid: c8e38c614bc96cb4587e5fd0c97caaaf, type: 3}
+  - {fileID: 21300000, guid: 102f0f6d14fc47e4ab74266c7f855cd0, type: 3}
+  - {fileID: 21300000, guid: 01e625d9861d46c458d152ff120ad555, type: 3}
+  - {fileID: 21300000, guid: ef5ee582f14b79647a6fb18eafa960c2, type: 3}
+  defaultColor: {r: 1, g: 1, b: 1, a: 0.003921569}
+  FulldefaultColor: {r: 1, g: 1, b: 1, a: 1}
   outlineColor: {r: 0.24705882, g: 0.24705882, b: 0.24705882, a: 1}
-  inPlaceColor: {r: 0.3254902, g: 0.5529412, b: 0.30588236, a: 1}
-  inWordColor: {r: 0.70980394, g: 0.62352943, b: 0.23137255, a: 1}
-  notInWordColor: {r: 0.16470589, g: 0.16470589, b: 0.16470589, a: 1}
-  hintColor: {r: 0, g: 0, b: 0, a: 0}
-  hintTextColor: {r: 0, g: 0, b: 0, a: 0}
-  defaultWordImage: {fileID: 0}
-  wordImage: {fileID: 0}
-  gridLetterDefaultColor: {r: 0, g: 0, b: 0, a: 0}
-  gridLetterCheckedColor: {r: 0, g: 0, b: 0, a: 0}
-  keyboardDefaultColor: {r: 129, g: 131, b: 132, a: 255}
-  keyboardDefaultTextColor: {r: 0, g: 0, b: 0, a: 0}
+  inPlaceColor: {r: 0.25882354, g: 0.8627451, b: 1, a: 1}
+  inWordColor: {r: 1, g: 0.31764707, b: 0.37254903, a: 1}
+  notInWordColor: {r: 0.54901963, g: 0.54901963, b: 0.54901963, a: 1}
+  hintColor: {r: 0.64705884, g: 0.8509804, b: 0.627451, a: 0.6745098}
+  hintTextColor: {r: 0, g: 0.25490198, b: 0.18431373, a: 0.9490196}
+  defaultWordImage: {fileID: 21300000, guid: cede0926b92fe46489bb225fe9e889f6, type: 3}
+  wordImage: {fileID: 21300000, guid: 2a929538bf77065469f6f717db06d038, type: 3}
+  gridLetterDefaultColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+  gridLetterCheckedColor: {r: 1, g: 1, b: 1, a: 1}
+  keyboardDefaultColor: {r: 1, g: 1, b: 1, a: 1}
+  keyboardDefaultTextColor: {r: 0.27450982, g: 0.27450982, b: 0.27450982, a: 1}
   levelsSeason:
   - {fileID: 1316549758685200, guid: ab2a5dafa99d5384ba9f61149e0e88d6, type: 3}
   - {fileID: 1792324914579886, guid: bc1523af926dcdc47bdf073b0f8a9e82, type: 3}
