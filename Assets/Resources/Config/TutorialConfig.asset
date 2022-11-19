@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a68333598f203cb449a009fff44b3275, type: 3}
+  m_Name: TutorialConfig
+  m_EditorClassIdentifier: 
+  goalWord: "\u0645\u0631\u062D\u0628\u0627"
+  instructs:
+  - text: "\u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0644\u0639\u0628\u0629 \u0627\u0644\u062A\u062F\u0631\u064A\u0628\u064A\u0629
+      \u0633\u064A\u062A\u0645 \u0634\u0631\u062D \u0643\u064A\u0641\u064A\u0629
+      \u0627\u0644\u0644\u0639\u0628"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 
+  - text: "\u0647\u0646\u0627\u0643 \u0643\u0644\u0645\u0629 \u0645\u062E\u0641\u064A\u0629
+      \u0648\u0627\u0644\u0647\u062F\u0641 \u0647\u0648 \u0627\u064A\u062C\u0627\u062F
+      \u062A\u0644\u0643 \u0627\u0644\u0643\u0644\u0645\u0629!"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 
+  - text: "\u0641\u0644\u062A\u062C\u0631\u0628 \u0627\u062F\u062E\u0627\u0644 \u0643\u0644\u0645\u0629
+      \u0645\u0627 "
+    inputWord: "\u0645\u062F\u0631\u0633\u0629"
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 0200000009000000
+  - text: "\u0644\u0648\u0646 \u0627\u0644\u0627\u062D\u0631\u0641 \u0647\u0648 \u0627\u0644\u0641\u062A\u0627\u062D
+      \u0644\u0627\u064A\u062C\u0627\u062F \u0627\u0644\u0643\u0644\u0645\u0629!"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 09000000
+  - text: "\u0647\u0630\u0647 \u0627\u0644\u062D\u0631\u0648\u0641 \u0636\u0645\u0646
+      \u0627\u0644\u0643\u0644\u0645\u0629 \u0648\u0641\u064A \u0645\u0643\u0627\u0646\u0647\u0627
+      \u0627\u0644\u0635\u062D\u064A\u062D"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 04000000
+  - text: "\u0647\u0630\u0647 \u0627\u0644\u062D\u0631\u0648\u0641 \u0636\u0645\u0646
+      \u0627\u0644\u0643\u0644\u0645\u0629 \u0648\u0644\u0643\u0646 \u0644\u064A\u0633\u062A
+      \u0641\u064A \u0645\u0643\u0627\u0646\u0647\u0627"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 03000000
+  - text: "\u0647\u0630\u0647 \u0627\u0644\u062D\u0631\u0648\u0641 \u0644\u064A\u0633\u062A
+      \u0636\u0645\u0646 \u0627\u0644\u0643\u0644\u0645\u0629"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 05000000
+  - text: "\u0627\u0633\u062A\u0639\u0645\u0644 \u0627\u062F\u0627\u0629 \u0627\u0644\u0633\u0647\u0645
+      \u0644\u0627\u0632\u0627\u0644\u0629 \u0639\u062F\u062F \u0645\u0646 \u0627\u0644\u062D\u0631\u0648\u0641
+      \u0627\u0644\u062A\u064A \u0644\u064A\u0633\u062A \u0636\u0645\u0646 \u0627\u0644\u0643\u0644\u0645\u0629"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 1
+    highlights: 06000000
+  - text: "\u0631\u0627\u0626\u0639!"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 
+  - text: "\u0628\u0627\u0632\u0627\u0644\u0629 \u0627\u0644\u062D\u0631\u0648\u0641
+      \u063A\u064A\u0631 \u0627\u0644\u0645\u0648\u062C\u0648\u062F\u0629 \u064A\u0635\u0628\u062D
+      \u0645\u0646\u0646 \u0627\u0644\u0633\u0647\u0644 \u0627\u0644\u0639\u062B\u0648\u0631
+      \u0639\u0644\u0649 \u0627\u0644\u0643\u0644\u0645\u0629"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 
+  - text: "\u0627\u0633\u062A\u0639\u0645\u0644 \u0627\u062F\u0627\u0629 \u0627\u0644\u0639\u062F\u0633\u0629
+      \u0644\u0643\u0634\u0641 \u062D\u0631\u0641 \u0645\u0646 \u0627\u0644\u0643\u0644\u0645\u0629"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 0
+    highlights: 07000000
+  - text: "\u0631\u0627\u0626\u0639!"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 
+  - text: "\u062A\u0643\u0634\u0641 \u0627\u062F\u0627\u0629 \u0627\u0644\u0639\u062F\u0633\u0629
+      \u0639\u0646 \u0627\u062D\u062F \u0627\u0644\u062D\u0631\u0648\u0641 \u0645\u0646
+      \u0627\u0644\u0643\u0644\u0645\u0629"
+    inputWord: 
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 
+  - text: "\u0641\u0644\u062A\u062F\u062E\u0644 \u0643\u0644\u0645\u0629 \u0627\u062E\u0631\u0649"
+    inputWord: "\u0645\u0631\u0643\u0628\u0629"
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 0200000009000000
+  - text: " \u0627\u0642\u062A\u0631\u0628\u062A \u0647\u0630\u0647 \u0627\u0644\u0645\u0631\u0629.
+      \u0641\u0644\u062A\u062F\u062E\u0644 \u0643\u0644\u0645\u0629 \u0645\u0634\u0627\u0628\u0647\u0629 "
+    inputWord: "\u0645\u0631\u062D\u0628\u0627"
+    useTimeout: 0
+    timeout: 3
+    item: 2
+    highlights: 0200000009000000

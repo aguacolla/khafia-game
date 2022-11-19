@@ -18,7 +18,9 @@ public class HintButton : MonoBehaviour
     [SerializeField] private Sprite inactiveSprite;
 
     private bool limitReached;
-    
+
+    public event Action onInputFinish;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -33,13 +35,13 @@ public class HintButton : MonoBehaviour
         GameManager.Instance.OnNewWord += ResetButton;
         GameManager.Instance.OnTextChanged += SetCounter;
     }
-    
+
     void SetText()
     {
         countText.text = GameManager.Instance.HintsAvailable.ToString();
     }
 
-    
+
     public void ResetButton()
     {
         limitReached = false;
@@ -65,7 +67,7 @@ public class HintButton : MonoBehaviour
             NotificationsManager.Instance.SpawnMessage(0);
             return;
         }
-        
+
         if ((!GameManager.Instance.devMode && GameManager.Instance.HintsAvailable <= 0))
         {
             //PopupManager.Instance.OpenPopup(3);
@@ -73,9 +75,9 @@ public class HintButton : MonoBehaviour
             GameManager.Instance.SwitchState("store");
             return;
         }
-        
-        
-        
+
+
+
         if (wordGuessManager.lettersHinted.Count <= 0)
         {
             return;
@@ -124,5 +126,6 @@ public class HintButton : MonoBehaviour
             limitReached = true;
             button.GetComponent<Image>().sprite = inactiveSprite;
         }
+        onInputFinish?.Invoke();
     }
 }

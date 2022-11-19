@@ -38,6 +38,12 @@ public class MenuState : BaseState
     {
         if (!SoundManager.Instance.musicSource.isPlaying)
             SoundManager.Instance.PlayMusic(0);
+        if (GameManager.Instance.ShouldStartTutorial)
+        {
+            GameManager.Instance.ShouldStartTutorial = false;
+            GameManager.Instance.PlayTutorialComplete();
+            return;
+        }
     }
 
     public override void UpdateState(IStateManageable stateManager)
@@ -82,6 +88,12 @@ public class GameState : BaseState
         {
             var level = GameManager.Instance.LevelGame;
             var guessManager = GameManager.Instance.wordGuessManager;
+            if (GameManager.Instance.IsTutorial)
+            {
+                guessManager.wordMode = WordGuessManager.WordMode.single;
+                guessManager.wordSingle = TutorialConfig.instance.goalWord;
+            }
+            else
             if (GameManager.Instance.IsLevelGame)
             {
                 var levelInfo = LevelGen.Generate(level);

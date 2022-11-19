@@ -8,7 +8,8 @@ using TMPro;
 public enum Item
 {
     Hint,
-    Elimination
+    Elimination,
+    UNKNOWN,
 }
 
 public class ItemBuyButton : MonoBehaviour
@@ -31,12 +32,12 @@ public class ItemBuyButton : MonoBehaviour
         text.text = (price * multiplier).ToString();
         button.onClick.AddListener(Buy);
     }
-    
+
     private void Buy()
     {
         if (GameManager.Instance.CoinsAvailable >= price * multiplier)
         {
-            GameManager.Instance.CoinsAvailable -= price* multiplier;
+            GameManager.Instance.CoinsAvailable -= price * multiplier;
             if (item == Item.Hint)
             {
                 GameManager.Instance.HintsAvailable += multiplier;

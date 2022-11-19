@@ -42,6 +42,11 @@ public class Game : Page
                 topText.text = "المستوى";
                 titleText.text = GameManager.Instance.LevelGame.ToString();
             }
+            else if (GameManager.Instance.IsTutorial)
+            {
+                topText.text = "لعبة تعليمية";
+                titleText.text = "";
+            }
             else
             {
                 topText.text = "عدد النقاط";

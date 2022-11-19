@@ -40,6 +40,9 @@ public class WordGuessManager : MonoBehaviour
     public UnityEvent wordNotGuessedEvent;
     // Invoke() - When word is too short or if word isn't in the dictionary
     public UnityEvent wordErrorEvent;
+
+    public System.Action<string> onInputFinish;
+
     public Color defaultColor;
     public Color FulldefaultColor;
     public Color outlineColor = new Color32(63, 63, 63, 255);
@@ -314,6 +317,7 @@ public class WordGuessManager : MonoBehaviour
 
     public void EnterLetter(string str)
     {
+        string originStr = str;
         // \b is backspace (delete character) and \n is enter (new line)
         // Converting string parts to charcters
         str = str.Replace("Back", "\b").Replace("Enter", "\n");
@@ -426,6 +430,7 @@ public class WordGuessManager : MonoBehaviour
 
                 DisplayWord();
                 SoundManager.Instance.PlayClickSound();
+                onInputFinish?.Invoke(originStr);
             }
         }
     }
@@ -657,6 +662,9 @@ public class WordGuessManager : MonoBehaviour
             {
                 letter.GetComponent<Image>().sprite = defaultWordImage;
                 letter.GetComponentInChildren<TextMeshProUGUI>().color = gridLetterDefaultColor;
+                var tl = letter.GetComponent<TutorialElement>();
+                if (tl)
+                    tl.element = 0;
             }
         }
 

@@ -21,13 +21,15 @@ public class EliminateButton : MonoBehaviour
     public List<string> eliminatedLetters;
 
     private bool limitReached;
-    
+
+    public event System.Action onInputFinish;
+
     void Awake()
     {
         button = GetComponent<Button>();
         eliminatedLetters = new List<string>();
     }
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,14 +45,14 @@ public class EliminateButton : MonoBehaviour
         limitReached = false;
         SetCounter();
     }
-    
+
     public void SetCounter()
     {
         int endValue = GameManager.Instance.EliminationsAvailable;
         countText.DOText(endValue.ToString(), 0.25f);
         button.GetComponent<Image>().sprite = (endValue == 0 || limitReached) ? inactiveSprite : activeSprite;
     }
-    
+
     void SetText()
     {
         countText.text = GameManager.Instance.EliminationsAvailable.ToString();
@@ -58,17 +60,17 @@ public class EliminateButton : MonoBehaviour
 
     public void EliminateLetters(int numberOfLetters)
     {
-        
+
         int count = keyboard.Count;
         int index = 0;
         List<string> keys = keyboard.Keys.ToList();
-        
+
         if (GameManager.Instance.EliminationsAvailable >= 0 && limitReached)
         {
             NotificationsManager.Instance.SpawnMessage(0);
             return;
         }
-        
+
         if ((!GameManager.Instance.devMode && GameManager.Instance.EliminationsAvailable <= 0))
         {
             //PopupManager.Instance.OpenPopup(3);
@@ -84,7 +86,7 @@ public class EliminateButton : MonoBehaviour
         }
         for (int i = 0; i < numberOfLetters; i++)
         {
-            
+
             while (true)
             {
                 index = Random.Range(0, count);
@@ -102,15 +104,16 @@ public class EliminateButton : MonoBehaviour
         }
         GameManager.Instance.EliminationsAvailable--;
         GameManager.Instance.timesEliminationUsed++;
-        
+
         SetCounter();
         if (GameManager.Instance.timesEliminationUsed >= GameManager.Instance.eliminationLimit)
         {
             limitReached = true;
             button.GetComponent<Image>().sprite = inactiveSprite;
         }
+        onInputFinish?.Invoke();
     }
-    
+
     private void EliminateKey(string key)
     {
         print(key);

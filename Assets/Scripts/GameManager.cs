@@ -52,6 +52,8 @@ public class GameManager : Singleton<GameManager>, IStateManageable
 
     public bool IsLevelGame => LevelGame > 0;
     public int LevelGame { get; set; }
+    public bool IsTutorial => TutorialControl.instance;
+    public bool ShouldStartTutorial { get; set; }
 
     public int CoinsAvailable
     {
@@ -66,22 +68,36 @@ public class GameManager : Singleton<GameManager>, IStateManageable
 
     public int HintsAvailable
     {
-        get => hints;
+        get => IsTutorial ? TutorialControl.instance.HintsAvail : hints;
         set
         {
-            hints = value;
-            PlayerPrefs.SetInt("Hints", hints);
+            if (IsTutorial)
+            {
+                TutorialControl.instance.HintsAvail = value;
+            }
+            else
+            {
+                hints = value;
+                PlayerPrefs.SetInt("Hints", hints);
+            }
             OnTextChanged?.Invoke();
         }
     }
 
     public int EliminationsAvailable
     {
-        get => eliminations;
+        get => IsTutorial ? TutorialControl.instance.EliminationsAvail : eliminations;
         set
         {
-            eliminations = value;
-            PlayerPrefs.SetInt("Eliminations", eliminations);
+            if (IsTutorial)
+            {
+                TutorialControl.instance.EliminationsAvail = value;
+            }
+            else
+            {
+                eliminations = value;
+                PlayerPrefs.SetInt("Eliminations", eliminations);
+            }
             OnTextChanged?.Invoke();
         }
     }
@@ -176,6 +192,8 @@ public class GameManager : Singleton<GameManager>, IStateManageable
                 PlayerPrefs.SetInt("Day", DateTime.UtcNow.Day);
                 PlayerPrefs.SetInt("DailyButton", 1);
                 PlayerPrefs.SetInt("Ads", 1);
+
+                ShouldStartTutorial = true;
             }
             CoinsAvailable = PlayerPrefs.GetInt("Coins");
             HintsAvailable = PlayerPrefs.GetInt("Hints");
@@ -217,6 +235,8 @@ public class GameManager : Singleton<GameManager>, IStateManageable
             PlayerPrefs.SetInt("HighScore", 0);
             ResetEverything = false;
         }
+
+        // ShouldStartTutorial = true;
     }
 
     public string PseudoDailyWord()
@@ -281,6 +301,11 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         }
         else if (gameType == GameType.Daily)
             wordGuessManager.Reset();
+
+        if (IsTutorial)
+        {
+            PagesManager.Instance.FlipPage(0);
+        }
     }
     public void ProccedLevel()
     {
@@ -364,6 +389,16 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     {
         string key = "level" + level + ".stars";
         PlayerPrefs.SetInt(key, stars);
+    }
+    public void PlayTutorialComplete()
+    {
+        TutorialControl.instance = new GameObject("TUTORIAL").AddComponent<TutorialControl>();
+        PagesManager.Instance.FlipPage(1);
+        SwitchState("game");
+        GameManager.Instance.LevelGame = 0;
+        GameManager.Instance.SetGameType(GameType.Classic);
+        GameManager.Instance.SwitchState(GameManager.Instance.States["game"]);
+
     }
     // public void PlayLevel(int level)
     // {
