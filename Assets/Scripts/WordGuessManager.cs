@@ -34,7 +34,7 @@ public class WordGuessManager : MonoBehaviour
 
     // Inspector Variables
     public int wordLength => state.wordLen;
-    public Transform wordGrid, wordGridClassic;
+    public WordGrid wordGrid => WordGrid.instance;
     // Invoke() - When the word is guessed correctly
     public UnityEvent wordGuessedEvent;
     // Invoke() - When player runs out of guesses
@@ -75,7 +75,7 @@ public class WordGuessManager : MonoBehaviour
         get => state.goalWordSimple;
         set => state.goalWordSimple = value;
     }
-    private string enteredWord
+    public string enteredWord
     {
         get => state.enteredWord;
         set => state.enteredWord = value;
@@ -134,7 +134,6 @@ public class WordGuessManager : MonoBehaviour
         get => state.hintCalled;
         set => state.hintCalled = value;
     }
-    private List<Image> glowImages = new List<Image>();
     public int EliminationCount
     {
         get => state.eliminationCount;
@@ -145,50 +144,11 @@ public class WordGuessManager : MonoBehaviour
     public int coinsDecrease;
 
 
-    private void Awake()
-    {
-        // foreach (Transform row in keyboardClassic.GetChild(0))
-        // {
-        //     foreach (Button but in row.GetComponentsInChildren<Button>())
-        //     {
-        //         if (but.name == "Enter" || but.name == "Back" || but.name == "Hint" || but.name == "Eliminate") continue;
-        //         but.GetComponentInChildren<TextMeshProUGUI>().color = keyboardDefaultTextColor;
-        //         KeyboardButtonsClassic.Add(but.name, but);
-        //     }
-        // }
-
-        // foreach (Transform row in keyboardDaily.GetChild(0))
-        // {
-        //     foreach (Button but in row.GetComponentsInChildren<Button>())
-        //     {
-        //         if (but.name == "Enter" || but.name == "Back" || but.name == "Hint" || but.name == "Eliminate") continue;
-        //         but.GetComponentInChildren<TextMeshProUGUI>().color = keyboardDefaultTextColor;
-        //         KeyboardButtonsDaily.Add(but.name, but);
-        //     }
-        // }
-
-        foreach (Transform row in wordGridClassic)
-        {
-            foreach (Transform letter in row)
-            {
-                letter.GetComponentInChildren<TextMeshProUGUI>().color = gridLetterDefaultColor;
-                Image glow = Instantiate(hintGlow, letter.position, Quaternion.identity, letter).GetComponent<Image>();
-                glow.color = hintColor;
-                glow.gameObject.AddComponent<CanvasGroup>().alpha = 0;
-                glowImages.Add(glow);
-            }
-        }
-
-        //OnStateChange += arg0 => print($"Switching to Game State: {arg0.ToString()}");
-        //NewWord();
-        //WordNotInDictionary("ااااا");
-    }
-
     private void Start()
     {
         GameManager.Instance.OnGameTypeSelected += OnGameTypeChanged;
         //GameManager.Instance.OnNewDailyWord += ResetDaily;
-        Image[] images = wordGridClassic.GetComponentsInChildren<Image>();
+        Image[] images = wordGrid.GetComponentsInChildren<Image>();
 
         foreach (Image image in images) image.color = defaultColor;
     }
@@ -196,8 +156,7 @@ public class WordGuessManager : MonoBehaviour
     private void OnGameTypeChanged()
     {
         keyboard.gameObject.SetActive(true);
-        wordGridClassic.gameObject.SetActive(true);
-        wordGrid = wordGridClassic;
+        wordGrid.gameObject.SetActive(true);
     }
 
     public void SwitchState(InGameState state)
@@ -356,7 +315,7 @@ public class WordGuessManager : MonoBehaviour
                     if (incorrectWord)
                     {
                         //wordGrid.GetChild(rowIndex).DOShakePosition(0.5f, 100);
-                        StartCoroutine(Shake(rowIndex, 1));
+                        wordGrid.DoShake();
                         wordErrorEvent.Invoke();
                         return;
                     }
@@ -407,55 +366,19 @@ public class WordGuessManager : MonoBehaviour
                     enterButton.SetIncorrectWord(incorrectWord);
                 }
 
-                DisplayWord();
+                wordGrid.DisplayWord();
                 SoundManager.Instance.PlayClickSound();
                 onInputFinish?.Invoke(originStr);
             }
         }
     }
 
-    public void DisplayWord()
-    {
-        Transform row = wordGrid.GetChild((rowIndex));
-        for (int i = 0; i < row.childCount; i++)
-        {
-            var eWord = enteredWord;
-            var str = eWord.Length > i ? eWord[i].ToString() : "";
-            if (str == "ي" && i != row.childCount - 1)
-            {
-                str = "يـ";
-            }
-            else if (str == "ئ" && i != row.childCount - 1)
-            {
-                str = "ئـ";
-            }
-            Transform letter = row.GetChild(row.childCount - i - 1);
-            if (letter.GetChild(1).childCount == 1 && letter.GetChild(1).GetChild(0).gameObject.activeInHierarchy && eWord.Length >= i/* && str.Equals(letter.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text, StringComparison.CurrentCulture)*/)
-            {
-                if (str.Equals(""))
-                {
-                    letter.GetChild(1).DOLocalMoveY(0, 0.2f);
-                    letter.GetChild(1).GetComponent<CanvasGroup>().DOFade(1, 0.2f);
-                }
-                else
-                {
-                    letter.GetChild(1).DOLocalMoveY(250, 0.2f);
-                    letter.GetChild(1).GetComponent<CanvasGroup>().DOFade(0, 0.2f);
-                }
-                //letter.GetChild(1).GetComponent<CanvasGroup>().DOFade(0, 0.1f);
-                //letter.GetChild(1).GetComponent<Image>().DOFade(0, 0.1f);
-                //letter.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().DOFade(0, 0.1f);
-            }
-            letter.GetComponentInChildren<TextMeshProUGUI>().text = str;
-            //print(str);
-        }
-    }
 
     private void Update()
     {
         if (GameManager.Instance.CurrentState.stateName == "Game") EnterLetter(Input.inputString);
         //print(CurrentState);
-        SetImageColor();
+        wordGrid.SetImageColor();
     }
 
     public string ValidateWord(string str)
@@ -469,15 +392,7 @@ public class WordGuessManager : MonoBehaviour
         //str = str.ToUpper();
         return str;
     }
-    void SetImageColor()
-    {
-        Transform row = wordGrid.GetChild(rowIndex);
-        for (int i = 0; i < row.childCount; i++)
-        {
-            Image img = row.GetChild(row.childCount - i - 1).GetComponent<Image>();
-            img.color = FulldefaultColor;
-        }
-    }
+
     public void CheckRow()
     {
         List<Color> colors = new List<Color>();
@@ -598,74 +513,16 @@ public class WordGuessManager : MonoBehaviour
 
     public void ResetClassic()
     {
-        if (!wordGridClassic) return;
-        // Gets all characters displayed in the grid
-        TextMeshProUGUI[] gridTMPro = wordGridClassic.GetComponentsInChildren<TextMeshProUGUI>();
-        // Gets all boxes behind the characters
+        if (!wordGrid) return;
 
-        // Resets characters
-        foreach (TextMeshProUGUI tmPro in gridTMPro) tmPro.text = "";
-
-        foreach (Image glow in glowImages)
-        {
-            glow.rectTransform.localPosition = new Vector3(0, 0, 0);
-            glow.color = hintColor;
-            glow.GetComponent<CanvasGroup>().alpha = 0;
-            if (glow.transform.childCount > 0)
-            {
-                glow.transform.GetChild(0).gameObject.SetActive(false);
-            }
-        }
-        EliminationCount = 0;
-
+        wordGrid.Clean();
         keyboard.Clean();
-
-        // Common
-        // Jumps to first row
-        rowIndex = 0;
-        enteredWord = "";
-        wordGuessed = outOfTrials = false;
+        this.state = new State();
 
         enterButton.SetInteractable(false);
-
-        foreach (Transform row in wordGridClassic)
-        {
-            foreach (Transform letter in row)
-            {
-                letter.GetComponent<Image>().sprite = defaultWordImage;
-                letter.GetComponentInChildren<TextMeshProUGUI>().color = gridLetterDefaultColor;
-                var tl = letter.GetComponent<TutorialElement>();
-                if (tl)
-                    tl.element = 0;
-            }
-        }
-
-
-        // Classic specific
         NewWord();
-        Image[] images = wordGridClassic.GetComponentsInChildren<Image>();
 
-        foreach (Image image in images) image.color = defaultColor;
     }
-
-
-
-
-
-
-    IEnumerator Shake(int row, float duration)
-    {
-        float startTime = Time.time;
-        float time = Time.time - startTime;
-        while (time <= duration)
-        {
-            float x = 50 * Mathf.Sin(40 * time) * Mathf.Exp(-5 * time);
-            wordGrid.GetChild(row).localPosition = new Vector3(x, wordGrid.GetChild(row).localPosition.y, wordGrid.GetChild(row).localPosition.z);
-            yield return new WaitForSeconds(0.01f);
-            time = Time.time - startTime;
-        }
-    }
-
 
 
 #if UNITY_EDITOR

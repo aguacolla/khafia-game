@@ -15,5 +15,11 @@ public class State
     public List<int> lettersHinted = new List<int>();
     public bool hintCalled;
     public int eliminationCount;
+
+    public int seed;
+
+    public List<string> tries = new List<string>();
+    public int usedHints;
+    public int usedEliminations;
 }
 
