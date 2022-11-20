@@ -7,6 +7,7 @@ using System;
 
 public class WinPopup : Popup
 {
+    public bool isDaily;
     public TextMeshProUGUI currentWord;
 
     public TextMeshProUGUI score, highScore;
@@ -27,22 +28,22 @@ public class WinPopup : Popup
 
     private void ChangeScore()
     {
-        if (GameManager.Instance.gameType == GameType.Classic)
+        if (!isDaily)
         {
             score.text = GameManager.Instance.score.ToString();
             highScore.text = GameManager.Instance.highScore.ToString();
         }
     }
-    
+
     private void ChangeDate()
     {
-        currentWord.text = GameManager.Instance.DailyWord;
+        // currentWord.text = GameManager.Instance.DailyWord;
         date.text = $"{DateTime.UtcNow.Day} {GameManager.Instance.arabicMonths[DateTime.UtcNow.Month - 1]}";
     }
 
     private void OnEnable()
     {
-        if (GameManager.Instance.gameType == GameType.Daily)
+        if (isDaily)
         {
             ChangeDate();
 

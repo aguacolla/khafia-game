@@ -28,12 +28,13 @@ public class WordGuessManager : MonoBehaviour
     }
     public WordMode wordMode = WordMode.array;
 
+    public State state = new State();
     // Single
     public string wordSingle = "BUGGE";
 
     // Inspector Variables
-    public int wordLength = 5;
-    public Transform wordGrid, wordGridClassic, wordGridDaily;
+    public int wordLength => state.wordLen;
+    public Transform wordGrid, wordGridClassic;
     // Invoke() - When the word is guessed correctly
     public UnityEvent wordGuessedEvent;
     // Invoke() - When player runs out of guesses
@@ -43,88 +44,130 @@ public class WordGuessManager : MonoBehaviour
 
     public System.Action<string> onInputFinish;
 
-    public Color defaultColor;
-    public Color FulldefaultColor;
-    public Color outlineColor = new Color32(63, 63, 63, 255);
-    public Color inPlaceColor = new Color32(83, 141, 78, 255);
-    public Color inWordColor = new Color32(181, 159, 59, 255);
-    public Color notInWordColor = new Color32(42, 42, 42, 255);
-    public Color hintColor;
-    public Color hintTextColor;
+
+    UIConfig config => UIConfig.instance;
+
+    public Color defaultColor => config.defaultColor;
+
+    public Color FulldefaultColor => config.FulldefaultColor;
+    public Color outlineColor => config.outlineColor;
+    public Color inPlaceColor => config.inPlaceColor;
+    public Color inWordColor => config.inWordColor;
+    public Color notInWordColor => config.notInWordColor;
+    public Color hintColor => config.hintColor;
+    public Color hintTextColor => config.hintTextColor;
     public Image hintGlow;
-    public Sprite defaultWordImage;
-    public Sprite wordImage;
+    public Sprite defaultWordImage => config.defaultWordImage;
+    public Sprite wordImage => config.wordImage;
 
-    public Color keyboardDefaultColor = new Color(129, 131, 132, 255);
-    public Color keyboardDefaultTextColor;
-    public Color gridLetterDefaultColor;
-    public Color gridLetterCheckedColor;
+    public Color keyboardDefaultColor => config.keyboardDefaultColor;
+    public Color keyboardDefaultTextColor => config.keyboardDefaultTextColor;
+    public Color gridLetterDefaultColor => config.gridLetterDefaultColor;
+    public Color gridLetterCheckedColor => config.gridLetterCheckedColor;
 
-    private string currentWord, currentWordDaily;
-    private string currentWordSimplified, currentWordSimplifiedDaily;
-    private string enteredWord, enteredWordDaily;
-    public int rowIndex { get; private set; } = 0;
-    public int rowIndexDaily { get; private set; } = 0;
+    private string currentWord
+    {
+        get => state.goalWord;
+        set => state.goalWord = value;
+    }
+    private string currentWordSimplified
+    {
+        get => state.goalWordSimple;
+        set => state.goalWordSimple = value;
+    }
+    private string enteredWord
+    {
+        get => state.enteredWord;
+        set => state.enteredWord = value;
+    }
 
-    private bool wordGuessed, outOfTrials;
-    private bool wordGuessedDaily, outOfTrialsDaily;
-    public InGameState CurrentState, pastState;
+    public int rowIndex
+    {
+        get => state.rowIndex;
+        private set => state.rowIndex = value;
+    }
+
+    private bool wordGuessed
+    {
+        get => state.wordGuessed;
+        set => state.wordGuessed = value;
+    }
+    private bool outOfTrials
+    {
+        get => state.outOftrials;
+        set => state.outOftrials = value;
+    }
+    public InGameState CurrentState
+    {
+        get => state.currentState;
+        set => state.currentState = value;
+    }
+    public InGameState pastState
+    {
+        get => state.pastState;
+        set => state.pastState = value;
+    }
     public UnityAction<InGameState> OnStateChange;
 
+    public Keyboard keyboard => Keyboard.instance;
 
-    public Transform keyboard, keyboardClassic, keyboardDaily;
-    public Dictionary<string, Button> KeyboardButtons;
-    public Dictionary<string, Button> KeyboardButtonsClassic = new Dictionary<string, Button>();
-    public Dictionary<string, Button> KeyboardButtonsDaily = new Dictionary<string, Button>();
-    public EnterButton enterButton, enterButtonClassic, enterButtonDaily;
 
-    public bool incorrectWord = false;
+    // public Transform keyboard, keyboardClassic, keyboardDaily;
+    // public Dictionary<string, Button> KeyboardButtons;
+    // public Dictionary<string, Button> KeyboardButtonsClassic = new Dictionary<string, Button>();
+    // public Dictionary<string, Button> KeyboardButtonsDaily = new Dictionary<string, Button>();
+    public EnterButton enterButton => keyboard.enterButton;
 
-    public List<int> lettersHinted;
-    public bool hintCalled;
+    public bool incorrectWord
+    {
+        get => state.incorrectWord;
+        set => state.incorrectWord = value;
+    }
+
+    public List<int> lettersHinted
+    {
+        get => state.lettersHinted;
+        set => state.lettersHinted = value;
+    }
+    public bool hintCalled
+    {
+        get => state.hintCalled;
+        set => state.hintCalled = value;
+    }
     private List<Image> glowImages = new List<Image>();
-    public int EliminationCount { get; set; } = 0;
+    public int EliminationCount
+    {
+        get => state.eliminationCount;
+        set => state.eliminationCount = value;
+    }
 
     public int coinsWon;
     public int coinsDecrease;
 
-    private GameType gameType;
 
     private void Awake()
     {
-        foreach (Transform row in keyboardClassic.GetChild(0))
-        {
-            foreach (Button but in row.GetComponentsInChildren<Button>())
-            {
-                if (but.name == "Enter" || but.name == "Back" || but.name == "Hint" || but.name == "Eliminate") continue;
-                but.GetComponentInChildren<TextMeshProUGUI>().color = keyboardDefaultTextColor;
-                KeyboardButtonsClassic.Add(but.name, but);
-            }
-        }
+        // foreach (Transform row in keyboardClassic.GetChild(0))
+        // {
+        //     foreach (Button but in row.GetComponentsInChildren<Button>())
+        //     {
+        //         if (but.name == "Enter" || but.name == "Back" || but.name == "Hint" || but.name == "Eliminate") continue;
+        //         but.GetComponentInChildren<TextMeshProUGUI>().color = keyboardDefaultTextColor;
+        //         KeyboardButtonsClassic.Add(but.name, but);
+        //     }
+        // }
 
-        foreach (Transform row in keyboardDaily.GetChild(0))
-        {
-            foreach (Button but in row.GetComponentsInChildren<Button>())
-            {
-                if (but.name == "Enter" || but.name == "Back" || but.name == "Hint" || but.name == "Eliminate") continue;
-                but.GetComponentInChildren<TextMeshProUGUI>().color = keyboardDefaultTextColor;
-                KeyboardButtonsDaily.Add(but.name, but);
-            }
-        }
+        // foreach (Transform row in keyboardDaily.GetChild(0))
+        // {
+        //     foreach (Button but in row.GetComponentsInChildren<Button>())
+        //     {
+        //         if (but.name == "Enter" || but.name == "Back" || but.name == "Hint" || but.name == "Eliminate") continue;
+        //         but.GetComponentInChildren<TextMeshProUGUI>().color = keyboardDefaultTextColor;
+        //         KeyboardButtonsDaily.Add(but.name, but);
+        //     }
+        // }
 
         foreach (Transform row in wordGridClassic)
-        {
-            foreach (Transform letter in row)
-            {
-                letter.GetComponentInChildren<TextMeshProUGUI>().color = gridLetterDefaultColor;
-                Image glow = Instantiate(hintGlow, letter.position, Quaternion.identity, letter).GetComponent<Image>();
-                glow.color = hintColor;
-                glow.gameObject.AddComponent<CanvasGroup>().alpha = 0;
-                glowImages.Add(glow);
-            }
-        }
-
-        foreach (Transform row in wordGridDaily)
         {
             foreach (Transform letter in row)
             {
@@ -150,33 +193,11 @@ public class WordGuessManager : MonoBehaviour
         foreach (Image image in images) image.color = defaultColor;
     }
 
-    private void OnGameTypeChanged(GameType type)
+    private void OnGameTypeChanged()
     {
-        switch (type)
-        {
-            case GameType.Classic:
-                keyboardDaily.gameObject.SetActive(false);
-                keyboardClassic.gameObject.SetActive(true);
-                wordGridClassic.gameObject.SetActive(true);
-                wordGridDaily.gameObject.SetActive(false);
-                wordGrid = wordGridClassic;
-                keyboard = keyboardClassic;
-                enterButton = enterButtonClassic;
-                KeyboardButtons = KeyboardButtonsClassic;
-                gameType = GameType.Classic;
-                break;
-            case GameType.Daily:
-                keyboardDaily.gameObject.SetActive(true);
-                keyboardClassic.gameObject.SetActive(false);
-                wordGridClassic.gameObject.SetActive(false);
-                wordGridDaily.gameObject.SetActive(true);
-                wordGrid = wordGridDaily;
-                keyboard = keyboardDaily;
-                enterButton = enterButtonDaily;
-                KeyboardButtons = KeyboardButtonsDaily;
-                gameType = GameType.Daily;
-                break;
-        }
+        keyboard.gameObject.SetActive(true);
+        wordGridClassic.gameObject.SetActive(true);
+        wordGrid = wordGridClassic;
     }
 
     public void SwitchState(InGameState state)
@@ -210,7 +231,6 @@ public class WordGuessManager : MonoBehaviour
             LevelProgress.GetLevelStars(LevelProgress.levelTimeSpent));
             GameManager.Instance.UnlockedLevel++;
         }
-        if (gameType == GameType.Classic)
         {
             GameManager.Instance.GamesWon++;
             GameManager.Instance.score++;
@@ -227,19 +247,15 @@ public class WordGuessManager : MonoBehaviour
             if (GameManager.Instance.IsLevelGame)
                 PopupManager.Instance.OpenPopup(7);
             else
-                PopupManager.Instance.OpenPopup((gameType == GameType.Classic) ? 1 : 4);
+                PopupManager.Instance.OpenPopup(1);
             GameManager.Instance.OnGameWon?.Invoke();
 
-            if (gameType == GameType.Daily)
-            {
-                AdsManager.Instance.ShowInterstitial();
-            }
         };
 
         //print("ondailygame should be invoked");
         //GameManager.Instance.OnDailyGamePlayed?.Invoke();
-        coinsWon = (gameType == GameType.Classic) ? GameManager.Instance.coinsPerGame : GameManager.Instance.coinsPerGameDaily;
-        coinsDecrease = (gameType == GameType.Classic) ? GameManager.Instance.decreasePerRow : GameManager.Instance.decreasePerRowDaily;
+        coinsWon = GameManager.Instance.coinsPerGame;
+        coinsDecrease = GameManager.Instance.decreasePerRow;
         GameManager.Instance.CoinsAvailable += coinsWon - coinsDecrease * rowIndex;
         //PopupManager.Instance.OpenPopup(1);
         //GameManager.Instance.OnGameWon?.Invoke();
@@ -259,10 +275,10 @@ public class WordGuessManager : MonoBehaviour
             if (GameManager.Instance.IsLevelGame)
                 PopupManager.Instance.OpenPopup(8);
             else
-                PopupManager.Instance.OpenPopup((gameType == GameType.Classic) ? 2 : 5);
+                PopupManager.Instance.OpenPopup((2));
             //GameManager.Instance.OnDailyGamePlayed?.Invoke();
             GameManager.Instance.OnGameLost?.Invoke();
-            if (gameType == GameType.Classic) GameManager.Instance.ResetScore();
+            GameManager.Instance.ResetScore();
         };
         if (GameManager.Instance.shouldShowInterAd)
             AdsManager.Instance.ShowInterstitial();
@@ -270,15 +286,6 @@ public class WordGuessManager : MonoBehaviour
         //GameManager.Instance.OnGameLost?.Invoke();
     }
 
-    public void FetchDailyWord()
-    {
-        //print("fetch called");
-        currentWordDaily = GameManager.Instance.DailyWord;
-        currentWordSimplifiedDaily = currentWordDaily;
-        currentWordSimplifiedDaily = Regex.Replace(currentWordSimplifiedDaily, @"[أ|إ|آ]", "ا");
-        currentWordSimplifiedDaily = Regex.Replace(currentWordSimplifiedDaily, @"[ى]", "ي");
-
-    }
 
     public void NewWord()
     {
@@ -324,15 +331,14 @@ public class WordGuessManager : MonoBehaviour
 
         if (CurrentState == InGameState.Typing)
         {
-            var eWord = (gameType == GameType.Classic) ? enteredWord : enteredWordDaily;
+            var eWord = enteredWord;
             foreach (char c in str)
             {
                 // Removes character from end of string
                 if (c == '\b' && eWord.Length > 0)
                 {
                     eWord = eWord.Substring(0, eWord.Length - 1);
-                    if (gameType == GameType.Classic) enteredWord = eWord;
-                    else if (gameType == GameType.Daily) enteredWordDaily = eWord;
+                    enteredWord = eWord;
                 }
 
                 // Submits word for validation
@@ -350,7 +356,7 @@ public class WordGuessManager : MonoBehaviour
                     if (incorrectWord)
                     {
                         //wordGrid.GetChild(rowIndex).DOShakePosition(0.5f, 100);
-                        StartCoroutine(Shake((gameType == GameType.Classic) ? rowIndex : rowIndexDaily, 1));
+                        StartCoroutine(Shake(rowIndex, 1));
                         wordErrorEvent.Invoke();
                         return;
                     }
@@ -358,68 +364,41 @@ public class WordGuessManager : MonoBehaviour
                     // Checks and colors the current row
                     CheckRow();
                     // Checks if the word was guessed correctly or whether there's no guesses left
-                    if (eWord == ((gameType == GameType.Classic) ? currentWordSimplified : currentWordSimplifiedDaily))
+                    if (eWord == (currentWordSimplified))
                     {
-                        if (GameManager.Instance.gameType == GameType.Classic)
                         {
                             wordGuessed = true;
-                        }
-                        else if (GameManager.Instance.gameType == GameType.Daily)
-                        {
-                            wordGuessedDaily = true;
                         }
                         //wordGuessed = true;
                         wordGuessedEvent.Invoke();
                         return;
                     }
-                    if (((gameType == GameType.Classic) ? rowIndex : rowIndexDaily) + 1 >= wordGrid.childCount)
+                    if (rowIndex + 1 >= wordGrid.childCount)
                     {
-                        if (GameManager.Instance.gameType == GameType.Classic)
                         {
                             outOfTrials = true;
-                        }
-                        else if (GameManager.Instance.gameType == GameType.Daily)
-                        {
-                            outOfTrialsDaily = true;
                         }
                         wordNotGuessedEvent.Invoke();
                         return;
                     }
 
-                    switch (gameType)
-                    {
-                        // Jump to next row
-                        case GameType.Classic:
-                            rowIndex++;
-                            enteredWord = "";
-                            break;
-                        case GameType.Daily:
-                            rowIndexDaily++;
-                            enteredWordDaily = "";
-                            break;
-                    }
+                    rowIndex++;
+                    enteredWord = "";
                 }
                 else
                 {
                     eWord += c;
-                    switch (gameType)
                     {
                         // Jump to next row
-                        case GameType.Classic:
-                            enteredWord += c;
-                            break;
-                        case GameType.Daily:
-                            enteredWordDaily += c;
-                            break;
+                        enteredWord += c;
                     }
                 }
 
                 //print(eWord);
 
                 enteredWord = ValidateWord(enteredWord);
-                enteredWordDaily = ValidateWord(enteredWordDaily);
 
-                eWord = (GameManager.Instance.gameType == GameType.Classic) ? enteredWord : enteredWordDaily;
+                eWord = enteredWord;
 
                 enterButton.SetInteractable(eWord.Length == 5);
                 if (eWord.Length == 5)
@@ -437,10 +416,10 @@ public class WordGuessManager : MonoBehaviour
 
     public void DisplayWord()
     {
-        Transform row = wordGrid.GetChild((gameType == GameType.Classic) ? rowIndex : rowIndexDaily);
+        Transform row = wordGrid.GetChild((rowIndex));
         for (int i = 0; i < row.childCount; i++)
         {
-            var eWord = (gameType == GameType.Classic) ? enteredWord : enteredWordDaily;
+            var eWord = enteredWord;
             var str = eWord.Length > i ? eWord[i].ToString() : "";
             if (str == "ي" && i != row.childCount - 1)
             {
@@ -476,10 +455,6 @@ public class WordGuessManager : MonoBehaviour
     {
         if (GameManager.Instance.CurrentState.stateName == "Game") EnterLetter(Input.inputString);
         //print(CurrentState);
-        if (Input.GetKeyDown("space"))
-        {
-            ResetDaily();
-        }
         SetImageColor();
     }
 
@@ -496,7 +471,7 @@ public class WordGuessManager : MonoBehaviour
     }
     void SetImageColor()
     {
-        Transform row = wordGrid.GetChild((gameType == GameType.Classic) ? rowIndex : rowIndexDaily);
+        Transform row = wordGrid.GetChild(rowIndex);
         for (int i = 0; i < row.childCount; i++)
         {
             Image img = row.GetChild(row.childCount - i - 1).GetComponent<Image>();
@@ -507,13 +482,13 @@ public class WordGuessManager : MonoBehaviour
     {
         List<Color> colors = new List<Color>();
         List<int> notInRightPlaceIndices = new List<int>();
-        Transform row = wordGrid.GetChild((gameType == GameType.Classic) ? rowIndex : rowIndexDaily);
+        Transform row = wordGrid.GetChild(rowIndex);
         List<Image> notInRightPlaceImages = new List<Image>();
         List<char> notInRightPlaceChars = new List<char>();
 
-        string cWordSimplified = (gameType == GameType.Classic) ? currentWordSimplified : currentWordSimplifiedDaily;
-        string cWord = (gameType == GameType.Classic) ? currentWord : currentWordDaily;
-        string eWord = (gameType == GameType.Classic) ? enteredWord : enteredWordDaily;
+        string cWordSimplified = currentWordSimplified;
+        string cWord = currentWord;
+        string eWord = enteredWord;
         string letterCount = cWordSimplified;
 
 
@@ -523,7 +498,7 @@ public class WordGuessManager : MonoBehaviour
             if (eWord[i].ToString() == cWordSimplified[i].ToString())
             {
                 Regex regex = new Regex(Regex.Escape(cWordSimplified[i].ToString()));
-                Image buttonImg = KeyboardButtons[eWord[i].ToString()].gameObject.GetComponent<Image>();
+                Image buttonImg = keyboard.GetKeyImage(eWord[i].ToString());
                 letterCount = regex.Replace(letterCount, "", 1);
                 //img.color = inPlaceColor;
                 buttonImg.color = inPlaceColor;
@@ -543,7 +518,7 @@ public class WordGuessManager : MonoBehaviour
         for (int i = 0; i < notInRightPlaceImages.Count; i++)
         {
             Image img = notInRightPlaceImages[i];
-            Image buttonImg = KeyboardButtons[notInRightPlaceChars[i].ToString()].gameObject.GetComponent<Image>();
+            Image buttonImg = keyboard.GetKeyImage(notInRightPlaceChars[i].ToString());
             if (letterCount.Contains(notInRightPlaceChars[i]))
             {
                 Regex regex = new Regex(Regex.Escape(notInRightPlaceChars[i].ToString()));
@@ -600,11 +575,11 @@ public class WordGuessManager : MonoBehaviour
 
         seq.onComplete += () =>
         {
-            if (wordGuessed || wordGuessedDaily)
+            if (wordGuessed)
             {
                 SwitchState(InGameState.Win);
             }
-            else if (outOfTrials || outOfTrialsDaily)
+            else if (outOfTrials)
             {
                 SwitchState(InGameState.Loss);
             }
@@ -643,10 +618,7 @@ public class WordGuessManager : MonoBehaviour
         }
         EliminationCount = 0;
 
-        foreach (var btn in KeyboardButtonsClassic.Values)
-        {
-            btn.GetComponent<Image>().color = keyboardDefaultColor;
-        }
+        keyboard.Clean();
 
         // Common
         // Jumps to first row
@@ -654,7 +626,7 @@ public class WordGuessManager : MonoBehaviour
         enteredWord = "";
         wordGuessed = outOfTrials = false;
 
-        enterButtonClassic.SetInteractable(false);
+        enterButton.SetInteractable(false);
 
         foreach (Transform row in wordGridClassic)
         {
@@ -668,14 +640,6 @@ public class WordGuessManager : MonoBehaviour
             }
         }
 
-        foreach (Transform row in keyboard.GetChild(0))
-        {
-            foreach (Button but in row.GetComponentsInChildren<Button>())
-            {
-                if (but.name == "Enter" || but.name == "Back") continue;
-                but.GetComponentInChildren<TextMeshProUGUI>().color = keyboardDefaultTextColor;
-            }
-        }
 
         // Classic specific
         NewWord();
@@ -684,97 +648,9 @@ public class WordGuessManager : MonoBehaviour
         foreach (Image image in images) image.color = defaultColor;
     }
 
-    public void ResetDaily()
-    {
-        if (!wordGridDaily) return;
-        // Gets all characters displayed in the grid
-        TextMeshProUGUI[] gridTMPro = wordGridDaily.GetComponentsInChildren<TextMeshProUGUI>();
-        // Gets all boxes behind the characters
-        Image[] images = wordGridDaily.GetComponentsInChildren<Image>();
-
-        foreach (Image image in images) image.color = defaultColor;
-        // Resets characters
-        foreach (TextMeshProUGUI tmPro in gridTMPro) tmPro.text = "";
-
-        foreach (Image glow in glowImages)
-        {
-            glow.rectTransform.localPosition = new Vector3(0, 0, 0);
-            glow.color = hintColor;
-            glow.GetComponent<CanvasGroup>().alpha = 0;
-            if (glow.transform.childCount > 0)
-            {
-                glow.transform.GetChild(0).gameObject.SetActive(false);
-            }
-        }
-        EliminationCount = 0;
-
-        foreach (var btn in KeyboardButtonsDaily.Values)
-        {
-            btn.GetComponent<Image>().color = keyboardDefaultColor;
-        }
-
-        // Common
-        // Jumps to first row
-        rowIndexDaily = 0;
-        enteredWordDaily = "";
-        wordGuessedDaily = outOfTrialsDaily = false;
-
-        enterButtonDaily.SetInteractable(false);
-
-        foreach (Transform row in wordGridDaily)
-        {
-            foreach (Transform letter in row)
-            {
-                letter.GetComponent<Image>().sprite = defaultWordImage;
-                letter.GetComponentInChildren<TextMeshProUGUI>().color = gridLetterDefaultColor;
-            }
-        }
-
-        foreach (Transform row in keyboardDaily.GetChild(0))
-        {
-            foreach (Button but in row.GetComponentsInChildren<Button>())
-            {
-                if (but.name == "Enter" || but.name == "Back") continue;
-                but.GetComponentInChildren<TextMeshProUGUI>().color = keyboardDefaultTextColor;
-            }
-        }
-
-        // Classic specific
-        foreach (Transform row in keyboardDaily.GetChild(0))
-        {
-            foreach (Button but in row.GetComponentsInChildren<Button>())
-            {
-                if (but.name == "Enter") continue;
-                but.interactable = true;
-            }
-        }
-        PlayerPrefs.SetInt("DailyButton", 1);
-        SwitchState(InGameState.Typing);
-        Image[] imagess = wordGridClassic.GetComponentsInChildren<Image>();
-
-        foreach (Image image in imagess) image.color = defaultColor;
-    }
 
 
 
-    public void Reset()
-    {
-        foreach (Transform row in keyboardDaily.GetChild(0))
-        {
-            foreach (Button but in row.GetComponentsInChildren<Button>())
-            {
-                if (but.name == "Enter") continue;
-                but.interactable = false;
-            }
-        }
-
-        enterButtonDaily.SetInteractable(false);
-        rowIndexDaily = 0;
-        enteredWordDaily = "";
-        wordGuessedDaily = outOfTrialsDaily = false;
-        PlayerPrefs.SetInt("DailyButton", 0);
-        SwitchState(InGameState.Typing);
-    }
 
 
     IEnumerator Shake(int row, float duration)

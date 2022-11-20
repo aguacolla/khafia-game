@@ -7,19 +7,12 @@ using UnityEngine.Events;
 using Random = UnityEngine.Random;
 using UnityEngine.UI;
 
-public enum GameType
-{
-    None,
-    Classic,
-    Daily
-}
 
 public class GameManager : Singleton<GameManager>, IStateManageable
 {
     public bool devMode = false;
     public int score;
     public int highScore;
-    public GameType gameType = GameType.None;
     public WordGuessManager wordGuessManager;
     public string CurrentWord { get; set; } = String.Empty;
     public string CurrentWordSimplified { get; set; } = String.Empty;
@@ -29,9 +22,8 @@ public class GameManager : Singleton<GameManager>, IStateManageable
 
     public Color backgroundColor;
 
-    public UnityAction<GameType> OnGameTypeSelected;
+    public UnityAction OnGameTypeSelected;
     public UnityAction OnNewWord;
-    public UnityAction OnNewDailyWord;
     public UnityAction OnGameWon;
     public UnityAction OnDailyGamePlayed;
     public UnityAction OnGameLost;
@@ -136,7 +128,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     [HideInInspector] public int timesHintUsed = 0;
     public int eliminationLimit = 3;
     [HideInInspector] public int timesEliminationUsed = 0;
-
+    public int eliminateLetterCount = 3;
 
 
 
@@ -154,18 +146,6 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     public int randomSeed = 1361997;
     [SerializeField] private string dailyWord;
 
-    public string DailyWord
-    {
-        get { return dailyWord; }
-        set
-        {
-            dailyWord = value;
-            PlayerPrefs.SetString("DailyWord", dailyWord);
-            OnNewDailyWord?.Invoke();
-            wordGuessManager.ResetDaily();
-            ((MainMenu)PagesManager.Instance.pages[0]).SetDaily();
-        }
-    }
 
     [Header("Background Settings")]
     public Image background;
@@ -212,9 +192,6 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         highScore = PlayerPrefs.GetInt("HighScore");
         SwitchState("intro");
         //Gley
-        OnNewDailyWord += wordGuessManager.FetchDailyWord;
-        if (NewUser == 0) DailyWord = PseudoDailyWord();
-        else DailyWord = PlayerPrefs.GetString("DailyWord");
         StartCoroutine(CheckForDay());
         background.sprite = patterns[Random.Range(0, patterns.Length)];
         BackGroundImage.sprite = BackgroundSprites[Random.Range(0, BackgroundSprites.Length)];
@@ -265,7 +242,6 @@ public class GameManager : Singleton<GameManager>, IStateManageable
                     MobileNotifications.SendDailyReward();
                     DailyRewardsAvailable++;
                 }
-                DailyWord = PseudoDailyWord();
                 day = DateTime.UtcNow.Day;
                 PlayerPrefs.SetInt("Day", day);
                 yield break;
@@ -294,13 +270,10 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     {
         PopupManager.Instance.CloseCurrentPopup();
         timesEliminationUsed = timesHintUsed = 0;
-        if (gameType == GameType.Classic)
         {
             wordGuessManager.wordMode = WordGuessManager.WordMode.array;
             wordGuessManager.ResetClassic();
         }
-        else if (gameType == GameType.Daily)
-            wordGuessManager.Reset();
 
         if (IsTutorial)
         {
@@ -343,10 +316,9 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         CurrentState.EnterState(this);
     }
 
-    public void SetGameType(GameType type)
+    public void SetGameType()
     {
-        gameType = type;
-        OnGameTypeSelected?.Invoke(type);
+        OnGameTypeSelected?.Invoke();
     }
 
     public void EnableClassicMode()
@@ -396,7 +368,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         PagesManager.Instance.FlipPage(1);
         SwitchState("game");
         GameManager.Instance.LevelGame = 0;
-        GameManager.Instance.SetGameType(GameType.Classic);
+        GameManager.Instance.SetGameType();
         GameManager.Instance.SwitchState(GameManager.Instance.States["game"]);
 
     }

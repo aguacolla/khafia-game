@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using RTLTMPro;
 using TMPro;
+[DefaultExecutionOrder(-100)]
 public class EnterButton : MonoBehaviour
 {
     private Button _button;
@@ -15,7 +16,7 @@ public class EnterButton : MonoBehaviour
 
     public Color incorrectWordColor;
     public string incorrectText = "كلمة خاطئة";
-    
+
     public Color inactiveColor;
     public string inactiveText = "كلمة قصيرة";
 
@@ -42,7 +43,7 @@ public class EnterButton : MonoBehaviour
         _image.color = interactable ? normalColor : inactiveColor;
         text.text = interactable ? normalText : inactiveText;
     }
-    
+
     public void SetIncorrectWord(bool incorrectWord)
     {
         if (incorrectWord)

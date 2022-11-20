@@ -48,20 +48,19 @@ public class MainMenu : Page
     public void PlayClassic()
     {
         GameManager.Instance.LevelGame = 0;
-        GameManager.Instance.SetGameType(GameType.Classic);
+        GameManager.Instance.SetGameType();
         GameManager.Instance.SwitchState(GameManager.Instance.States["game"]);
     }
     public void PlayCurrentLevel()
     {
         int currentLevel = GameManager.Instance.UnlockedLevel;
         GameManager.Instance.LevelGame = currentLevel;
-        GameManager.Instance.SetGameType(GameType.Classic);
+        GameManager.Instance.SetGameType();
         GameManager.Instance.SwitchState("game");
     }
 
     public void PlayDaily()
     {
-        GameManager.Instance.SetGameType(GameType.Daily);
         GameManager.Instance.SwitchState(GameManager.Instance.States["game"]);
     }
 
@@ -78,7 +77,6 @@ public class MainMenu : Page
         currentLevel.text = GameManager.Instance.UnlockedLevel.ToString();
         GameManager.Instance.OnTextChanged += SetText;
         SetCalendar();
-        GameManager.Instance.OnNewDailyWord += SetCalendar;
         SetDaily();
         dailyRewardButton.UpdateContent();
     }

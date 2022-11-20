@@ -35,7 +35,6 @@ public class Game : Page
     // Update is called once per frame
     void ChangeText()
     {
-        if (GameManager.Instance.gameType == GameType.Classic)
         {
             if (GameManager.Instance.IsLevelGame)
             {
@@ -53,24 +52,11 @@ public class Game : Page
                 titleText.text = GameManager.Instance.score.ToString();
             }
         }
-        else if (GameManager.Instance.gameType == GameType.Daily)
-        {
-            topText.text = GameManager.Instance.arabicMonths[DateTime.Now.Month - 1];
-            titleText.text = DateTime.Now.Day.ToString();
-        }
     }
 
-    private void GameTypeSelected(GameType type)
+    private void GameTypeSelected()
     {
-        if (type == GameType.Classic)
-        {
-            GameManager.Instance.EnableClassicMode();
-        }
-        else if (type == GameType.Daily)
-        {
-            GameManager.Instance.EnableDailyMode();
-        }
-
+        GameManager.Instance.EnableClassicMode();
         ChangeText();
     }
 }

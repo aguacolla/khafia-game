@@ -84,7 +84,6 @@ public class GameState : BaseState
     //public InGameState CurrentState { get; set; } = InGameState.Typing;
     public override void EnterState(IStateManageable stateManager)
     {
-        if (GameManager.Instance.gameType == GameType.Classic)
         {
             var level = GameManager.Instance.LevelGame;
             var guessManager = GameManager.Instance.wordGuessManager;

@@ -14,7 +14,7 @@ public class EliminateButton : MonoBehaviour
     [SerializeField] private Sprite activeSprite;
     [SerializeField] private Sprite inactiveSprite;
 
-    private Dictionary<string, Button> keyboard;
+    public Keyboard keyboard => Keyboard.instance;
     public GameObject arrow;
     public Ease ease;
     public float duration;
@@ -35,7 +35,6 @@ public class EliminateButton : MonoBehaviour
     {
         SetCounter();
         wordGuessManager = GameManager.Instance.wordGuessManager;
-        keyboard = wordGuessManager.KeyboardButtons;
         GameManager.Instance.OnNewWord += ResetButton;
         GameManager.Instance.OnTextChanged += SetCounter;
     }
@@ -61,9 +60,9 @@ public class EliminateButton : MonoBehaviour
     public void EliminateLetters(int numberOfLetters)
     {
 
-        int count = keyboard.Count;
+        int count = keyboard.keyCount;
         int index = 0;
-        List<string> keys = keyboard.Keys.ToList();
+        List<string> keys = keyboard.GetLetterList();
 
         if (GameManager.Instance.EliminationsAvailable >= 0 && limitReached)
         {
@@ -92,7 +91,7 @@ public class EliminateButton : MonoBehaviour
                 index = Random.Range(0, count);
                 if (!GameManager.Instance.CurrentWordSimplified.Contains(keys[index]) && !eliminatedLetters.Contains(keys[index]))
                 {
-                    if (keyboard[keys[index]].GetComponent<Image>().color == wordGuessManager.keyboardDefaultColor)
+                    if (keyboard.GetKeyImage(keys[index]).color == wordGuessManager.keyboardDefaultColor)
                     {
                         wordGuessManager.EliminationCount++;
                         eliminatedLetters.Add(keys[index]);
@@ -114,18 +113,19 @@ public class EliminateButton : MonoBehaviour
         onInputFinish?.Invoke();
     }
 
-    private void EliminateKey(string key)
+    private void EliminateKey(string letter)
     {
-        print(key);
+        print(letter);
+        var key = keyboard.GetKeyImage(letter);
         Sequence seq = DOTween.Sequence();
         GameObject arrow = Instantiate(this.arrow, transform);
-        Vector2 diff = (keyboard[key].transform.position - transform.position).normalized;
+        Vector2 diff = (keyboard[letter].transform.position - transform.position).normalized;
         arrow.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg);
-        seq.Append(arrow.GetComponent<RectTransform>().DOMove(keyboard[key].transform.position, duration).SetEase(ease));
-        seq.Append(keyboard[key].GetComponent<Image>().DOColor(wordGuessManager.notInWordColor, 0.25f));
-        seq.Join(keyboard[key].GetComponentInChildren<TextMeshProUGUI>().DOColor(Color.white, 0.25f));
+        seq.Append(arrow.GetComponent<RectTransform>().DOMove(keyboard[letter].transform.position, duration).SetEase(ease));
+        seq.Append(keyboard[letter].image.DOColor(wordGuessManager.notInWordColor, 0.25f));
+        seq.Join(keyboard[letter].text.DOColor(Color.white, 0.25f));
         seq.Join(arrow.GetComponent<RectTransform>().DOShakeRotation(0.08f, 50, 10, 10));
-        seq.Join(keyboard[key].GetComponent<RectTransform>().DOPunchScale(new Vector3(0.1f, 0.1f, 0.1f), 0.1f, 10, 10));
+        seq.Join(keyboard[letter].transform.GetComponent<RectTransform>().DOPunchScale(new Vector3(0.1f, 0.1f, 0.1f), 0.1f, 10, 10));
         seq.AppendInterval(0.25f);
         seq.Append(arrow.GetComponent<Image>().DOFade(0, 0.25f));
         seq.onComplete += () => Destroy(arrow);
