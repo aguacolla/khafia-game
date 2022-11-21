@@ -309,7 +309,7 @@ public class WordGuessManager : MonoBehaviour
                 else if (c == '\n' || c == '\r')
                 {
                     // Checks if word is too short
-                    if (eWord.Length != wordLength)
+                    if (eWord.Length != wordLen)
                     {
                         wordErrorEvent.Invoke();
                         return;
@@ -390,7 +390,7 @@ public class WordGuessManager : MonoBehaviour
     {
         if (str == "" || str == null) return "";
         // Sets length of string if it's too long
-        if (str.Length > wordLength) str = str.Substring(0, wordLength);
+        if (str.Length > wordLen) str = str.Substring(0, wordLen);
         // Remove anything else than letters
         str = Regex.Replace(str, @"[^\u0600-\u06ff]", "");
 
@@ -414,7 +414,7 @@ public class WordGuessManager : MonoBehaviour
 
         for (int i = 0; i < wordLen; i++)
         {
-            Image img = row.GetChild(wordLen - i - 1).GetComponent<Image>();
+            Image img = row.GetChild(i).GetComponent<Image>();
             if (eWord[i].ToString() == cWordSimplified[i].ToString())
             {
                 Regex regex = new Regex(Regex.Escape(cWordSimplified[i].ToString()));
@@ -457,8 +457,8 @@ public class WordGuessManager : MonoBehaviour
 
         SwitchState(InGameState.Animation);
         Sequence seq = DOTween.Sequence();
-        Tweener t = row.GetChild(wordLastIndex).DOLocalRotate(new Vector3(90, 0, 0), 0.1f);
-        Image ims = row.GetChild(wordLastIndex).GetComponent<Image>();
+        Tweener t = row.GetChild(0).DOLocalRotate(new Vector3(90, 0, 0), 0.1f);
+        Image ims = row.GetChild(0).GetComponent<Image>();
         t.onComplete += () =>
         {
             ims.sprite = wordImage;
@@ -466,13 +466,13 @@ public class WordGuessManager : MonoBehaviour
         };
         seq.Append(t);
         seq.Append(DOTween.To(() => ims.color, x => ims.color = x, colors[0], 0.1f).SetDelay(0.1f));
-        seq.Join(row.GetChild(wordLastIndex).DOLocalRotate(new Vector3(0, 0, 0), 0.1f));
+        seq.Join(row.GetChild(0).DOLocalRotate(new Vector3(0, 0, 0), 0.1f));
 
         for (int i = 1; i < wordLen; i++)
         {
-            Image im = row.GetChild(wordLen - i - 1).GetComponent<Image>();
+            Image im = row.GetChild(i).GetComponent<Image>();
             //seq.AppendInterval(0.05f);
-            Tweener t2 = row.GetChild(wordLen - i - 1).DOLocalRotate(new Vector3(90, 0, 0), 0.1f);
+            Tweener t2 = row.GetChild(i).DOLocalRotate(new Vector3(90, 0, 0), 0.1f);
             t2.onComplete += () =>
             {
                 im.sprite = wordImage;
@@ -486,11 +486,11 @@ public class WordGuessManager : MonoBehaviour
             };
             seq.Join(t2.SetDelay(0.05f));
             seq.Join(DOTween.To(() => im.color, x => im.color = x, colors[i], 0.1f).SetDelay(0.1f));
-            if (i == wordLastIndex && row.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text == "ﻱ" && cWord[^1] == 'ى')
+            if (i == wordLastIndex && row.GetChild(wordLastIndex).GetComponentInChildren<TextMeshProUGUI>().text == "ﻱ" && cWord[^1] == 'ى')
             {
-                seq.Join(row.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().DOText("ى", 0.1f));
+                seq.Join(row.GetChild(wordLastIndex).GetComponentInChildren<TextMeshProUGUI>().DOText("ى", 0.1f));
             }
-            seq.Join(row.GetChild(wordLen - i - 1).DOLocalRotate(new Vector3(0, 0, 0), 0.1f));
+            seq.Join(row.GetChild(i).DOLocalRotate(new Vector3(0, 0, 0), 0.1f));
         }
 
         seq.onComplete += () =>

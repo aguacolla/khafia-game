@@ -14,6 +14,7 @@ public class WordGrid : MonoBehaviour
     public List<Image> glowImages { get; set; } = new List<Image>();
 
     public int rowIndex => wordGuessManager.rowIndex;
+    public int wordLen => wordGuessManager.wordLen;
 
     public Image hintGlow;
     private void Awake()
@@ -34,19 +35,19 @@ public class WordGrid : MonoBehaviour
     public void DisplayWord()
     {
         Transform row = transform.GetChild((rowIndex));
-        for (int i = 0; i < row.childCount; i++)
+        for (int i = 0; i < wordLen; i++)
         {
             var eWord = wordGuessManager.enteredWord;
             var str = eWord.Length > i ? eWord[i].ToString() : "";
-            if (str == "ي" && i != row.childCount - 1)
+            if (str == "ي" && i != wordLen - 1)
             {
                 str = "يـ";
             }
-            else if (str == "ئ" && i != row.childCount - 1)
+            else if (str == "ئ" && i != wordLen - 1)
             {
                 str = "ئـ";
             }
-            Transform letter = row.GetChild(row.childCount - i - 1);
+            Transform letter = row.GetChild(i);
             if (letter.GetChild(1).childCount == 1 && letter.GetChild(1).GetChild(0).gameObject.activeInHierarchy && eWord.Length >= i/* && str.Equals(letter.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text, StringComparison.CurrentCulture)*/)
             {
                 if (str.Equals(""))
@@ -124,9 +125,9 @@ public class WordGrid : MonoBehaviour
     public void SetImageColor()
     {
         Transform row = transform.GetChild(rowIndex);
-        for (int i = 0; i < row.childCount; i++)
+        for (int i = 0; i < wordLen; i++)
         {
-            Image img = row.GetChild(row.childCount - i - 1).GetComponent<Image>();
+            Image img = row.GetChild(i).GetComponent<Image>();
             img.color = UIConfig.instance.FulldefaultColor;
         }
     }
@@ -135,12 +136,10 @@ public class WordGrid : MonoBehaviour
     {
         foreach (Transform row in transform)
         {
-            int j = 0;
-            for (int i = row.childCount - 1; i >= 0; i--)
+            for (int i = 0; i < row.childCount; i++)
             {
                 var cell = row.GetChild(i);
-                cell.gameObject.SetActive(j < len);
-                j++;
+                cell.gameObject.SetActive(i < len);
             }
         }
     }
