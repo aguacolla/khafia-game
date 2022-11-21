@@ -14,11 +14,11 @@ public static class LevelGen
         List<int> indexes = new List<int>();
 
         var wordLen = 5;
-        var dict = WordArray.AllWordsDict;
+        var dict = WordArray.GetDictionary(wordLen);
         int iteration = 0;
     START:
         {
-            var goal = WordArray.WordList[Random.Range(0, WordArray.WordList.Length)];
+            var goal = WordArray.GetWordRandom(wordLen);
             var goalOrigin = goal;
             goal = Simplify(goal);
 
@@ -89,9 +89,9 @@ public static class LevelGen
     }
 
 
-    static IEnumerable<string> AllWords()
+    static IEnumerable<string> AllWords(int len)
     {
-        var dict = WordArray.AllWordsDict;
+        var dict = WordArray.GetDictionary(len);
         int startIndex = Random.Range(0, dict.Count);
         int count = dict.Count;
         int i = startIndex;
@@ -115,7 +115,7 @@ public static class LevelGen
         searchFail = false;
         string found = null;
         var goalSimple = Simplify(goal);
-        foreach (var word in AllWords())
+        foreach (var word in AllWords(goal.Length))
         {
             if (word == goal || entered.Contains(word))
                 continue;
@@ -134,7 +134,7 @@ public static class LevelGen
             }
         }
         if (found == null)
-            foreach (var word in AllWords())
+            foreach (var word in AllWords(goal.Length))
             {
                 // Debug.LogError("word not found");
                 searchFail = true;
@@ -210,7 +210,7 @@ public static class LevelGen
     }
     static string SearchWord(GuessContent content, string goalOrigin, List<string> current, List<int> indexes)
     {
-        var dict = WordArray.AllWordsDict;
+        var dict = WordArray.GetDictionary(goalOrigin.Length);
         string any = null;
         GuessContent anyContent = default;
 

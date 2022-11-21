@@ -104,7 +104,7 @@ public class GameState : BaseState
             }
             else
             {
-                guessManager.wordMode = WordGuessManager.WordMode.array;
+                guessManager.wordMode = WordGuessManager.WordMode.random;
                 if (GameManager.Instance.CurrentWord.Length == 5)
                 {
                     return;

@@ -130,4 +130,18 @@ public class WordGrid : MonoBehaviour
             img.color = UIConfig.instance.FulldefaultColor;
         }
     }
+
+    public void SetLen(int len)
+    {
+        foreach (Transform row in transform)
+        {
+            int j = 0;
+            for (int i = row.childCount - 1; i >= 0; i--)
+            {
+                var cell = row.GetChild(i);
+                cell.gameObject.SetActive(j < len);
+                j++;
+            }
+        }
+    }
 }

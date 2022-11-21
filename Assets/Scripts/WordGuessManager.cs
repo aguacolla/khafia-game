@@ -24,9 +24,11 @@ public class WordGuessManager : MonoBehaviour
     public enum WordMode
     {
         single,
-        array
+        random
     }
-    public WordMode wordMode = WordMode.array;
+    public WordMode lenMode = WordMode.random;
+    public int singleLen = 4;
+    public WordMode wordMode = WordMode.random;
 
     public State state = new State();
     // Single
@@ -143,6 +145,9 @@ public class WordGuessManager : MonoBehaviour
     public int coinsWon;
     public int coinsDecrease;
 
+    public int wordLen => currentWordSimplified.Length;
+    public int wordLastIndex => wordLen - 1;
+
 
     private void Start()
     {
@@ -253,32 +258,32 @@ public class WordGuessManager : MonoBehaviour
         // Array: Gives you a random word from the dictionary
         else
         {
-            int index = Random.Range(0, WordArray.WordList.Length);
-            currentWord = WordArray.WordList[index];
-
+            var len = this.lenMode == WordMode.single ? singleLen : WordArray.randomLen;
+            currentWord = WordArray.GetWordRandom(len);
         }
         currentWordSimplified = currentWord;
         currentWordSimplified = Regex.Replace(currentWordSimplified, @"[أ|إ|آ]", "ا");
         currentWordSimplified = Regex.Replace(currentWordSimplified, @"[ى]", "ي");
 
-        for (int i = 0; i < 5; i++)
+        lettersHinted = new List<int>();
+        for (int i = 0; i < wordLen; i++)
         {
-            lettersHinted = new List<int>() { 0, 1, 2, 3, 4 };
+            lettersHinted.Add(i);
         }
 
         SwitchState(InGameState.Typing);
         GameManager.Instance.CurrentWord = currentWord;
         GameManager.Instance.CurrentWordSimplified = currentWordSimplified;
         GameManager.Instance.OnNewWord?.Invoke();
+
+        wordGrid.SetLen(wordLen);
         //coinsWon = GameManager.Instance.coinsPerGame;
         //coinsDecrease = GameManager.Instance.decreasePerRow;
     }
 
     public bool WordNotInDictionary(string word)
     {
-        //WordArray.Start();
-        return (!WordArray.AllWordsDict.ContainsKey(word[0].ToString()) ||
-            System.Array.IndexOf(WordArray.AllWordsDict[word[0].ToString()], word) == -1);
+        return WordArray.WordNotInDictionary(word);
     }
 
     public void EnterLetter(string str)
@@ -359,8 +364,8 @@ public class WordGuessManager : MonoBehaviour
 
                 eWord = enteredWord;
 
-                enterButton.SetInteractable(eWord.Length == 5);
-                if (eWord.Length == 5)
+                enterButton.SetInteractable(eWord.Length == wordLen);
+                if (eWord.Length == wordLen)
                 {
                     incorrectWord = WordNotInDictionary(eWord);
                     enterButton.SetIncorrectWord(incorrectWord);
@@ -407,9 +412,9 @@ public class WordGuessManager : MonoBehaviour
         string letterCount = cWordSimplified;
 
 
-        for (int i = 0; i < row.childCount; i++)
+        for (int i = 0; i < wordLen; i++)
         {
-            Image img = row.GetChild(row.childCount - i - 1).GetComponent<Image>();
+            Image img = row.GetChild(wordLen - i - 1).GetComponent<Image>();
             if (eWord[i].ToString() == cWordSimplified[i].ToString())
             {
                 Regex regex = new Regex(Regex.Escape(cWordSimplified[i].ToString()));
@@ -452,8 +457,8 @@ public class WordGuessManager : MonoBehaviour
 
         SwitchState(InGameState.Animation);
         Sequence seq = DOTween.Sequence();
-        Tweener t = row.GetChild(4).DOLocalRotate(new Vector3(90, 0, 0), 0.1f);
-        Image ims = row.GetChild(4).GetComponent<Image>();
+        Tweener t = row.GetChild(wordLastIndex).DOLocalRotate(new Vector3(90, 0, 0), 0.1f);
+        Image ims = row.GetChild(wordLastIndex).GetComponent<Image>();
         t.onComplete += () =>
         {
             ims.sprite = wordImage;
@@ -461,13 +466,13 @@ public class WordGuessManager : MonoBehaviour
         };
         seq.Append(t);
         seq.Append(DOTween.To(() => ims.color, x => ims.color = x, colors[0], 0.1f).SetDelay(0.1f));
-        seq.Join(row.GetChild(4).DOLocalRotate(new Vector3(0, 0, 0), 0.1f));
+        seq.Join(row.GetChild(wordLastIndex).DOLocalRotate(new Vector3(0, 0, 0), 0.1f));
 
-        for (int i = 1; i < 5; i++)
+        for (int i = 1; i < wordLen; i++)
         {
-            Image im = row.GetChild(5 - i - 1).GetComponent<Image>();
+            Image im = row.GetChild(wordLen - i - 1).GetComponent<Image>();
             //seq.AppendInterval(0.05f);
-            Tweener t2 = row.GetChild(5 - i - 1).DOLocalRotate(new Vector3(90, 0, 0), 0.1f);
+            Tweener t2 = row.GetChild(wordLen - i - 1).DOLocalRotate(new Vector3(90, 0, 0), 0.1f);
             t2.onComplete += () =>
             {
                 im.sprite = wordImage;
@@ -481,11 +486,11 @@ public class WordGuessManager : MonoBehaviour
             };
             seq.Join(t2.SetDelay(0.05f));
             seq.Join(DOTween.To(() => im.color, x => im.color = x, colors[i], 0.1f).SetDelay(0.1f));
-            if (i == 4 && row.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text == "ﻱ" && cWord[^1] == 'ى')
+            if (i == wordLastIndex && row.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text == "ﻱ" && cWord[^1] == 'ى')
             {
                 seq.Join(row.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().DOText("ى", 0.1f));
             }
-            seq.Join(row.GetChild(5 - i - 1).DOLocalRotate(new Vector3(0, 0, 0), 0.1f));
+            seq.Join(row.GetChild(wordLen - i - 1).DOLocalRotate(new Vector3(0, 0, 0), 0.1f));
         }
 
         seq.onComplete += () =>

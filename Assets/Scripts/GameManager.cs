@@ -216,19 +216,6 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         // ShouldStartTutorial = true;
     }
 
-    public string PseudoDailyWord()
-    {
-        System.Random r = new System.Random(randomSeed);
-        //Random.InitState(randomSeed);
-        int dayMonth = DateTime.UtcNow.Day + DateTime.UtcNow.Month;
-        int idx = 0;
-        for (int i = 0; i < dayMonth; i++)
-        {
-            idx = r.Next(0, WordArray.WordList.Length);
-        }
-        //print($"daily word generated {WordArray.WordList[idx]}");
-        return WordArray.WordList[idx];
-    }
 
     private IEnumerator CheckForDay()
     {
@@ -271,7 +258,8 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         PopupManager.Instance.CloseCurrentPopup();
         timesEliminationUsed = timesHintUsed = 0;
         {
-            wordGuessManager.wordMode = WordGuessManager.WordMode.array;
+            wordGuessManager.lenMode = WordGuessManager.WordMode.random;
+            wordGuessManager.wordMode = WordGuessManager.WordMode.random;
             wordGuessManager.ResetClassic();
         }
 

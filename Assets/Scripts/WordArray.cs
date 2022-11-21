@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class WordArray
 {
-    public static readonly string[] WordList =
-        {   
+    static readonly string[] WordList =
+        {
             "أبحاث",
             "أبريل",
             "أبصار",
@@ -550,6 +550,16 @@ public class WordArray
             "وليمة",
             "وهران"
         };
+
+    static string[] GetArray(int len) => len == 4 ? WordArray4.WordList : WordList;
+    public static int randomLen => Random.Range(4, 6);
+    public static string GetWordRandom(int len)
+    {
+        var ar = GetArray(len);
+
+        return ar[Random.Range(0, ar.Length)];
+    }
+
     public static string[] WordsArrays(string letter)
     {
         //List<string> words = new List<string>();
@@ -558,7 +568,7 @@ public class WordArray
         return words;
     }
 
-    public static readonly Dictionary<string, string[]> AllWordsDict = new Dictionary<string, string[]>(){
+    static readonly Dictionary<string, string[]> AllWordsDict = new Dictionary<string, string[]>(){
         {"ا", WordsArrays("alif")},
         {"ب", WordsArrays("baa2")},
         {"ت", WordsArrays("taa2")},
@@ -588,5 +598,17 @@ public class WordArray
         {"و", WordsArrays("waw")},
         {"ي", WordsArrays("ya2")}
     };
+    public static bool WordNotInDictionary(string word)
+    {
+        var dict = word.Length == 4 ? WordArray4.AllWordsDict : AllWordsDict;
+        //WordArray.Start();
+        return (!dict.ContainsKey(word[0].ToString()) ||
+            System.Array.IndexOf(dict[word[0].ToString()], word) == -1);
+    }
 
+    public static Dictionary<string, string[]> GetDictionary(int len)
+    {
+        var dict = len == 4 ? WordArray4.AllWordsDict : AllWordsDict;
+        return dict;
+    }
 }
