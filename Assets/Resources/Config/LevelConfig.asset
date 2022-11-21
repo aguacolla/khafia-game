@@ -29,5 +29,27 @@ MonoBehaviour:
   inPlaceCount:
     min: 1
     max: 2
+  firstLevels: 10
+  genFirstLevels:
+    wordLen: 4
+    guesses:
+    - inPlace: 1
+      inWord: 3
+    solves: 0300000004000000
+  genLevels:
+  - wordLen: 5
+    guesses:
+    - inPlace: 1
+      inWord: 4
+    - inPlace: 0
+      inWord: 5
+    solves: 0300000004000000
+  - wordLen: 4
+    guesses:
+    - inPlace: 1
+      inWord: 2
+    - inPlace: 0
+      inWord: 4
+    solves: 0300000004000000
   genSeed: 0
   maxIterations: 10

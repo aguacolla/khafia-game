@@ -13,30 +13,32 @@ public static class LevelGen
         LevelInfo info = new LevelInfo();
         List<int> indexes = new List<int>();
 
-        var wordLen = 5;
-        var dict = WordArray.GetDictionary(wordLen);
+
         int iteration = 0;
+        GenerationInfo genInfo;
+        if (level <= LevelConfig.instance.firstLevels)
+            genInfo = LevelConfig.instance.genFirstLevels;
+        else
+            genInfo = LevelConfig.instance.genLevels.GetRandom();
+
+        var wordLen = genInfo.wordLen;
+        var dict = WordArray.GetDictionary(wordLen);
     START:
         {
             var goal = WordArray.GetWordRandom(wordLen);
             var goalOrigin = goal;
             goal = Simplify(goal);
 
-            var solvedGuesses = config.solvedGuesses.random;
-            var leftGuesses = config.leftGuesses.random;
-            var inPlace = config.inPlaceCount.random;
-            var inWord = config.inWordcount.random;
+            var solvedGuesses = genInfo.solves.GetRandom();
+            var guessContent = genInfo.guesses.GetRandom();
+            var inPlace = guessContent.inPlace;
+            var inWord = guessContent.inWord;
 
             inWord = Mathf.Clamp(inWord, 0, wordLen);
             inPlace = Mathf.Clamp(inPlace, 0, wordLen);
             while (inPlace + inWord > wordLen)
                 inPlace--;
 
-            GuessContent gc = new GuessContent(inPlace, inWord);
-
-
-
-            var totalGuesses = solvedGuesses + leftGuesses;
             GuessContent[] guessContents = new GuessContent[solvedGuesses];
             for (int i = 0; i < solvedGuesses; i++)
             {
@@ -45,8 +47,8 @@ public static class LevelGen
 
                 var isLast = i == solvedGuesses - 1;
 
-                var inp = isLast ? inPlace : Random.Range(0, inPlace + 1);
-                var inw = isLast ? inWord : Random.Range(0, inWord + 1);
+                var inp = isLast ? inPlace : Random.Range(1, 2);
+                var inw = isLast ? inWord : Random.Range(1, 2);
                 guessContents[i] = new GuessContent(inp, inw);
 
                 inPlace -= inp;
