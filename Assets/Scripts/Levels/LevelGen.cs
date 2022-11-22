@@ -8,14 +8,17 @@ public static class LevelGen
     static float beginTime;
 
     static Dictionary<int, LevelInfo> cached = new();
-    public static LevelInfo Generate(int level, int? SEED = null)
+    public static LevelInfo Generate(int level, int? SEED = 0, bool isGenerator = false)
     {
-        if (GeneratedLevels.instance)
-            if (level < GeneratedLevels.instance.levels.Count)
-                return GeneratedLevels.instance.levels[level].Clone();
         int seed = level + (SEED.HasValue ? SEED.Value : LevelConfig.instance.genSeed);
-        if (cached.ContainsKey(seed))
-            return cached[seed].Clone();
+        if (!isGenerator)
+        {
+            if (GeneratedLevels.instance)
+                if (level < GeneratedLevels.instance.levels.Count)
+                    return GeneratedLevels.instance.levels[level].Clone();
+            if (cached.ContainsKey(seed))
+                return cached[seed].Clone();
+        }
 
         beginTime = Time.time + 4;
         var st = Random.state;
