@@ -1,0 +1,772 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aa46faffc9cc8948b7838057661414c, type: 3}
+  m_Name: GeneratedLevels
+  m_EditorClassIdentifier: 
+  count: 1000
+  levels:
+  - goalWord: 
+    goalWordSimplified: 
+    hasFailed: 0
+    entered: []
+  - goalWord: "\u0641\u0648\u0636\u0649"
+    goalWordSimplified: "\u0641\u0648\u0636\u064A"
+    hasFailed: 0
+    entered:
+    - "\u0648\u0627\u0628\u0627"
+    - "\u0627\u0628\u0627\u0636"
+    - "\u0628\u0627\u0641\u064A"
+  - goalWord: "\u062E\u0627\u0626\u0646"
+    goalWordSimplified: "\u062E\u0627\u0626\u0646"
+    hasFailed: 0
+    entered:
+    - "\u0646\u0624\u0628\u0647"
+    - "\u064A\u0624\u062E\u0630"
+    - "\u062F\u0627\u0631\u0626"
+  - goalWord: "\u0641\u0631\u062D\u0629"
+    goalWordSimplified: "\u0641\u0631\u062D\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0648\u0627\u0628\u0631"
+    - "\u0636\u0627\u0628\u062D"
+    - "\u063A\u0627\u062F\u0641"
+    - "\u0639\u0627\u062C\u0629"
+  - goalWord: "\u0630\u0628\u0627\u0628"
+    goalWordSimplified: "\u0630\u0628\u0627\u0628"
+    hasFailed: 0
+    entered:
+    - "\u0631\u0627\u0643\u0645"
+    - "\u062F\u0626\u0628\u062A"
+    - "\u062A\u0624\u062E\u0630"
+    - "\u0646\u0624\u062F\u0628"
+  - goalWord: "\u0639\u0627\u062C\u0644"
+    goalWordSimplified: "\u0639\u0627\u062C\u0644"
+    hasFailed: 0
+    entered:
+    - "\u0628\u0624\u0631\u0627"
+    - "\u062D\u0628\u0644\u062A"
+    - "\u062A\u0624\u0631\u062C"
+    - "\u0639\u0628\u0624\u0643"
+  - goalWord: "\u0628\u0627\u0628\u0627"
+    goalWordSimplified: "\u0628\u0627\u0628\u0627"
+    hasFailed: 1
+    entered:
+    - "\u0639\u0628\u0624\u0643"
+    - "\u064A\u062A\u0627\u062A"
+    - "\u062A\u0628\u0647\u0645"
+    - "\u0644\u0624\u0645\u0627"
+  - goalWord: "\u0644\u064A\u0644\u0629"
+    goalWordSimplified: "\u0644\u064A\u0644\u0629"
+    hasFailed: 1
+    entered:
+    - "\u0641\u0627\u0628\u0644"
+    - "\u0645\u0627\u0628\u064A"
+    - "\u062A\u062E\u0646\u0639"
+  - goalWord: "\u0645\u062A\u062D\u0641"
+    goalWordSimplified: "\u0645\u062A\u062D\u0641"
+    hasFailed: 0
+    entered:
+    - "\u0639\u0627\u0626\u0645"
+    - "\u062F\u0627\u0628\u062A"
+    - "\u0648\u0627\u0641\u0629"
+    - "\u0642\u0627\u062D\u0627"
+  - goalWord: "\u0639\u0638\u0645\u0629"
+    goalWordSimplified: "\u0639\u0638\u0645\u0629"
+    hasFailed: 0
+    entered:
+    - "\u062D\u0627\u0626\u0645"
+    - "\u0646\u0627\u0628\u0639"
+    - "\u0641\u0627\u0628\u0638"
+    - "\u0627\u0628\u062F\u0629"
+  - goalWord: "\u062E\u0627\u0626\u0641"
+    goalWordSimplified: "\u062E\u0627\u0626\u0641"
+    hasFailed: 0
+    entered:
+    - "\u0627\u0628\u062A\u0643"
+    - "\u062F\u0626\u0628\u062A"
+    - "\u0632\u062D\u0641\u0629"
+    - "\u062E\u0624\u0648\u0644"
+  - goalWord: "\u062E\u062F\u0627\u0639"
+    goalWordSimplified: "\u062E\u062F\u0627\u0639"
+    hasFailed: 0
+    entered:
+    - "\u0634\u0627\u0645\u064A"
+    - "\u062D\u0634\u0648\u062F"
+    - "\u0639\u0628\u0624\u0643"
+    - "\u0628\u0628\u062E\u062A"
+  - goalWord: "\u0645\u0633\u0637\u0631\u0629"
+    goalWordSimplified: "\u0645\u0633\u0637\u0631\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0646\u0627\u0633\u0645\u062A"
+    - "\u0634\u0627\u0626\u0637\u0627"
+    - "\u0646\u0627\u0631\u064A\u0629"
+  - goalWord: "\u0637\u0648\u0627\u0631\u0626"
+    goalWordSimplified: "\u0637\u0648\u0627\u0631\u0626"
+    hasFailed: 0
+    entered:
+    - "\u0630\u0624\u0628\u0627\u0646"
+    - "\u0644\u0637\u062E\u0648\u0646"
+    - "\u0645\u0626\u0631\u0628\u0629"
+  - goalWord: "\u062E\u0627\u0631\u062C"
+    goalWordSimplified: "\u062E\u0627\u0631\u062C"
+    hasFailed: 0
+    entered:
+    - "\u062A\u0624\u0627\u0645"
+    - "\u062F\u0628\u062C\u062A"
+    - "\u0634\u062E\u0631\u062A"
+  - goalWord: "\u062D\u0627\u0631\u0628"
+    goalWordSimplified: "\u062D\u0627\u0631\u0628"
+    hasFailed: 0
+    entered:
+    - "\u064A\u0628\u0627\u0633"
+    - "\u0633\u062A\u062A\u0631"
+    - "\u0636\u062D\u0643\u0629"
+  - goalWord: "\u0627\u0639\u062A\u0630\u0631"
+    goalWordSimplified: "\u0627\u0639\u062A\u0630\u0631"
+    hasFailed: 0
+    entered:
+    - "\u0628\u0624\u0631\u062A\u064A"
+    - "\u0648\u0627\u0645\u064A\u0646"
+    - "\u0641\u0639\u0645\u0626\u0630"
+  - goalWord: "\u062E\u0627\u0644\u062F"
+    goalWordSimplified: "\u062E\u0627\u0644\u062F"
+    hasFailed: 0
+    entered:
+    - "\u0634\u0624\u0645\u0627"
+    - "\u0636\u0626\u064A\u0644"
+    - "\u062F\u0624\u0648\u0628"
+    - "\u062E\u0624\u0648\u0646"
+  - goalWord: "\u0647\u064A\u0626\u0629"
+    goalWordSimplified: "\u0647\u064A\u0626\u0629"
+    hasFailed: 0
+    entered:
+    - "\u062D\u0627\u0628\u0647"
+    - "\u0627\u0628\u062A\u064A"
+    - "\u0627\u0626\u0645\u0629"
+  - goalWord: "\u062C\u0632\u064A\u0631\u0629"
+    goalWordSimplified: "\u062C\u0632\u064A\u0631\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0641\u0627\u0645\u064A\u0646"
+    - "\u0636\u0627\u062C\u0627\u0646"
+    - "\u062A\u0624\u0645\u0648\u0631"
+    - "\u062E\u0627\u0628\u0632\u0629"
+  - goalWord: "\u0630\u0627\u062A\u0643"
+    goalWordSimplified: "\u0630\u0627\u062A\u0643"
+    hasFailed: 0
+    entered:
+    - "\u0631\u0624\u0627\u0645"
+    - "\u0648\u0626\u062F\u062A"
+    - "\u0645\u0630\u0631\u0643"
+  - goalWord: "\u0647\u0627\u0644\u0643"
+    goalWordSimplified: "\u0647\u0627\u0644\u0643"
+    hasFailed: 0
+    entered:
+    - "\u062A\u0624\u062C\u0644"
+    - "\u0648\u0626\u0627\u0645"
+    - "\u0639\u0631\u0643\u0647"
+  - goalWord: "\u0625\u0633\u0647\u0627\u0644"
+    goalWordSimplified: "\u0627\u0633\u0647\u0627\u0644"
+    hasFailed: 0
+    entered:
+    - "\u062A\u0627\u0645\u064A\u0646"
+    - "\u0643\u0628\u0633\u062A\u064A"
+    - "\u064A\u0624\u0632\u0644\u0646"
+    - "\u0645\u0628\u062F\u0627\u0647"
+  - goalWord: "\u0645\u062A\u0633\u0639"
+    goalWordSimplified: "\u0645\u062A\u0633\u0639"
+    hasFailed: 0
+    entered:
+    - "\u062C\u0627\u0631\u062A"
+    - "\u0639\u0627\u0626\u0628"
+    - "\u0634\u0627\u0645\u0627"
+    - "\u062E\u0627\u0633\u0626"
+  - goalWord: "\u062D\u0627\u0631\u0628"
+    goalWordSimplified: "\u062D\u0627\u0631\u0628"
+    hasFailed: 0
+    entered:
+    - "\u0644\u0628\u0627\u0632"
+    - "\u0648\u062A\u062A\u062D"
+    - "\u062F\u062B\u0648\u0631"
+    - "\u0641\u0624\u0648\u0633"
+  - goalWord: "\u0639\u0645\u0644\u0627\u0642"
+    goalWordSimplified: "\u0639\u0645\u0644\u0627\u0642"
+    hasFailed: 0
+    entered:
+    - "\u0635\u0624\u0627\u0628\u0629"
+    - "\u062D\u062F\u0642\u0644\u0629"
+    - "\u0635\u0648\u0645\u0639\u0629"
+  - goalWord: "\u0642\u0644\u0628\u064A\u0629"
+    goalWordSimplified: "\u0642\u0644\u0628\u064A\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0628\u0624\u0631\u062A\u064A"
+    - "\u0646\u0627\u0626\u0644\u0627"
+    - "\u0647\u0631\u0627\u0642\u0629"
+  - goalWord: "\u0632\u0626\u064A\u0631"
+    goalWordSimplified: "\u0632\u0626\u064A\u0631"
+    hasFailed: 0
+    entered:
+    - "\u062B\u0627\u0631\u0627"
+    - "\u0633\u0627\u0628\u064A"
+    - "\u062F\u0627\u0626\u0628"
+    - "\u0632\u0627\u0641\u0629"
+  - goalWord: "\u0645\u0633\u0627\u062D\u0629"
+    goalWordSimplified: "\u0645\u0633\u0627\u062D\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0643\u0624\u0648\u0633\u0627"
+    - "\u0644\u0624\u0645\u064A\u0646"
+    - "\u0644\u0628\u062D\u064A\u0646"
+    - "\u0642\u0624\u0648\u062F\u0629"
+  - goalWord: "\u0643\u0632\u0628\u0631\u0629"
+    goalWordSimplified: "\u0643\u0632\u0628\u0631\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0638\u0627\u0631\u0627\u0646"
+    - "\u062A\u0628\u0627\u0632\u062C"
+    - "\u0635\u0627\u0643\u0627\u0646"
+    - "\u062D\u0645\u0644\u0629\u0627"
+  - goalWord: "\u0623\u0645\u062C\u062F"
+    goalWordSimplified: "\u0627\u0645\u062C\u062F"
+    hasFailed: 0
+    entered:
+    - "\u0633\u0627\u0628\u0642"
+    - "\u0634\u0624\u0645\u0643"
+    - "\u0636\u062C\u062A\u0643"
+    - "\u0628\u0628\u0631\u062F"
+  - goalWord: "\u062A\u062C\u062F\u064A\u0641"
+    goalWordSimplified: "\u062A\u062C\u062F\u064A\u0641"
+    hasFailed: 0
+    entered:
+    - "\u062B\u0624\u0627\u062C\u0627"
+    - "\u062E\u0624\u0648\u0646\u064A"
+    - "\u0643\u0624\u0648\u062F\u0627"
+    - "\u0647\u0648\u0627\u062A\u0641"
+  - goalWord: "\u0639\u0628\u0642\u0631\u064A"
+    goalWordSimplified: "\u0639\u0628\u0642\u0631\u064A"
+    hasFailed: 0
+    entered:
+    - "\u0634\u0627\u0628\u064A\u0629"
+    - "\u0637\u0627\u0626\u0639\u0627"
+    - "\u063A\u0627\u0631\u0642\u0627"
+  - goalWord: "\u062B\u0627\u0626\u0631"
+    goalWordSimplified: "\u062B\u0627\u0626\u0631"
+    hasFailed: 0
+    entered:
+    - "\u062D\u0628\u0627\u062A"
+    - "\u0639\u0628\u062B\u0629"
+    - "\u0644\u0631\u0626\u0629"
+  - goalWord: "\u0627\u0642\u062A\u0646\u0639"
+    goalWordSimplified: "\u0627\u0642\u062A\u0646\u0639"
+    hasFailed: 0
+    entered:
+    - "\u062E\u0627\u0626\u062A\u0629"
+    - "\u062E\u0628\u0624\u0648\u0646"
+    - "\u062F\u0631\u0642\u0639\u0629"
+  - goalWord: "\u0645\u062F\u0631\u0633\u0629"
+    goalWordSimplified: "\u0645\u062F\u0631\u0633\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0648\u0627\u0645\u064A\u0646"
+    - "\u0642\u0624\u0648\u062F\u0627"
+    - "\u0646\u0627\u0628\u0644\u0633"
+    - "\u0648\u0627\u0632\u0631\u0629"
+  - goalWord: "\u0630\u0647\u0628\u064A"
+    goalWordSimplified: "\u0630\u0647\u0628\u064A"
+    hasFailed: 0
+    entered:
+    - "\u062F\u0627\u0645\u0647"
+    - "\u063A\u0627\u0626\u0628"
+    - "\u0646\u0627\u062E\u0630"
+    - "\u0634\u0627\u0645\u064A"
+  - goalWord: "\u0645\u0624\u0644\u0641"
+    goalWordSimplified: "\u0645\u0624\u0644\u0641"
+    hasFailed: 0
+    entered:
+    - "\u0646\u0627\u0628\u0644"
+    - "\u062D\u0627\u0632\u0645"
+    - "\u0631\u0624\u0641\u0627"
+  - goalWord: "\u0639\u062F\u0648\u0627\u0646"
+    goalWordSimplified: "\u0639\u062F\u0648\u0627\u0646"
+    hasFailed: 0
+    entered:
+    - "\u062E\u0627\u0626\u0628\u0648"
+    - "\u064A\u0624\u0643\u0633\u062F"
+    - "\u062E\u0628\u0639\u064A\u0646"
+  - goalWord: "\u062A\u0639\u0641\u0646"
+    goalWordSimplified: "\u062A\u0639\u0641\u0646"
+    hasFailed: 0
+    entered:
+    - "\u0638\u0631\u0648\u0641"
+    - "\u0646\u0627\u0628\u062F"
+    - "\u0642\u0627\u0639\u062A"
+  - goalWord: "\u0637\u0627\u0642\u0629"
+    goalWordSimplified: "\u0637\u0627\u0642\u0629"
+    hasFailed: 0
+    entered:
+    - "\u064A\u0624\u0631\u0642"
+    - "\u0643\u0626\u0627\u0633"
+    - "\u064A\u0624\u0637\u0631"
+    - "\u0644\u0628\u0624\u0629"
+  - goalWord: "\u0645\u0631\u062D\u0627\u0636"
+    goalWordSimplified: "\u0645\u0631\u062D\u0627\u0636"
+    hasFailed: 0
+    entered:
+    - "\u0632\u0624\u0648\u0645\u0627"
+    - "\u062A\u0628\u062A\u0631\u064A"
+    - "\u0636\u0628\u062D\u064A\u0646"
+  - goalWord: "\u062C\u0647\u0627\u062A"
+    goalWordSimplified: "\u062C\u0647\u0627\u062A"
+    hasFailed: 0
+    entered:
+    - "\u0632\u0627\u0631\u0646"
+    - "\u062F\u0628\u0628\u0647"
+    - "\u0644\u0628\u062A\u0631"
+    - "\u0644\u0628\u062C\u0629"
+  - goalWord: "\u0634\u0627\u0645\u0644"
+    goalWordSimplified: "\u0634\u0627\u0645\u0644"
+    hasFailed: 0
+    entered:
+    - "\u0632\u0626\u0631\u0627"
+    - "\u0633\u0624\u062A\u0645"
+    - "\u0642\u0634\u0644\u0629"
+  - goalWord: "\u062D\u0627\u0641\u0644\u0629"
+    goalWordSimplified: "\u062D\u0627\u0641\u0644\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0631\u0621\u0648\u0641\u0627"
+    - "\u062E\u0628\u0644\u0648\u0646"
+    - "\u062B\u062D\u062C\u064A\u0646"
+    - "\u0636\u0628\u0636\u0628\u0629"
+  - goalWord: "\u062B\u0645\u0631\u0629"
+    goalWordSimplified: "\u062B\u0645\u0631\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0628\u0627\u062C\u0631"
+    - "\u0642\u0627\u0626\u0645"
+    - "\u0643\u062B\u0642\u0629"
+  - goalWord: "\u0642\u064A\u0635\u0631"
+    goalWordSimplified: "\u0642\u064A\u0635\u0631"
+    hasFailed: 0
+    entered:
+    - "\u0632\u0627\u0631\u0642"
+    - "\u062D\u0627\u0628\u064A"
+    - "\u0633\u0627\u0628\u0635"
+  - goalWord: "\u0642\u0635\u064A\u0631\u0629"
+    goalWordSimplified: "\u0642\u0635\u064A\u0631\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0630\u0626\u0628\u064A\u0646"
+    - "\u062E\u0627\u0626\u0635\u0627"
+    - "\u0628\u0624\u0631\u0627\u062A"
+    - "\u0633\u0627\u0626\u0642\u0629"
+  - goalWord: "\u062F\u0648\u0644\u0627\u0628"
+    goalWordSimplified: "\u062F\u0648\u0644\u0627\u0628"
+    hasFailed: 0
+    entered:
+    - "\u0646\u0624\u0648\u062C\u0627"
+    - "\u0637\u0628\u062A\u064A\u0646"
+    - "\u0646\u062A\u064A\u0644\u0629"
+    - "\u0639\u062A\u064A\u062F\u0629"
+  - goalWord: "\u0645\u062C\u0627\u0644"
+    goalWordSimplified: "\u0645\u062C\u0627\u0644"
+    hasFailed: 0
+    entered:
+    - "\u062A\u0627\u062E\u062A"
+    - "\u064A\u0624\u062B\u0645"
+    - "\u0643\u0628\u062C\u0639"
+    - "\u062A\u0624\u062B\u0644"
+  - goalWord: "\u062D\u0627\u0633\u0648\u0628"
+    goalWordSimplified: "\u062D\u0627\u0633\u0648\u0628"
+    hasFailed: 0
+    entered:
+    - "\u063A\u0628\u062A\u064A\u0646"
+    - "\u0627\u0634\u0639\u0644\u062A"
+    - "\u064A\u062A\u062D\u0648\u0633"
+  - goalWord: "\u0645\u0639\u062C\u0648\u0646"
+    goalWordSimplified: "\u0645\u0639\u062C\u0648\u0646"
+    hasFailed: 0
+    entered:
+    - "\u062B\u0624\u0627\u062C\u0627"
+    - "\u0639\u0624\u0648\u0630\u0627"
+    - "\u062D\u0645\u062F\u0646\u0627"
+  - goalWord: "\u0631\u064A\u0645\u0627"
+    goalWordSimplified: "\u0631\u064A\u0645\u0627"
+    hasFailed: 0
+    entered:
+    - "\u062C\u0627\u0634\u062A"
+    - "\u0642\u0626\u062A\u0645"
+    - "\u0639\u0628\u0631\u064A"
+  - goalWord: "\u062A\u0639\u0627\u0645\u0644"
+    goalWordSimplified: "\u062A\u0639\u0627\u0645\u0644"
+    hasFailed: 0
+    entered:
+    - "\u0638\u0626\u0638\u0627\u0621"
+    - "\u0628\u062A\u0639\u0648\u0646"
+    - "\u063A\u062B\u0645\u0631\u0629"
+    - "\u0646\u0628\u0644\u064A\u0646"
+  - goalWord: "\u0639\u0645\u0644\u0627\u0642"
+    goalWordSimplified: "\u0639\u0645\u0644\u0627\u0642"
+    hasFailed: 0
+    entered:
+    - "\u062A\u0627\u0646\u0626\u0630"
+    - "\u062B\u0628\u0642\u064A\u0646"
+    - "\u0628\u0624\u0648\u0644\u0629"
+    - "\u062E\u0645\u0639\u064A\u0646"
+  - goalWord: "\u0646\u0627\u062F\u064A"
+    goalWordSimplified: "\u0646\u0627\u062F\u064A"
+    hasFailed: 0
+    entered:
+    - "\u0645\u0624\u0627\u0628"
+    - "\u0636\u0624\u0644\u0646"
+    - "\u0648\u0626\u064A\u062F"
+  - goalWord: "\u0633\u0628\u0627\u062D\u0629"
+    goalWordSimplified: "\u0633\u0628\u0627\u062D\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0634\u0627\u0626\u0628\u0648"
+    - "\u0639\u062A\u0631\u0633\u062A"
+    - "\u0635\u062D\u062A\u064A\u0646"
+    - "\u0637\u062E\u0637\u062E\u0629"
+  - goalWord: "\u0631\u0648\u0627\u064A\u0629"
+    goalWordSimplified: "\u0631\u0648\u0627\u064A\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0627\u0628\u0639\u062F\u062A"
+    - "\u062D\u0628\u0642\u0648\u0642"
+    - "\u0632\u0628\u064A\u0631\u0629"
+  - goalWord: "\u0631\u063A\u0628\u0629"
+    goalWordSimplified: "\u0631\u063A\u0628\u0629"
+    hasFailed: 0
+    entered:
+    - "\u062D\u0627\u0626\u0628"
+    - "\u0630\u0627\u062E\u0631"
+    - "\u0633\u0648\u063A\u0629"
+  - goalWord: "\u0645\u064A\u062F\u0627\u0646"
+    goalWordSimplified: "\u0645\u064A\u062F\u0627\u0646"
+    hasFailed: 0
+    entered:
+    - "\u0643\u0624\u0648\u0633\u0627"
+    - "\u0633\u0626\u0645\u062A\u064A"
+    - "\u0633\u0644\u0628\u0646\u062F"
+  - goalWord: "\u0645\u062F\u0628\u0644\u062C"
+    goalWordSimplified: "\u0645\u062F\u0628\u0644\u062C"
+    hasFailed: 0
+    entered:
+    - "\u0647\u0627\u062C\u062F\u0627"
+    - "\u0643\u0627\u0646\u0645\u0627"
+    - "\u0644\u0627\u0634\u0631\u0631"
+    - "\u0646\u0627\u0626\u0628\u0627"
+  - goalWord: "\u0644\u0628\u0627\u0646"
+    goalWordSimplified: "\u0644\u0628\u0627\u0646"
+    hasFailed: 0
+    entered:
+    - "\u0646\u0624\u062A\u0647"
+    - "\u062D\u0627\u062C\u0643"
+    - "\u0628\u0624\u062A\u0645"
+    - "\u0644\u0624\u0645\u0643"
+  - goalWord: "\u0644\u0642\u0645\u0629"
+    goalWordSimplified: "\u0644\u0642\u0645\u0629"
+    hasFailed: 0
+    entered:
+    - "\u062D\u0627\u0632\u0645"
+    - "\u062E\u0624\u0648\u0644"
+    - "\u062C\u0648\u0642\u0629"
+  - goalWord: "\u0627\u0646\u062A\u0634\u0631"
+    goalWordSimplified: "\u0627\u0646\u062A\u0634\u0631"
+    hasFailed: 0
+    entered:
+    - "\u0639\u0624\u0648\u0646\u0627"
+    - "\u0633\u0626\u0645\u062A\u064A"
+    - "\u0643\u0628\u0631\u064A\u0629"
+    - "\u0633\u064A\u0634\u0639\u0644"
+  - goalWord: "\u0647\u0645\u062C\u064A"
+    goalWordSimplified: "\u0647\u0645\u062C\u064A"
+    hasFailed: 0
+    entered:
+    - "\u0641\u0627\u0628\u0647"
+    - "\u0639\u0627\u0626\u062C"
+    - "\u0645\u0627\u0628\u0627"
+    - "\u062E\u0627\u062F\u064A"
+  - goalWord: "\u064A\u0642\u0638\u0629"
+    goalWordSimplified: "\u064A\u0642\u0638\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0639\u0627\u0626\u0642"
+    - "\u062A\u0627\u062E\u064A"
+    - "\u0643\u0638\u0644\u0629"
+  - goalWord: "\u0645\u0639\u062C\u0632\u0629"
+    goalWordSimplified: "\u0645\u0639\u062C\u0632\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0647\u0627\u0645\u062C\u0627"
+    - "\u0639\u0624\u0648\u0630\u0627"
+    - "\u0628\u0627\u0632\u062E\u0629"
+  - goalWord: "\u0637\u0628\u0644\u0629"
+    goalWordSimplified: "\u0637\u0628\u0644\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0636\u0626\u0627\u0644"
+    - "\u062E\u0627\u0626\u0628"
+    - "\u062E\u0631\u0637\u0629"
+  - goalWord: "\u0647\u0627\u062F\u0626"
+    goalWordSimplified: "\u0647\u0627\u062F\u0626"
+    hasFailed: 0
+    entered:
+    - "\u0648\u0626\u0645\u062A"
+    - "\u0628\u0624\u0631\u0627"
+    - "\u063A\u0628\u062A\u0647"
+    - "\u0628\u0628\u062F\u0621"
+  - goalWord: "\u0644\u064A\u0627\u0642\u0629"
+    goalWordSimplified: "\u0644\u064A\u0627\u0642\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0646\u0624\u0648\u062C\u0627"
+    - "\u064A\u0624\u0628\u0633\u0646"
+    - "\u0645\u0624\u062A\u0643\u0644"
+    - "\u0645\u0624\u0642\u062A\u0629"
+  - goalWord: "\u0634\u0631\u0637\u064A"
+    goalWordSimplified: "\u0634\u0631\u0637\u064A"
+    hasFailed: 0
+    entered:
+    - "\u062A\u062B\u064A\u0631"
+    - "\u0643\u0627\u062C\u0634"
+    - "\u0632\u0637\u0645\u0629"
+    - "\u0638\u0644\u0627\u0644"
+  - goalWord: "\u063A\u0645\u0627\u0631"
+    goalWordSimplified: "\u063A\u0645\u0627\u0631"
+    hasFailed: 0
+    entered:
+    - "\u0646\u0627\u0628\u062F"
+    - "\u062A\u0624\u0644\u0645"
+    - "\u062D\u0628\u0631\u0629"
+    - "\u0632\u063A\u0628\u0629"
+  - goalWord: "\u062C\u0645\u0628\u0631\u064A"
+    goalWordSimplified: "\u062C\u0645\u0628\u0631\u064A"
+    hasFailed: 0
+    entered:
+    - "\u063A\u0627\u0631\u0628\u0627"
+    - "\u0634\u0624\u0645\u0627\u0646"
+    - "\u062C\u0627\u0621\u064A\u0646"
+  - goalWord: "\u0631\u0648\u0627\u064A\u0629"
+    goalWordSimplified: "\u0631\u0648\u0627\u064A\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0638\u0627\u0621\u0631\u062A"
+    - "\u0639\u0628\u062F\u062A\u064A"
+    - "\u0648\u0628\u062A\u0644\u0629"
+  - goalWord: "\u0632\u0641\u0627\u0641"
+    goalWordSimplified: "\u0632\u0641\u0627\u0641"
+    hasFailed: 0
+    entered:
+    - "\u0634\u0627\u0645\u064A"
+    - "\u0645\u0624\u0632\u0631"
+    - "\u062A\u0624\u0641\u0641"
+  - goalWord: "\u0627\u0639\u062A\u0630\u0631"
+    goalWordSimplified: "\u0627\u0639\u062A\u0630\u0631"
+    hasFailed: 0
+    entered:
+    - "\u0641\u0627\u0646\u0626\u0630"
+    - "\u0641\u0628\u0631\u0643\u0629"
+    - "\u0632\u0628\u062F\u062A\u064A"
+    - "\u0641\u0639\u0644\u0648\u0629"
+  - goalWord: "\u0645\u062A\u0637\u0648\u0639"
+    goalWordSimplified: "\u0645\u062A\u0637\u0648\u0639"
+    hasFailed: 0
+    entered:
+    - "\u064A\u0624\u0627\u062A\u064A"
+    - "\u0639\u0627\u0626\u0628\u0627"
+    - "\u0627\u063A\u0631\u0645\u0627"
+    - "\u063A\u0637\u0634\u0648\u0646"
+  - goalWord: "\u0645\u0628\u0644\u0644"
+    goalWordSimplified: "\u0645\u0628\u0644\u0644"
+    hasFailed: 0
+    entered:
+    - "\u0630\u0627\u0628\u0627"
+    - "\u062A\u0627\u0645\u0631"
+    - "\u0634\u0644\u0627\u0644"
+  - goalWord: "\u0637\u0631\u064A\u0642\u0629"
+    goalWordSimplified: "\u0637\u0631\u064A\u0642\u0629"
+    hasFailed: 0
+    entered:
+    - "\u062B\u0627\u0626\u0631\u064A"
+    - "\u0642\u0624\u0648\u062F\u0627"
+    - "\u0628\u0627\u0633\u0637\u0627"
+    - "\u062D\u0645\u0644\u0629\u0627"
+  - goalWord: "\u0645\u0631\u062A\u0628\u0629"
+    goalWordSimplified: "\u0645\u0631\u062A\u0628\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0638\u0626\u0627\u0631\u0627"
+    - "\u062E\u0627\u0621\u0627\u062A"
+    - "\u0643\u0627\u0646\u0645\u0627"
+    - "\u0636\u0627\u0628\u0626\u0629"
+  - goalWord: "\u0628\u0642\u0631\u0629"
+    goalWordSimplified: "\u0628\u0642\u0631\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0641\u0627\u0628\u0627"
+    - "\u0646\u0627\u062B\u0631"
+    - "\u063A\u0627\u062F\u0642"
+    - "\u062B\u062F\u064A\u0629"
+  - goalWord: "\u0627\u062D\u062A\u0641\u0644"
+    goalWordSimplified: "\u0627\u062D\u062A\u0641\u0644"
+    hasFailed: 0
+    entered:
+    - "\u062B\u0627\u0628\u062A\u0629"
+    - "\u0647\u0628\u0644\u064A\u0646"
+    - "\u0638\u0631\u0641\u064A\u0629"
+    - "\u0628\u0624\u0648\u062D\u0629"
+  - goalWord: "\u0637\u0628\u0627\u0639\u0629"
+    goalWordSimplified: "\u0637\u0628\u0627\u0639\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0638\u0627\u0628\u064A\u0646"
+    - "\u062A\u062A\u0631\u064A\u0639"
+    - "\u064A\u062A\u062C\u0644\u0637"
+    - "\u062A\u062A\u0631\u064A\u0629"
+  - goalWord: "\u0630\u0648\u0627\u062A"
+    goalWordSimplified: "\u0630\u0648\u0627\u062A"
+    hasFailed: 0
+    entered:
+    - "\u062D\u0627\u0630\u0631"
+    - "\u0642\u0624\u0648\u062F"
+    - "\u062C\u0626\u062A\u0643"
+    - "\u0643\u0626\u0628\u0646"
+  - goalWord: "\u0630\u0631\u0627\u062A"
+    goalWordSimplified: "\u0630\u0631\u0627\u062A"
+    hasFailed: 0
+    entered:
+    - "\u0639\u0627\u0626\u0628"
+    - "\u062B\u0624\u0648\u0631"
+    - "\u0639\u0630\u0628\u062A"
+  - goalWord: "\u0627\u0642\u062A\u062D\u0645"
+    goalWordSimplified: "\u0627\u0642\u062A\u062D\u0645"
+    hasFailed: 0
+    entered:
+    - "\u0628\u0624\u0631\u0627\u062A"
+    - "\u062E\u0628\u0642\u064A\u0646"
+    - "\u0645\u0628\u0631\u062D\u0629"
+  - goalWord: "\u062A\u0633\u0645\u0645"
+    goalWordSimplified: "\u062A\u0633\u0645\u0645"
+    hasFailed: 0
+    entered:
+    - "\u063A\u0627\u0628\u062A"
+    - "\u0627\u0631\u0647\u0633"
+    - "\u0646\u0645\u0627\u0645"
+  - goalWord: "\u062F\u0641\u0639\u0629"
+    goalWordSimplified: "\u062F\u0641\u0639\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0634\u0627\u0626\u0639"
+    - "\u0634\u0627\u0626\u0641"
+    - "\u0643\u0628\u062F\u0629"
+  - goalWord: "\u0645\u062A\u0635\u0641\u062D"
+    goalWordSimplified: "\u0645\u062A\u0635\u0641\u062D"
+    hasFailed: 0
+    entered:
+    - "\u0634\u0624\u0645\u0627\u0646"
+    - "\u063A\u0631\u0641\u0627\u062A"
+    - "\u0637\u0627\u0626\u062D\u0627"
+    - "\u0634\u0624\u0648\u0635\u0629"
+  - goalWord: "\u0631\u0632\u0645\u0629"
+    goalWordSimplified: "\u0631\u0632\u0645\u0629"
+    hasFailed: 0
+    entered:
+    - "\u062A\u0627\u0628\u0631"
+    - "\u0627\u062A\u0643\u0645"
+    - "\u0644\u0627\u0628\u0632"
+    - "\u0636\u0627\u0644\u0629"
+  - goalWord: "\u0646\u062C\u0627\u062D"
+    goalWordSimplified: "\u0646\u062C\u0627\u062D"
+    hasFailed: 0
+    entered:
+    - "\u0632\u0627\u0631\u062A"
+    - "\u0630\u0628\u062A\u0646"
+    - "\u0633\u062A\u062D\u062C"
+  - goalWord: "\u062E\u0637\u0648\u0628\u0629"
+    goalWordSimplified: "\u062E\u0637\u0648\u0628\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0632\u0627\u0628\u0648\u0646"
+    - "\u0637\u0626\u062A\u064A\u0646"
+    - "\u0643\u0627\u062E\u064A\u0629"
+  - goalWord: "\u062A\u0631\u0627\u0628"
+    goalWordSimplified: "\u062A\u0631\u0627\u0628"
+    hasFailed: 0
+    entered:
+    - "\u0628\u0627\u062B\u0645"
+    - "\u0646\u0624\u062A\u0647"
+    - "\u0643\u062B\u0631\u0629"
+  - goalWord: "\u0646\u062F\u0648\u0645"
+    goalWordSimplified: "\u0646\u062F\u0648\u0645"
+    hasFailed: 0
+    entered:
+    - "\u0630\u0627\u0626\u062F"
+    - "\u062C\u0627\u0631\u0646"
+    - "\u0641\u0627\u0645\u0627"
+    - "\u062A\u0627\u0648\u0628"
+  - goalWord: "\u0645\u062E\u0637\u0648\u0628"
+    goalWordSimplified: "\u0645\u062E\u0637\u0648\u0628"
+    hasFailed: 0
+    entered:
+    - "\u0646\u0624\u0648\u0645\u0627"
+    - "\u063A\u0627\u0626\u0628\u0627"
+    - "\u062D\u0627\u0626\u0637\u0627"
+    - "\u0630\u0627\u062E\u0631\u0629"
+  - goalWord: "\u062A\u0648\u0631\u0645"
+    goalWordSimplified: "\u062A\u0648\u0631\u0645"
+    hasFailed: 0
+    entered:
+    - "\u062E\u0624\u0648\u0644"
+    - "\u0638\u0627\u0647\u0631"
+    - "\u0636\u062C\u062A\u0645"
+  - goalWord: "\u062C\u0645\u0627\u0644"
+    goalWordSimplified: "\u062C\u0645\u0627\u0644"
+    hasFailed: 0
+    entered:
+    - "\u0633\u0627\u0628\u0642"
+    - "\u0642\u0626\u062A\u0645"
+    - "\u0635\u0639\u0644\u0629"
+    - "\u062C\u0624\u0648\u0634"
+  - goalWord: "\u0645\u062A\u0639\u0635\u0628"
+    goalWordSimplified: "\u0645\u062A\u0639\u0635\u0628"
+    hasFailed: 0
+    entered:
+    - "\u0644\u0627\u0628\u0627\u0639"
+    - "\u063A\u0627\u0626\u0645\u0627"
+    - "\u0642\u0631\u0641\u0635\u062A"
+  - goalWord: "\u0634\u0631\u064A\u062D\u0629"
+    goalWordSimplified: "\u0634\u0631\u064A\u062D\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0641\u0627\u0626\u0631\u064A"
+    - "\u0633\u0627\u0634\u0639\u0644"
+    - "\u062D\u0645\u0644\u0629\u0627"
+  - goalWord: "\u0639\u0627\u0632\u0628"
+    goalWordSimplified: "\u0639\u0627\u0632\u0628"
+    hasFailed: 0
+    entered:
+    - "\u062A\u0628\u0627\u0631"
+    - "\u062D\u062C\u0648\u0632"
+    - "\u064A\u062A\u0631\u0639"
+    - "\u062B\u0624\u0648\u0631"
+  - goalWord: "\u062D\u0627\u0641\u0638\u0629"
+    goalWordSimplified: "\u062D\u0627\u0641\u0638\u0629"
+    hasFailed: 0
+    entered:
+    - "\u0627\u062D\u064A\u0644\u064A"
+    - "\u0638\u0628\u064A\u062A\u064A"
+    - "\u063A\u0631\u0636\u0648\u0641"
+    - "\u0637\u0628\u0631\u064A\u0629"

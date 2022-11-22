@@ -47,9 +47,9 @@ MonoBehaviour:
   - wordLen: 4
     guesses:
     - inPlace: 1
-      inWord: 2
+      inWord: 3
     - inPlace: 0
       inWord: 4
     solves: 0300000004000000
-  genSeed: 0
-  maxIterations: 10
+  genSeed: -2
+  maxIterations: 20

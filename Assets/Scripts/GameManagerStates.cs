@@ -23,7 +23,8 @@ public class IntroState : BaseState
     {
         yield return new WaitUntil(() =>
         {
-            return GameManager.Instance.wordGuessManager.WordNotInDictionary("منتهز");
+            return !WordArray.WordNotInDictionary("منتهز")
+            && !WordArray.WordNotInDictionary("مممم");
         });
     }
 

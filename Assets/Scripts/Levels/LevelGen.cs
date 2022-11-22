@@ -1,42 +1,60 @@
 using UnityEngine;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Collections;
 public static class LevelGen
 {
     static LevelConfig config => LevelConfig.instance;
     static float beginTime;
-    public static LevelInfo Generate(int level)
+
+    static Dictionary<int, LevelInfo> cached = new();
+    public static LevelInfo Generate(int level, int? SEED = null)
     {
+        if (GeneratedLevels.instance)
+            if (level < GeneratedLevels.instance.levels.Count)
+                return GeneratedLevels.instance.levels[level].Clone();
+        int seed = level + (SEED.HasValue ? SEED.Value : LevelConfig.instance.genSeed);
+        if (cached.ContainsKey(seed))
+            return cached[seed].Clone();
+
         beginTime = Time.time + 4;
         var st = Random.state;
-        Random.InitState(level + LevelConfig.instance.genSeed);
-        LevelInfo info = new LevelInfo();
-        List<int> indexes = new List<int>();
+        Random.InitState(seed);
+        LevelInfo info;
 
-        var wordLen = 5;
-        var dict = WordArray.GetDictionary(wordLen);
         int iteration = 0;
+
+        GenerationInfo genInfo;
+        if (level <= LevelConfig.instance.firstLevels)
+            genInfo = LevelConfig.instance.genFirstLevels;
+        else
+            genInfo = LevelConfig.instance.genLevels.GetRandom();
+
+        var wordLen = genInfo.wordLen;
+
+        string GOAL = WordArray.GetWordRandom(wordLen);
+
     START:
         {
-            var goal = WordArray.GetWordRandom(wordLen);
+            iteration++;
+            List<int> indexes = new List<int>();
+            info = new LevelInfo();
+
+            var dict = WordArray.GetDictionary(wordLen);
+            var goal = GOAL;
             var goalOrigin = goal;
             goal = Simplify(goal);
 
-            var solvedGuesses = config.solvedGuesses.random;
-            var leftGuesses = config.leftGuesses.random;
-            var inPlace = config.inPlaceCount.random;
-            var inWord = config.inWordcount.random;
+            var solvedGuesses = genInfo.solves.GetRandom();
+            var guessContent = genInfo.guesses.GetRandom();
+            var inPlace = guessContent.inPlace;
+            var inWord = guessContent.inWord;
 
             inWord = Mathf.Clamp(inWord, 0, wordLen);
             inPlace = Mathf.Clamp(inPlace, 0, wordLen);
             while (inPlace + inWord > wordLen)
                 inPlace--;
 
-            GuessContent gc = new GuessContent(inPlace, inWord);
-
-
-
-            var totalGuesses = solvedGuesses + leftGuesses;
             GuessContent[] guessContents = new GuessContent[solvedGuesses];
             for (int i = 0; i < solvedGuesses; i++)
             {
@@ -45,8 +63,16 @@ public static class LevelGen
 
                 var isLast = i == solvedGuesses - 1;
 
-                var inp = isLast ? inPlace : Random.Range(0, inPlace + 1);
-                var inw = isLast ? inWord : Random.Range(0, inWord + 1);
+                // var inw = isLast ? inWord : Random.Range(1, 3);
+
+                // var inp = isLast ? inPlace : inw > 1 ? 0 : Random.Range(1, 3);
+                var inw = isLast ? inWord : Random.Range(1, inWord / 2 + 1);
+                var inp = isLast ? inPlace : Random.Range(0, inPlace / 2 + 1);
+
+                if (inp > inPlace) inp = inPlace;
+                if (inw > inWord) inw = inWord;
+
+
                 guessContents[i] = new GuessContent(inp, inw);
 
                 inPlace -= inp;
@@ -54,12 +80,14 @@ public static class LevelGen
             }
             foreach (var x in guessContents)
             {
-                var s = Search(goalOrigin, x, info.entered, indexes);
+                var s = DoSearch(goalOrigin, x, info.entered, indexes);
                 if (searchFail)
                 {
                     if (iteration >= LevelConfig.instance.maxIterations)
                     {
-                        Debug.LogError("Search fail");
+                        Debug.LogError($"Search fail: {seed}({level}) Reached max iterations");
+                        s = GetRandomFallback(wordLen);
+                        info.hasFailed = true;
                     }
                     else
                         goto START;
@@ -68,7 +96,8 @@ public static class LevelGen
             }
             if (iteration > 1)
             {
-                Debug.Log("level generation iterations: " + iteration);
+                if (iteration < LevelConfig.instance.maxIterations)
+                    Debug.Log($"{seed}({level}): level generation iterations: " + iteration);
             }
             info.goalWord = goalOrigin;
             info.goalWordSimplified = goal;
@@ -76,16 +105,14 @@ public static class LevelGen
         }
 
         Random.state = st;
+
+        cached.Add(seed, info);
         return info;
     }
 
     public static string Simplify(string currentWord)
     {
-        var currentWordSimplified = currentWord;
-        currentWordSimplified = Regex.Replace(currentWordSimplified, @"[أ|إ|آ]", "ا");
-        currentWordSimplified = Regex.Replace(currentWordSimplified, @"[ى]", "ي");
-        return currentWordSimplified;
-
+        return WordGuessManager.Simplify(currentWord);
     }
 
 
@@ -108,6 +135,151 @@ public static class LevelGen
             i %= count;
         } while (i != startIndex);
     }
+
+
+    static void DoSearch(string goal, int count, GuessContent guessContent, List<string> target)
+    {
+        var goalSimple = Simplify(goal);
+
+        var originContent = guessContent;
+
+
+        foreach (var word in AllWords(goal.Length))
+        {
+            if (string.IsNullOrEmpty(word))
+                continue;
+            var wordSimple = Simplify(word);
+
+            if (wordSimple == goalSimple)
+                continue;
+            if (guessContent.total == 0)
+                break;
+
+        }
+    }
+
+    static IEnumerable<KeyValuePair<int, bool>> DoCompare(string goal, string word)
+    {
+        List<int> checklist = new();
+        if (goal.Length != word.Length)
+        {
+            Debug.LogError("Mismatch: " + goal + " -> " + word);
+            yield break;
+        }
+        for (int i = 0; i < goal.Length; i++)
+        {
+            var g = goal[i];
+            var w = word[i];
+
+            if (g == w && !checklist.Contains(i))
+            {
+                checklist.Add(i);
+                yield return new(i, true);
+            }
+            else
+            {
+                for (int j = 0; j < goal.Length; j++)
+                {
+                    g = goal[j];
+                    if (w == g && !checklist.Contains(i))
+                    {
+                        checklist.Add(i);
+                        if (word == "دءوبا")
+                        {
+                            var lll = 0;
+                        }
+                        yield return new KeyValuePair<int, bool>(j, false);
+                    }
+                }
+            }
+            if (word == "دؤوبا")
+            {
+                var lll = 0;
+            }
+        }
+    }
+    static Dictionary<int, List<string>> countOfLengths = new();
+    static string GetRandomFallback(int len)
+    {
+        List<string> list;
+
+        if (!countOfLengths.TryGetValue(len, out list))
+        {
+            list = new List<string>(10000);
+            foreach (var x in AllWords(len))
+            {
+                if (string.IsNullOrEmpty(x))
+                    continue;
+                list.Add(x);
+            }
+            list.TrimExcess();
+            countOfLengths.Add(len, list);
+        }
+        return list[Random.Range(0, list.Count)];
+    }
+    static string DoSearch(string goal, GuessContent LEFT, List<string> entered, List<int> indexes)
+    {
+        searchFail = false;
+        var goalSimple = Simplify(goal);
+        int indexesLen = indexes.Count;
+        // string fallback = GetRandomFallback(goal.Length);
+        foreach (var word in AllWords(goal.Length))
+        {
+
+            if (string.IsNullOrEmpty(word))
+                continue;
+
+            var wordSimple = Simplify(word);
+            if (wordSimple == goal || entered.Contains(wordSimple))
+                continue;
+
+            var content = new GuessContent(LEFT.inPlace, LEFT.inWord);
+
+            bool fail = false;
+            IEnumerable<KeyValuePair<int, bool>> compResult = null;
+            compResult = DoCompare(goalSimple, wordSimple);
+            var s = 0;
+
+
+
+            foreach (var x in compResult)
+            {
+                if (wordSimple == "دءوبا")
+                {
+                    var lll = 0;
+                }
+                if (indexes.Contains(x.Key))
+                {
+                    fail = true;
+                    break;
+                }
+                if (x.Value)
+                    content.inPlace--;
+                else
+                    content.inWord--;
+                if (content.isNeg)
+                {
+                    fail = true;
+                    break;
+                }
+                indexes.Add(x.Key);
+            }
+            if (content.total != 0)
+                fail = true;
+            if (fail)
+            {
+                if (indexesLen < indexes.Count)
+                    indexes.RemoveRange(indexesLen, indexes.Count - indexesLen);
+                continue;
+            }
+            return wordSimple;
+        }
+        searchFail = true;
+        return null;
+
+    }
+
+
     static bool searchFail = false;
 
     static string Search(string goal, GuessContent leftContent, List<string> entered, List<int> indexes)
@@ -120,7 +292,15 @@ public static class LevelGen
             if (word == goal || entered.Contains(word))
                 continue;
             var wordSimple = Simplify(word);
-            var content = Compare(goalSimple, wordSimple);
+            GuessContent content = default;
+            try
+            {
+                content = Compare(goalSimple, wordSimple);
+            }
+            catch
+            {
+                var whatever = 0;
+            }
 
             if (content.Equals(leftContent))
             {
@@ -177,6 +357,7 @@ public static class LevelGen
         return temp;
 
     }
+    static List<int> matchIndexes = new List<int>();
     static GuessContent Compare(string goal, string other)
     {
         GuessContent content = default;
@@ -287,6 +468,7 @@ public struct GuessContent
     public int inPlace;
     public int inWord;
     public int total => inPlace + inWord;
+    public bool isNeg => inPlace < 0 || inWord < 0;
     public GuessContent(int inPlace, int inWord)
     {
         this.inPlace = inPlace;

@@ -283,7 +283,17 @@ public class WordGuessManager : MonoBehaviour
 
     public bool WordNotInDictionary(string word)
     {
-        return WordArray.WordNotInDictionary(word);
+        if (word.Length == 0)
+            return false;
+        var simpleWord = Simplify(word);
+        var dict = WordArray.GetDictionary(word.Length);
+        var firstLetter = word[0];
+        var array = dict[firstLetter.ToString()];
+        foreach (var x in array)
+            if (Simplify(x) == simpleWord)
+                return false;
+
+        return true;
     }
 
     public void EnterLetter(string str)
@@ -540,4 +550,13 @@ public class WordGuessManager : MonoBehaviour
         foreach (Outline outline in outlines) outline.effectColor = outlineColor;
     }
 #endif
+
+
+    public static string Simplify(string word)
+    {
+        var currentWordSimplified = word;
+        currentWordSimplified = Regex.Replace(currentWordSimplified, @"[أ|إ|آ]", "ا");
+        currentWordSimplified = Regex.Replace(currentWordSimplified, @"[ى]", "ي");
+        return currentWordSimplified;
+    }
 }
