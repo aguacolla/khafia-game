@@ -11812,6 +11812,8 @@ MonoBehaviour:
     tries: []
     usedHints: 0
     usedEliminations: 0
+    isOver: 0
+    eliminatedLetters: []
   wordSingle: "\u0645\u0633\u062A\u0648\u0649"
   wordGuessedEvent:
     m_PersistentCalls:
@@ -50040,6 +50042,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   devMode: 0
+  saveClassicGame: 1
+  saveLevelGame: 1
   score: 0
   highScore: 0
   wordGuessManager: {fileID: 394679884}
@@ -63152,7 +63156,6 @@ MonoBehaviour:
   arrow: {fileID: 5084362057242916456, guid: e4b29beb2ea1f2c49aecbd015802ba3b, type: 3}
   ease: 35
   duration: 0.25
-  eliminatedLetters: []
 --- !u!1 &1757359184
 GameObject:
   m_ObjectHideFlags: 0
@@ -73893,7 +73896,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 666.8, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2058692408

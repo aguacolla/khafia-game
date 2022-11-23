@@ -11,6 +11,8 @@ using UnityEngine.UI;
 public class GameManager : Singleton<GameManager>, IStateManageable
 {
     public bool devMode = false;
+    public bool saveClassicGame = true;
+    public bool saveLevelGame = true;
     public int score;
     public int highScore;
     public WordGuessManager wordGuessManager;
@@ -256,17 +258,17 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     public void Proceed()
     {
         PopupManager.Instance.CloseCurrentPopup();
-        timesEliminationUsed = timesHintUsed = 0;
-        {
-            wordGuessManager.lenMode = WordGuessManager.WordMode.random;
-            wordGuessManager.wordMode = WordGuessManager.WordMode.random;
-            wordGuessManager.ResetClassic();
-        }
 
         if (IsTutorial)
         {
-            PagesManager.Instance.FlipPage(0);
+            PagesManager.Instance.GoBack();
         }
+        else
+        {
+            wordGuessManager.Clean();
+            wordGuessManager.AssignNewRandomly();
+        }
+
     }
     public void ProccedLevel()
     {
@@ -275,9 +277,10 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         var level = LevelGame;
         var guessManager = wordGuessManager;
         var levelInfo = LevelGen.Generate(level);
-        guessManager.wordMode = WordGuessManager.WordMode.single;
-        guessManager.wordSingle = levelInfo.goalWord;
-        guessManager.ResetClassic();
+
+        guessManager.Clean();
+        guessManager.AssignNew(levelInfo.goalWord);
+
         levelInfo.ApplyInputs();
         LevelProgress.Reset();
         // guessManager.NewWord();

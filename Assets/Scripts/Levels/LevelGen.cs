@@ -189,7 +189,6 @@ public static class LevelGen
                         checklist.Add(i);
                         if (word == "دءوبا")
                         {
-                            var lll = 0;
                         }
                         yield return new KeyValuePair<int, bool>(j, false);
                     }
@@ -197,7 +196,6 @@ public static class LevelGen
             }
             if (word == "دؤوبا")
             {
-                var lll = 0;
             }
         }
     }
@@ -241,7 +239,6 @@ public static class LevelGen
             bool fail = false;
             IEnumerable<KeyValuePair<int, bool>> compResult = null;
             compResult = DoCompare(goalSimple, wordSimple);
-            var s = 0;
 
 
 
@@ -249,7 +246,6 @@ public static class LevelGen
             {
                 if (wordSimple == "دءوبا")
                 {
-                    var lll = 0;
                 }
                 if (indexes.Contains(x.Key))
                 {
@@ -302,7 +298,6 @@ public static class LevelGen
             }
             catch
             {
-                var whatever = 0;
             }
 
             if (content.Equals(leftContent))

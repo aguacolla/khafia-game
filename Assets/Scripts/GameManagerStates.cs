@@ -83,35 +83,47 @@ public class StoreState : BaseState
 public class GameState : BaseState
 {
     //public InGameState CurrentState { get; set; } = InGameState.Typing;
+
+    static State classicState, levelState;
+    static int levelStateLevel;
     public override void EnterState(IStateManageable stateManager)
     {
         {
-            var level = GameManager.Instance.LevelGame;
             var guessManager = GameManager.Instance.wordGuessManager;
+            guessManager.Clean();
             if (GameManager.Instance.IsTutorial)
             {
-                guessManager.wordMode = WordGuessManager.WordMode.single;
-                guessManager.wordSingle = TutorialConfig.instance.goalWord;
+                guessManager.AssignNew(TutorialConfig.instance.goalWord);
             }
-            else
-            if (GameManager.Instance.IsLevelGame)
+            else if (GameManager.Instance.IsLevelGame)
             {
-                var levelInfo = LevelGen.Generate(level);
-                guessManager.wordMode = WordGuessManager.WordMode.single;
-                guessManager.wordSingle = levelInfo.goalWord;
-                guessManager.ResetClassic();
-                levelInfo.ApplyInputs();
-                LevelProgress.Reset();
-            }
-            else
-            {
-                guessManager.wordMode = WordGuessManager.WordMode.random;
-                if (GameManager.Instance.CurrentWord.Length == 5)
+                var level = GameManager.Instance.LevelGame;
+                if (GameManager.Instance.saveLevelGame && levelState != null && levelStateLevel == level && !levelState.isOver)
                 {
-                    return;
+                    guessManager.AssignNew(levelState.goalWord);
+                    guessManager.Reproduce(levelState);
+                }
+                else
+                {
+                    LevelProgress.Reset();
+                    var levelInfo = LevelGen.Generate(level);
+                    guessManager.AssignNew(levelInfo.goalWord);
+                    levelInfo.ApplyInputs();
                 }
             }
-            GameManager.Instance.wordGuessManager.NewWord();
+            else
+            {
+                if (GameManager.Instance.saveClassicGame && classicState != null && !classicState.isOver)
+                {
+                    guessManager.AssignNew(classicState.goalWord);
+                    guessManager.Reproduce(classicState);
+                }
+                else
+                {
+                    guessManager.AssignNewRandomly();
+                }
+            }
+            GameManager.Instance.OnNewWord.Invoke();
         }
 
     }
@@ -123,14 +135,16 @@ public class GameState : BaseState
 
     public override void ExitState(IStateManageable stateManager)
     {
+        var gm = GameManager.Instance.wordGuessManager;
         if (GameManager.Instance.IsLevelGame)
         {
-            GameManager.Instance.timesEliminationUsed = 0;
-            GameManager.Instance.timesHintUsed = 0;
-            GameManager.Instance.wordGuessManager.ResetClassic();
+            levelState = gm.state;
+            levelStateLevel = GameManager.Instance.LevelGame;
         }
-        GameManager.Instance.LevelGame = 0;
-
+        else if (!GameManager.Instance.IsTutorial)
+        {
+            classicState = gm.state;
+        }
     }
 
     public GameState() : base("Game")

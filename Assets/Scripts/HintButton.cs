@@ -7,17 +7,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Random = UnityEngine.Random;
-using DG.Tweening;
 
 public class HintButton : MonoBehaviour
 {
     public TextMeshProUGUI countText;
     private Button button;
-    private WordGuessManager wordGuessManager;
+    private WordGuessManager wordGuessManager => GameManager.Instance.wordGuessManager;
     [SerializeField] private Sprite activeSprite;
     [SerializeField] private Sprite inactiveSprite;
 
-    private bool limitReached;
+    private bool limitReached => wordGuessManager.state.usedHints >= GameManager.Instance.hintLimit;
 
     public event Action onInputFinish;
 
@@ -30,7 +29,6 @@ public class HintButton : MonoBehaviour
     private void Start()
     {
         SetCounter();
-        wordGuessManager = GameManager.Instance.wordGuessManager;
         //countText.text = GameManager.Instance.HintsAvailable.ToString();
         GameManager.Instance.OnNewWord += ResetButton;
         GameManager.Instance.OnTextChanged += SetCounter;
@@ -44,7 +42,6 @@ public class HintButton : MonoBehaviour
 
     public void ResetButton()
     {
-        limitReached = false;
         SetCounter();
     }
 
@@ -84,46 +81,61 @@ public class HintButton : MonoBehaviour
         }
 
 
+
+        GameManager.Instance.HintsAvailable--;
+        wordGuessManager.hintCalled = true;
+        wordGuessManager.state.usedHints++;
+        GameManager.Instance.timesHintUsed++;
+
+        ShowHintInstant();
+    }
+
+    public void ShowHintInstant()
+    {
         string word = GameManager.Instance.CurrentWordSimplified;
         Transform currentRow = wordGuessManager.wordGrid.GetChild(wordGuessManager.rowIndex);
         List<TextMeshProUGUI> letters = new List<TextMeshProUGUI>();
 
-        foreach (Transform box in currentRow)
-        {
-            letters.Add(box.GetComponentInChildren<TextMeshProUGUI>());
-        }
+        for (int j = 0; j < wordGuessManager.wordLen; j++)
+            letters.Add(currentRow.GetChild(j).GetComponentInChildren<TextMeshProUGUI>());
 
+        var st = Random.state;
+        Random.InitState(wordGuessManager.hintSeed);
         int i = Random.Range(0, wordGuessManager.lettersHinted.Count);
+        Random.state = st;
+
         int index = wordGuessManager.lettersHinted[i];
         wordGuessManager.lettersHinted.RemoveAt(i);
         string hint = word[index].ToString();
         TextMeshProUGUI hintLetter;
-        if (letters[4 - index].transform.parent.GetChild(1).childCount == 1)
-        {
-            letters[4 - index].transform.parent.GetChild(1).GetChild(0).gameObject.SetActive(true);
 
-            hintLetter = letters[4 - index].transform.parent.GetChild(1).GetComponentInChildren<TextMeshProUGUI>();
+        var targetIndex = index;
+        if (letters[targetIndex].transform.parent.GetChild(1).childCount == 1)
+        {
+            letters[targetIndex].transform.parent.GetChild(1).GetChild(0).gameObject.SetActive(true);
+
+            hintLetter = letters[targetIndex].transform.parent.GetChild(1).GetComponentInChildren<TextMeshProUGUI>();
             hintLetter.transform.position = transform.position;
         }
         else
         {
-            hintLetter = Instantiate(letters[4 - index].gameObject, transform.position, Quaternion.identity, letters[4 - index].transform.parent.GetChild(1)).GetComponent<TextMeshProUGUI>();
+            hintLetter = Instantiate(letters[targetIndex].gameObject, transform.position, Quaternion.identity, letters[targetIndex].transform.parent.GetChild(1)).GetComponent<TextMeshProUGUI>();
             hintLetter.color = wordGuessManager.hintTextColor;
         }
         hintLetter.text = hint;
         Sequence seq = DOTween.Sequence();
-        seq.Append(hintLetter.rectTransform.DOMove(letters[4 - index].rectTransform.position, 0.5f).SetEase(Ease.InOutSine));
-        seq.Join(letters[4 - index].transform.parent.GetChild(1).GetComponent<CanvasGroup>().DOFade(1, 0.1f));
+        seq.Append(hintLetter.rectTransform.DOMove(letters[targetIndex].rectTransform.position, 0.5f).SetEase(Ease.InOutSine));
+        seq.Join(letters[targetIndex].transform.parent.GetChild(1).GetComponent<CanvasGroup>().DOFade(1, 0.1f));
         seq.Append(hintLetter.rectTransform.DOShakeScale(0.05f, 0.5f, 1, 20));
-        //seq.Join(letters[4 - index].transform.parent.GetChild(1).GetComponent<Image>().DOColor(wordGuessManager.hintColor, 0.1f));
-        print(letters[4 - index].transform.parent.childCount);
-        GameManager.Instance.HintsAvailable--;
-        SetCounter();
-        wordGuessManager.hintCalled = true;
-        GameManager.Instance.timesHintUsed++;
-        if (GameManager.Instance.timesHintUsed >= GameManager.Instance.hintLimit)
+        seq.onComplete += () =>
         {
-            limitReached = true;
+            hintLetter.rectTransform.sizeDelta = hintLetter.rectTransform.anchoredPosition = new();
+        };
+        //seq.Join(letters[targetIndex].transform.parent.GetChild(1).GetComponent<Image>().DOColor(wordGuessManager.hintColor, 0.1f));
+        print(letters[targetIndex].transform.parent.childCount);
+        SetCounter();
+        if (limitReached)
+        {
             button.GetComponent<Image>().sprite = inactiveSprite;
         }
         onInputFinish?.Invoke();

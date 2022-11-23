@@ -11,7 +11,7 @@ public class LevelInfo
 
     public void ApplyInputs()
     {
-        UnityEngine.Object.FindObjectOfType<LevelsView>(true).testLevelInfo = this;
+        // UnityEngine.Object.FindObjectOfType<LevelsView>(true).testLevelInfo = this;
         var manager = GameManager.Instance.wordGuessManager;
         foreach (var x in entered)
         {

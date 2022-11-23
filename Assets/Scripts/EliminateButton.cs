@@ -10,7 +10,7 @@ public class EliminateButton : MonoBehaviour
 {
     public TextMeshProUGUI countText;
     private Button button;
-    private WordGuessManager wordGuessManager;
+    private WordGuessManager wordGuessManager => GameManager.Instance.wordGuessManager;
     [SerializeField] private Sprite activeSprite;
     [SerializeField] private Sprite inactiveSprite;
 
@@ -18,30 +18,27 @@ public class EliminateButton : MonoBehaviour
     public GameObject arrow;
     public Ease ease;
     public float duration;
-    public List<string> eliminatedLetters;
+    public List<string> eliminatedLetters => wordGuessManager.state.eliminatedLetters;
 
-    private bool limitReached;
+    private bool limitReached => wordGuessManager.state.usedEliminations >= GameManager.Instance.eliminationLimit;
 
     public event System.Action onInputFinish;
 
     void Awake()
     {
         button = GetComponent<Button>();
-        eliminatedLetters = new List<string>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         SetCounter();
-        wordGuessManager = GameManager.Instance.wordGuessManager;
         GameManager.Instance.OnNewWord += ResetButton;
         GameManager.Instance.OnTextChanged += SetCounter;
     }
 
     public void ResetButton()
     {
-        limitReached = false;
         SetCounter();
     }
 
@@ -56,12 +53,14 @@ public class EliminateButton : MonoBehaviour
     {
         countText.text = GameManager.Instance.EliminationsAvailable.ToString();
     }
+    public void DoEliminate()
+    {
+        EliminateLetters(GameManager.Instance.eliminateLetterCount);
+    }
 
     public void EliminateLetters(int numberOfLetters)
     {
 
-        int count = keyboard.keyCount;
-        int index = 0;
         List<string> keys = keyboard.GetLetterList();
 
         if (GameManager.Instance.EliminationsAvailable >= 0 && limitReached)
@@ -77,12 +76,30 @@ public class EliminateButton : MonoBehaviour
             GameManager.Instance.SwitchState("store");
             return;
         }
-
         if (wordGuessManager.EliminationCount + numberOfLetters + 5 >= keys.Count)
         {
             print("not enough letters " + wordGuessManager.EliminationCount + " " + keys.Count);
             return;
         }
+
+
+
+        GameManager.Instance.EliminationsAvailable--;
+        GameManager.Instance.timesEliminationUsed++;
+        wordGuessManager.state.usedEliminations++;
+
+        EliminateLettersInstant(numberOfLetters);
+
+
+    }
+    public void EliminateLettersInstant(int numberOfLetters)
+    {
+        int count = keyboard.keyCount;
+        int index = 0;
+        List<string> keys = keyboard.GetLetterList();
+
+        var st = Random.state;
+        Random.InitState(wordGuessManager.eliminationSeed);
         for (int i = 0; i < numberOfLetters; i++)
         {
 
@@ -101,13 +118,10 @@ public class EliminateButton : MonoBehaviour
                 }
             }
         }
-        GameManager.Instance.EliminationsAvailable--;
-        GameManager.Instance.timesEliminationUsed++;
-
+        Random.state = st;
         SetCounter();
-        if (GameManager.Instance.timesEliminationUsed >= GameManager.Instance.eliminationLimit)
+        if (limitReached)
         {
-            limitReached = true;
             button.GetComponent<Image>().sprite = inactiveSprite;
         }
         onInputFinish?.Invoke();

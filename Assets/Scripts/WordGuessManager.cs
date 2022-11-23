@@ -67,6 +67,9 @@ public class WordGuessManager : MonoBehaviour
     public Color gridLetterDefaultColor => config.gridLetterDefaultColor;
     public Color gridLetterCheckedColor => config.gridLetterCheckedColor;
 
+    public int eliminationSeed => state.seed + state.usedEliminations;
+    public int hintSeed => state.seed + state.usedHints;
+
     private string currentWord
     {
         get => state.goalWord;
@@ -167,7 +170,10 @@ public class WordGuessManager : MonoBehaviour
     public void SwitchState(InGameState state)
     {
         if (state == InGameState.Win || state == InGameState.Loss)
+        {
             GameManager.Instance.interCounter++;
+            this.state.isOver = true;
+        }
         switch (state)
         {
             case InGameState.Typing:
@@ -195,6 +201,7 @@ public class WordGuessManager : MonoBehaviour
             LevelProgress.GetLevelStars(LevelProgress.levelTimeSpent));
             GameManager.Instance.UnlockedLevel++;
         }
+        else
         {
             GameManager.Instance.GamesWon++;
             GameManager.Instance.score++;
@@ -250,7 +257,31 @@ public class WordGuessManager : MonoBehaviour
         //GameManager.Instance.OnGameLost?.Invoke();
     }
 
+    public void AssignNewRandomly()
+    {
+        var len = Random.Range(4, 6);
+        var word = WordArray.GetWordRandom(len);
+        AssignNew(word);
+    }
+    public void AssignNew(string goal)
+    {
+        state = new State();
+        state.seed = Random.Range(0, 100000);
+        currentWord = goal;
+        currentWordSimplified = Simplify(goal);
+        lettersHinted = new List<int>();
+        for (int i = 0; i < wordLen; i++)
+        {
+            lettersHinted.Add(i);
+        }
 
+        SwitchState(InGameState.Typing);
+        GameManager.Instance.CurrentWord = currentWord;
+        GameManager.Instance.CurrentWordSimplified = currentWordSimplified;
+        wordGrid.SetLen(wordLen);
+
+    }
+    [System.Obsolete("", true)]
     public void NewWord()
     {
         // Single: Gives you the word set in the Inspector
@@ -337,6 +368,7 @@ public class WordGuessManager : MonoBehaviour
 
                     // Checks and colors the current row
                     CheckRow();
+                    state.tries.Add(eWord);
                     // Checks if the word was guessed correctly or whether there's no guesses left
                     if (eWord == (currentWordSimplified))
                     {
@@ -519,13 +551,13 @@ public class WordGuessManager : MonoBehaviour
             }
         };
     }
-
+    [System.Obsolete("", true)]
     public void ResetBase()
     {
         //wordGuessed = outOfTrials = false;
         SwitchState(InGameState.Typing);
     }
-
+    [System.Obsolete("", true)]
     public void ResetClassic()
     {
         if (!wordGrid) return;
@@ -558,5 +590,47 @@ public class WordGuessManager : MonoBehaviour
         currentWordSimplified = Regex.Replace(currentWordSimplified, @"[أ|إ|آ]", "ا");
         currentWordSimplified = Regex.Replace(currentWordSimplified, @"[ى]", "ي");
         return currentWordSimplified;
+    }
+    public void Reproduce(State rep)
+    {
+        state.seed = rep.seed;
+        Reproduce(rep.tries, rep.enteredWord, rep.usedHints, rep.usedEliminations);
+    }
+    public void Reproduce(IEnumerable<string> guesses, string entered, int hints = 0, int eliminations = 0)
+    {
+        var manager = this;
+        foreach (var x in guesses)
+        {
+            var word = LevelGen.Simplify(x);
+            foreach (var c in word)
+            {
+                manager.EnterLetter(c.ToString());
+            }
+            manager.EnterLetter("Enter");
+            manager.CurrentState = InGameState.Typing;
+        }
+        foreach (var c in entered)
+            manager.EnterLetter(c.ToString());
+
+        for (int i = 0; i < hints; i++)
+        {
+            keyboard.hintButton.ShowHintInstant();
+            state.usedHints++;
+        }
+        for (int i = 0; i < eliminations; i++)
+        {
+            keyboard.eliminateButton.EliminateLettersInstant(GameManager.Instance.eliminateLetterCount);
+            state.usedEliminations++;
+        }
+
+        state.usedHints = hints;
+        state.usedEliminations = eliminations;
+    }
+
+    public void Clean()
+    {
+        wordGrid.Clean();
+        keyboard.Clean();
+        state = new();
     }
 }

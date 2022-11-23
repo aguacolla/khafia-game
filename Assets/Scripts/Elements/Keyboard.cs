@@ -15,8 +15,8 @@ public class Keyboard : MonoBehaviour
         public string name => transform.name;
     }
     public static Keyboard instance;
-    EliminateButton eliminateButton;
-    HintButton hintButton;
+    public EliminateButton eliminateButton { get; private set; }
+    public HintButton hintButton { get; private set; }
     public EnterButton enterButton { get; private set; }
     List<Key> keys = new List<Key>();
     private void Awake()
