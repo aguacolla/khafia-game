@@ -38,7 +38,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     private int eliminations;
     private int dailyRewards;
     private int unlockedLevel = 1;
-
+    public int rateUsInterval = 6;
     public int interstitialFreq = 2;
     public int GamesWon { get; set; }
     public int interCounter { get; set; }
@@ -215,7 +215,6 @@ public class GameManager : Singleton<GameManager>, IStateManageable
             ResetEverything = false;
         }
 
-        ShouldStartTutorial = true;
     }
 
 
@@ -268,7 +267,8 @@ public class GameManager : Singleton<GameManager>, IStateManageable
             wordGuessManager.Clean();
             wordGuessManager.AssignNewRandomly();
         }
-
+        if (GameManager.Instance.shouldShowInterAd)
+            AdsManager.Instance.ShowInterstitial();
     }
     public void ProccedLevel()
     {
@@ -283,6 +283,8 @@ public class GameManager : Singleton<GameManager>, IStateManageable
 
         levelInfo.ApplyInputs();
         LevelProgress.Reset();
+        if (GameManager.Instance.shouldShowInterAd)
+            AdsManager.Instance.ShowInterstitial();
         // guessManager.NewWord();
     }
 

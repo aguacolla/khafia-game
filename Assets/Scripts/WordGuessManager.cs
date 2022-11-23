@@ -195,6 +195,8 @@ public class WordGuessManager : MonoBehaviour
 
     void GameWon()
     {
+        GameManager.Instance.GamesWon++;
+
         if (GameManager.Instance.IsLevelGame)
         {
             GameManager.Instance.SetLevelStars(GameManager.Instance.UnlockedLevel,
@@ -203,7 +205,6 @@ public class WordGuessManager : MonoBehaviour
         }
         else
         {
-            GameManager.Instance.GamesWon++;
             GameManager.Instance.score++;
             if (GameManager.Instance.score > GameManager.Instance.highScore)
             {
@@ -233,11 +234,6 @@ public class WordGuessManager : MonoBehaviour
         //PopupManager.Instance.OpenPopup(1);
         //GameManager.Instance.OnGameWon?.Invoke();
         PlayerPrefs.Save();
-        if (GameManager.Instance.shouldShowInterAd)
-        {
-            AdsManager.Instance.ShowInterstitial();
-        }
-
     }
 
     void GameLost()
@@ -253,8 +249,7 @@ public class WordGuessManager : MonoBehaviour
             GameManager.Instance.OnGameLost?.Invoke();
             GameManager.Instance.ResetScore();
         };
-        if (GameManager.Instance.shouldShowInterAd)
-            AdsManager.Instance.ShowInterstitial();
+
         //PopupManager.Instance.OpenPopup(2);
         //GameManager.Instance.OnGameLost?.Invoke();
     }

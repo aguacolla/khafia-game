@@ -45,6 +45,10 @@ public class MenuState : BaseState
             GameManager.Instance.PlayTutorialComplete();
             return;
         }
+        if (GameManager.Instance.GamesWon % GameManager.Instance.rateUsInterval == 0 && GameManager.Instance.GamesWon != 0)
+            if (PlayerPrefs.GetInt("FirstShow", 0) == 0)
+                RateGame.Instance.ForceShowRatePopup();
+
     }
 
     public override void UpdateState(IStateManageable stateManager)
