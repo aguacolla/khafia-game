@@ -215,7 +215,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
             ResetEverything = false;
         }
 
-        // ShouldStartTutorial = true;
+        ShouldStartTutorial = true;
     }
 
 
@@ -302,9 +302,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
 
     public void SwitchState(string state)
     {
-        CurrentState?.ExitState(this);
-        CurrentState = States[state];
-        CurrentState.EnterState(this);
+        SwitchState(States[state]);
     }
 
     public void SetGameType()
@@ -357,7 +355,6 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     {
         TutorialControl.instance = new GameObject("TUTORIAL").AddComponent<TutorialControl>();
         PagesManager.Instance.FlipPage(1);
-        SwitchState("game");
         GameManager.Instance.LevelGame = 0;
         GameManager.Instance.SetGameType();
         GameManager.Instance.SwitchState(GameManager.Instance.States["game"]);

@@ -145,6 +145,9 @@ public class GameState : BaseState
         {
             classicState = gm.state;
         }
+        else
+        if (TutorialControl.instance)
+            GameObject.Destroy(TutorialControl.instance.gameObject);
     }
 
     public GameState() : base("Game")

@@ -38,11 +38,13 @@ public class TutorialControl : MonoBehaviour
         helper.onClick += OnHelperClick;
         Highlighter.instance.onClick += OnHelperClick;
         guessManager.onInputFinish += OnInput;
-        helper.gameObject.SetActive(true);
+        helper.baseTransform.gameObject.SetActive(true);
         instance = this;
 
         objects.hintButton.onInputFinish += OnInputHint;
         objects.eliminateButton.onInputFinish += OnInputEliminate;
+
+        guessManager.wordGuessedEvent.AddListener(Finish);
 
 
 
@@ -54,16 +56,19 @@ public class TutorialControl : MonoBehaviour
         helper.onClick -= OnHelperClick;
         Highlighter.instance.onClick -= OnHelperClick;
         guessManager.onInputFinish -= OnInput;
-        helper.gameObject.SetActive(false);
+        helper.baseTransform.gameObject.SetActive(false);
         instance = null;
 
 
         objects.hintButton.onInputFinish -= OnInputHint;
         objects.eliminateButton.onInputFinish -= OnInputEliminate;
 
-        StopAllCoroutines();
-    }
+        guessManager.wordGuessedEvent.RemoveListener(Finish);
 
+
+        StopAllCoroutines();
+        print("has disabled");
+    }
 
 
     private void Update()
@@ -86,6 +91,10 @@ public class TutorialControl : MonoBehaviour
 
     bool moveNext = false;
 
+    void Finish()
+    {
+        moveNext = true;
+    }
     bool MoveNext()
     {
         if (moveNext)
@@ -112,14 +121,16 @@ public class TutorialControl : MonoBehaviour
             objects.RefreshGrid();
             objects.RefreshKeyboard();
             TutorialElement.SetAllHighlighted(x.highlights);
+            // TutorialElement.SetAllHighlightedNoClick(x.noclickHighlights);
 
             helper.SetButtonEnabled(x.byClick);
             helper.SetText(x.text);
 
-
             yield return new WaitUntil(MoveNext);
         }
-        // TutorialElement.ResetHighlights(true);
+        TutorialElement.ResetHighlights();
+        Highlighter.instance.gameObject.SetActive(false);
+        helper.baseTransform.gameObject.SetActive(false);
     }
 
 

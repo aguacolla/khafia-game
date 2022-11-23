@@ -217,6 +217,8 @@ public class WordGuessManager : MonoBehaviour
         {
             if (GameManager.Instance.IsLevelGame)
                 PopupManager.Instance.OpenPopup(7);
+            else if (GameManager.Instance.IsTutorial)
+                PopupManager.Instance.OpenPopup(9);
             else
                 PopupManager.Instance.OpenPopup(1);
             GameManager.Instance.OnGameWon?.Invoke();
@@ -279,6 +281,7 @@ public class WordGuessManager : MonoBehaviour
         GameManager.Instance.CurrentWord = currentWord;
         GameManager.Instance.CurrentWordSimplified = currentWordSimplified;
         wordGrid.SetLen(wordLen);
+        GameManager.Instance.OnNewWord?.Invoke();
 
     }
     [System.Obsolete("", true)]

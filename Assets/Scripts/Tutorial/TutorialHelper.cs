@@ -17,11 +17,11 @@ public class TutorialHelper : MonoBehaviour
 
     CanvasGroup canvasGroup;
 
-
+    public Transform baseTransform => transform.parent;
     private void Awake()
     {
         instance = this;
-        gameObject.SetActive(false);
+        baseTransform.gameObject.SetActive(false);
 
         button.onClick.AddListener(OnClick);
         canvasGroup = GetComponent<CanvasGroup>();

@@ -40,4 +40,10 @@ public class Highlighter : MonoBehaviour
     {
         canvasGroup.DOFade(1, animationDur).SetEase(animationEase).OnComplete(() => hasFinishedAnimation = true);
     }
+
+    public void DoHide()
+    {
+        canvasGroup.DOFade(0, animationDur).SetEase(animationEase).OnComplete(() => gameObject.SetActive(false));
+
+    }
 }

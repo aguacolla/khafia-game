@@ -74,8 +74,8 @@ public class Keyboard : MonoBehaviour
             key.text.color = UIConfig.instance.keyboardDefaultTextColor;
             key.button.image.color = UIConfig.instance.keyboardDefaultColor;
         }
-        enterButton.SetInteractable(false);
         enterButton.SetIncorrectWord(false);
+        enterButton.SetInteractable(false);
         hintButton.ResetButton();
         eliminateButton.ResetButton();
     }

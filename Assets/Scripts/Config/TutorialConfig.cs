@@ -70,6 +70,7 @@ public class Instruct
     public float timeout = 3;
     public Item item = Item.UNKNOWN;
     public InstructionElement[] highlights;
+    public InstructionElement[] noclickHighlights;
     public bool requireWord => !string.IsNullOrEmpty(inputWord);
     public bool byClick => item == Item.UNKNOWN && !requireWord;
 

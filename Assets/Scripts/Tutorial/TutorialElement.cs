@@ -20,7 +20,7 @@ public class TutorialElement : MonoBehaviour
         all.Add(this);
     }
 
-    public void SetHighlight(bool value)
+    public void SetHighlight(bool value, bool noclick = false)
     {
         if (value)
         {
@@ -32,7 +32,7 @@ public class TutorialElement : MonoBehaviour
             canvas.overrideSorting = true;
             canvas.sortingLayerName = "Highlight";
             canvas.enabled = value;
-            graphicRaycaster.enabled = value;
+            graphicRaycaster.enabled = value && !noclick;
         }
         else
         {
@@ -45,16 +45,22 @@ public class TutorialElement : MonoBehaviour
             }
         }
     }
-
-    public static IEnumerable<TutorialElement> SetAllHighlighted(params InstructionElement[] elements)
+    public static void SetAllHighlightedNoClick(params InstructionElement[] elements)
+    {
+        Highlighter.instance.gameObject.SetActive(true);
+        foreach (var x in all)
+        {
+            var exist = elements.Contains(x.element);
+            x.SetHighlight(exist, true);
+        }
+    }
+    public static void SetAllHighlighted(params InstructionElement[] elements)
     {
         Highlighter.instance.gameObject.SetActive(true);
         foreach (var x in all)
         {
             var exist = elements.Contains(x.element);
             x.SetHighlight(exist);
-            if (exist)
-                yield return x;
         }
     }
     public static void ResetHighlights()
