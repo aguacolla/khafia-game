@@ -14,6 +14,16 @@ public class WinLevelPopup : Popup
     //center, left ,right
     public Image[] stars;
 
+
+
+    private void Start()
+    {
+        //Continue to next level after claiming a reward
+        AdsManager.Instance.onRewardedDone += (bool v) =>
+        {
+            GameManager.Instance.ProccedLevel();
+        };
+    }
     private void OnEnable()
     {
         level.text = GameManager.Instance.LevelGame.ToString();

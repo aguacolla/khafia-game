@@ -68,6 +68,8 @@ public class TutorialControl : MonoBehaviour
 
         StopAllCoroutines();
         print("has disabled");
+        //All highlights must reset if user quit the tutorial
+        TutorialElement.ResetHighlights();
     }
 
 

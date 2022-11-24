@@ -188,6 +188,8 @@ public class AdsManager : Singleton<AdsManager>, IUnityAdsInitializationListener
     {
         if (placementId.Equals(rewardId) && showCompletionState == UnityAdsShowCompletionState.COMPLETED)
         {
+            //Fix bug: interstitial shown after watcing rewarded ad
+            GameManager.Instance.interCounter = -1;
             print("user should claim reward");
             GameManager.Instance.CoinsAvailable += rewardCoins;
             if (rewardSkipLevel)

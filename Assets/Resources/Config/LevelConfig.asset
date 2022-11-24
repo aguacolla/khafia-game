@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6858c164dd29df540b033f2d6fe0bae9, type: 3}
   m_Name: LevelConfig
   m_EditorClassIdentifier: 
+  ignoreGeneratedLevelsAll: 0
+  ignoreGeneratedLevels: 
   levelDuration: 60
   starsDiv:
   - 0.33333334
@@ -51,5 +53,5 @@ MonoBehaviour:
     - inPlace: 0
       inWord: 4
     solves: 0300000004000000
-  genSeed: -2
+  genSeed: 0
   maxIterations: 20

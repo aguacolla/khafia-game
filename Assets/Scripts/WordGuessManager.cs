@@ -423,6 +423,9 @@ public class WordGuessManager : MonoBehaviour
     {
         if (GameManager.Instance.CurrentState.stateName == "Game") EnterLetter(Input.inputString);
         //print(CurrentState);
+        //Fix bug: when winning row turn into white
+        if (outOfTrials || wordGuessed)
+            return;
         wordGrid.SetImageColor();
     }
 

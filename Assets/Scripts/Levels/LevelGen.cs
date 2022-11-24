@@ -108,8 +108,8 @@ public static class LevelGen
         }
 
         Random.state = st;
-
-        cached.Add(seed, info);
+        if (!isGenerator)
+            cached.Add(seed, info);
         return info;
     }
 
