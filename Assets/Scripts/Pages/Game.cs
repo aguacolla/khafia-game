@@ -14,6 +14,9 @@ public class Game : Page
 
     public HintButton hintButton;
     public EliminateButton eliminateButton;
+    [Space]
+    public Button retryButton;
+    public Button skipButton;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,5 +61,8 @@ public class Game : Page
     {
         GameManager.Instance.EnableClassicMode();
         ChangeText();
+
+        retryButton.gameObject.SetActive(GameManager.Instance.IsClassicGame);
+        skipButton.gameObject.SetActive(GameManager.Instance.IsLevelGame);
     }
 }

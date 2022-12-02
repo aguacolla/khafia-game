@@ -44,6 +44,7 @@ public class GameManager : Singleton<GameManager>, IStateManageable
     public int interCounter { get; set; }
     public bool shouldShowInterAd => interCounter > 0 && interCounter % interstitialFreq == 0;
 
+    public bool IsClassicGame => !IsLevelGame && !IsTutorial;
     public bool IsLevelGame => LevelGame > 0;
     public int LevelGame { get; set; }
     public bool IsTutorial => TutorialControl.instance;
@@ -268,7 +269,18 @@ public class GameManager : Singleton<GameManager>, IStateManageable
             wordGuessManager.AssignNewRandomly();
         }
         if (GameManager.Instance.shouldShowInterAd)
+        {
+            interCounter = 0;
             AdsManager.Instance.ShowInterstitial();
+        }
+    }
+    public void DecreaseScore()
+    {
+        if (score > 0)
+        {
+            score--;
+            PlayerPrefs.SetInt("Score", score);
+        }
     }
     public void ProccedLevel()
     {
@@ -284,7 +296,10 @@ public class GameManager : Singleton<GameManager>, IStateManageable
         levelInfo.ApplyInputs();
         LevelProgress.Reset();
         if (GameManager.Instance.shouldShowInterAd)
+        {
+            interCounter = 0;
             AdsManager.Instance.ShowInterstitial();
+        }
         // guessManager.NewWord();
     }
 

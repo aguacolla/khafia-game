@@ -17,6 +17,7 @@ public class IntroState : BaseState
     public override void ExitState(IStateManageable stateManager)
     {
         PagesManager.Instance.FlipPage(0);
+        SoundManager.Instance.PlayMusic(0);
     }
 
     IEnumerator LoadArray()

@@ -238,6 +238,7 @@ public class WordGuessManager : MonoBehaviour
 
     void GameLost()
     {
+        SoundManager.Instance.PlaySound(3);
         //GameManager.Instance.score = 0;
         NotificationsManager.Instance.SpawnNotification(1).onComplete += () =>
         {

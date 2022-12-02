@@ -10,7 +10,7 @@ public class PopupManager : Singleton<PopupManager>
 
     private void Start()
     {
-        foreach(Popup popup in popups)
+        foreach (Popup popup in popups)
         {
             popup.gameObject.SetActive(false);
         }
@@ -21,25 +21,26 @@ public class PopupManager : Singleton<PopupManager>
         popup.Open();
         currentPopup = popup;
     }
-    
+
     public void OpenPopup(int index)
     {
         currentPopup = popups[index];
         popups[index].Open();
     }
-    
+
     public void ClosePopup(Popup popup)
     {
         popup.Close();
     }
-    
+
     public void ClosePopup(int index)
     {
         popups[index].Close();
     }
-    
+
     public void CloseCurrentPopup()
     {
-        currentPopup.Close();
+        if (currentPopup)
+            currentPopup.Close();
     }
 }
